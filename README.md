@@ -76,3 +76,5 @@ Now browse to the app at `http://localhost:8000/app/index.html`.
 [gitorig]: https://github.com/angular/angular-seed/
 [bootstrap]: http://angular-ui.github.io/bootstrap/
 [boostrapcss]: http://getbootstrap.com/css/
+[npm]: https://www.npmjs.org/
+[bower]: http://bower.io/
