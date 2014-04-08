@@ -8,7 +8,7 @@
 ## Preparar el entorno (npm necesario, instlando Nodejs ya lo tendreís)
 
 ```
-git clone https://bitbucket.org/jaimevelaz/frontend.git
+git clone https://jaimevelaz@bitbucket.org/pes_qp1314_10/frontend.git
 ```
 
 ### Install Dependencies
