@@ -7,7 +7,7 @@ angular.module('myApp', [
     'myApp.filters',
     'myApp.directives',
     'myApp.controllers',
-    'ofertasServices',
+    'apiService',
     'ui.bootstrap'
 ]).
 config(['$routeProvider',
@@ -26,7 +26,7 @@ config(['$routeProvider',
         });
         $routeProvider.when('/listarOfertas', {
             templateUrl: 'partials/listarOfertas.html',
-            controller: 'MyCtrl4'
+            controller: 'listarOfertas'
         });
         $routeProvider.otherwise({
             redirectTo: '/home'

@@ -1,6 +1,31 @@
-  <ul>
-    <li ng-repeat="oferta in ofertas">
-      {{oferta.name}}
-      <p>{{oferta.snippet}}</p>
-    </li>
-  </ul>
+<div>
+	<form novalidate class="simple-form">
+	<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG</br>
+	<select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta">
+	</select></br>
+	<button ng-click="OfertasQuery(query)">SAVE</button>
+	</form>
+</div>
+
+<div class="row-fluid" >
+	<div ng-repeat="oferta in ofertas">
+		<div style="border: solid;" class="col-md-2">
+			icono
+		</div>
+		<div class="col-md-10">
+			<div class="row">
+				<div class="col-md-9">{{oferta.titulo}}</div>
+			   	<div class="col-md-3">{{oferta.horario}}</div>
+		   	</div>
+		   	</br>
+		   	<div class="row">
+			   	<div class="col-md-9">{{oferta.direccion}}</div>
+				<div class="col-md-3">{{oferta.fecha_de_incorporacion}}</div>
+			</div>
+		</div>
+		<div class="row" style="border-bottom:solid; padding-bottom:10px; margin-top:10px"></div>
+	</div>
+</div>
+ <div class="row-fluid">
+ <pagination direction-links="false" boundary-links="true" items-per-page="limit" total-items="totalItems" page="currentPage" on-select-page="selectPage(page)"></pagination>
+ </div>
