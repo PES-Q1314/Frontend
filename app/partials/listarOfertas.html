@@ -3,7 +3,7 @@
 	<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG</br>
 	<select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta">
 	</select></br>
-	<button ng-click="OfertasQuery(query)">SAVE</button>
+	<button ng-click="OfertasQuery(query)">Buscar</button>
 	</form>
 </div>
 
@@ -14,7 +14,7 @@
 		</div>
 		<div class="col-md-10">
 			<div class="row">
-				<div class="col-md-9">{{oferta.titulo}}</div>
+				<div class="col-md-9"><a href="#/detallesOferta/{{ tipo }}/{{ oferta.id }}">{{oferta.titulo}}</a></div>
 			   	<div class="col-md-3">{{oferta.horario}}</div>
 		   	</div>
 		   	</br>
