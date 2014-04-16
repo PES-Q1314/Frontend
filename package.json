@@ -5,11 +5,13 @@
   "description": "FrontEnd-PES",
   "repository": "https://bitbucket.org/jaimevelaz/frontend",
   "license": "MIT",
+  "dependencies": {
+    "bower": "^1.3.1"
+    },
   "devDependencies": {
     "karma": "~0.10",
     "protractor": "~0.17.0",
     "http-server": "^0.6.1",
-    "bower": "^1.3.1",
     "shelljs": "^0.2.6"
   },
   "scripts": {
