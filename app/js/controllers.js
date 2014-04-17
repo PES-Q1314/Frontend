@@ -71,7 +71,9 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
         };
 
         $scope.tipos_oferta = [/*{name:'Todas'},*/{name:'Empresa'},{name:'Departamento'},{name:'Colaboración'}];
+        $scope.tipos_jornada = ['','Parcial','Completa'];
         $scope.query.tipooferta = $scope.tipos_oferta[1];
+        $scope.query.tipos_jornada = $scope.tipos_jornada[0];
         $scope.selectPage(1);
     }
     ]);
