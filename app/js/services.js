@@ -3,8 +3,11 @@
 /* Services */
 var apiService = angular.module('apiService', ['ngResource']);
 
-apiService.factory('authlogin', ['$resource', function($resource){
-        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/systemuser/login', {}, {
+var urlServicio = 'http://nameless-fjord-3849.herokuapp.com/api/';
+//var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
+
+apiService.factory('authlogin', ['$resource', '$cookies', function($resource, $cookies){
+        return $resource(urlServicio + 'systemuser/login', {}, {
             login: {
                 method: 'POST'
             }
@@ -14,7 +17,7 @@ apiService.factory('authlogin', ['$resource', function($resource){
 
 apiService.factory('OfertaDeEmpresa', ['$resource',
     function($resource) {
-        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/ofertadeempresa/:id', {}, {
+        return $resource(urlServicio + 'ofertadeempresa/:id', {}, {
             queryAll: {
                 method: 'GET',
                 params:{id:''},
@@ -31,8 +34,8 @@ apiService.factory('OfertaDeEmpresa', ['$resource',
 
 apiService.factory('OfertaDeDepartamento', ['$resource',
     function($resource) {
-        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/ofertadedepartamento/:id', {}, {
-            query: { method: 'GET', params:{id:'@id'}, isArray: false },
+        return $resource(urlServicio + 'ofertadedepartamento/:id', {}, {
+            query: { method: 'GET', params:{id:'@id'}, isArray: false},
             queryAll: { method: 'GET', params:{id:''}, isArray: false }
         })
     }
@@ -40,7 +43,7 @@ apiService.factory('OfertaDeDepartamento', ['$resource',
 
 apiService.factory('OfertaDeProyectoEmprendedor', ['$resource',
     function($resource) {
-        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/ofertadeproyectoemprendedor/:id', {}, {
+        return $resource(urlServicio + 'ofertadeproyectoemprendedor/:id', {}, {
             queryAll: {
                 method: 'GET',
                 params:{id:''},

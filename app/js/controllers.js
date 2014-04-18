@@ -3,8 +3,8 @@
 /* Controllers */
 
 var myApp = angular.module('myApp.controllers', []);
-myApp.controller('MyCtrl1', ['$scope', 'authlogin', '$cookies', 
-    function($scope, authlogin, $cookies) {
+myApp.controller('MyCtrl1', ['$scope', 'authlogin', '$cookieStore', '$http', 
+    function($scope, authlogin, $cookieStore, $http) {
         authlogin.login({"username":'usuario0', "password":1234}, function(data, status, headers, config){
             console.log(data);
         });
