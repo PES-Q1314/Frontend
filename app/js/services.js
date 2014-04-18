@@ -3,6 +3,15 @@
 /* Services */
 var apiService = angular.module('apiService', ['ngResource']);
 
+apiService.factory('authlogin', ['$resource', function($resource){
+        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/systemuser/login', {}, {
+            login: {
+                method: 'POST'
+            }
+        })
+}]);
+
+
 apiService.factory('OfertaDeEmpresa', ['$resource',
     function($resource) {
         return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/ofertadeempresa/:id', {}, {

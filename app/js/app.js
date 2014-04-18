@@ -2,15 +2,17 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', [
+var myApp = angular.module('myApp', [
     'ngRoute',
     'myApp.filters',
     'myApp.directives',
     'myApp.controllers',
     'apiService',
-    'ui.bootstrap'
-]).
-config(['$routeProvider',
+    'ui.bootstrap',
+    'ngCookies'
+]);
+
+myApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/home', {
             templateUrl: 'partials/home.html',
@@ -32,8 +34,8 @@ config(['$routeProvider',
             redirectTo: '/home'
         });
     }
-]).config(['$httpProvider', function($httpProvider) {
-        $httpProvider.defaults.useXDomain = true;
-        delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    }
 ]);
+
+myApp.config(['$sceDelegateProvider', function($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://bolsa-de-empleo-upc.herokuapp.com/api/**']);
+}]);

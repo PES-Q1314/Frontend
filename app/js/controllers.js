@@ -3,7 +3,14 @@
 /* Controllers */
 
 var myApp = angular.module('myApp.controllers', []);
-myApp.controller('MyCtrl1', [function() {}]);
+myApp.controller('MyCtrl1', ['$scope', 'authlogin', '$cookies', 
+    function($scope, authlogin, $cookies) {
+        authlogin.login({"username":'usuario0', "password":1234}, function(data, status, headers, config){
+            console.log(data);
+        });
+}]);
+
+
 
 
 myApp.controller('crearOferta', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento',
