@@ -19,16 +19,28 @@ myApp.config(['$routeProvider',
             controller: 'MyCtrl1'
         });
         $routeProvider.when('/listarOfertas', {
-            templateUrl: 'partials/listarOfertas.html',
+            templateUrl: 'partials/oferta/listarOfertas.html',
             controller: 'listarOfertas'
         });
         $routeProvider.when('/crearOferta', {
-            templateUrl: 'partials/crearOferta.html',
+            templateUrl: 'partials/oferta/crearOferta.html',
             controller: 'crearOferta'
         });
         $routeProvider.when('/detallesOferta/:tipoOferta/:idOferta', {
-            templateUrl: 'partials/detallesOferta.html',
+            templateUrl: 'partials/oferta/detallesOferta.html',
             controller: 'detallesOferta'
+        });
+        $routeProvider.when('/empresa/:id/', {
+            templateUrl: 'partials/perfiles/empresa.html',
+            controller: 'perfilEmpresa'
+        });
+        $routeProvider.when('/estudiante/:id/', {
+            templateUrl: 'partials/perfiles/estudiante.html',
+            controller: 'perfilEstudiante'
+        });
+        $routeProvider.when('/profesor/:id/', {
+            templateUrl: 'partials/perfiles/profesor.html',
+            controller: 'perfilProfesor'
         });
         $routeProvider.otherwise({
             redirectTo: '/home'

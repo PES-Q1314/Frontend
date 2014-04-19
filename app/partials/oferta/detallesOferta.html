@@ -1,0 +1,79 @@
+<div class="row-fluid">
+<div class="row"><h2>Información de la oferta</h2></div>
+<div class="row">
+	<div class="col-md-2">Titulo:</div><div class="col-md-10">{{ oferta.titulo }}</div>
+	<div class="col-md-2">Descripcion:</div><div class="col-md-10">{{ oferta.descripcion }}</div>
+	<div class="col-md-2">Ubicacion:</div><div class="col-md-6">{{ oferta.direccion }}</div>
+	<div class="col-md-2">Plazas: </div><div class="col-md-2">{{ oferta.numero_de_puestos_vacantes }}</div>
+	<div class="col-md-6"><a href="">Empresa ofertora</a></div>
+</div>
+
+<div class="row"><h3>Información de contacto</h3></div>
+<div class="row">
+	<div ng-show="oferta.persona_de_contacto" class="col-md-4">Persona de contacto:</div>
+	<div ng-show="oferta.persona_de_contacto" class="col-md-8">{{ oferta.persona_de_contacto }}</div>
+	<div ng-show="oferta.email_de_contacto" class="col-md-4">Correo electrónico:</div>
+	<div ng-show="oferta.email_de_contacto" class="col-md-8">{{ oferta.email_de_contacto }}</div>
+</div>
+
+<div class="row"><h3>Información sobre el puesto</h3></div>
+<div class="row">
+	<div class="col-md-2">Puesto: </div>
+	<div class="col-md-4">{{ oferta.puesto }}</div>
+	<div class="col-md-2">Horario: </div>
+	<div class="col-md-4">{{ oferta.horario }}</div>
+	<div class="col-md-3">Jornada: </div>
+	<div class="col-md-3">{{ oferta.tipo_de_jornada }}</div>
+	<div class="col-md-3">Remuneración: </div>
+	<div class="col-md-3">{{ oferta.salario_mensual }}</div>
+	<div class="col-md-3">Fecha de incorporación: </div>
+	<div class="col-md-3">{{ oferta.fecha_de_incorporacion }}</div>
+</div>
+
+<div class="row"><h3>Requisitos</h3></div>
+<div class="row">
+	<h4>Conocimientos tecnicos</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Conocimiento</td>
+			<td>Nivel</td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="conocimiento in oferta.requisitos_de_conocimiento_tecnico">
+			<td>{{ conocimiento.conocimiento.conocimiento }}</td>
+			<td>{{ conocimiento.nivel}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="row">
+	<h4>Experiencia laboral</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Sector</td>
+			<td>Meses</td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="conocimiento in oferta.requisitos_de_experiencia_laboral">
+			<td>{{ conocimiento.sector.sector }}</td>
+			<td>{{ conocimiento.meses}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="row">
+	<h4>Idiomas</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Idioma</td>
+			<td>Nivel</td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="conocimiento in oferta.requisitos_de_idioma">
+			<td>{{ conocimiento.idioma.idioma }}</td>
+			<td>{{ conocimiento.nivel}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+</div>
