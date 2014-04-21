@@ -1,1 +1,47 @@
-CREAR OFERTA
+<form novalidate class="simple-form">
+	<div class="row">
+			Titulo: <input type="text" ng-model="oferta.titulo">
+	</div>
+	<div class="row">
+			Descripcion: <input type="text" ng-model="oferta.descripcion">
+	</div>
+	<div class="row">
+			Direccion: <input type="text" ng-model="oferta.direccion">
+	</div>
+	<div class="row">
+			Email de contacto: <input type="text" ng-model="oferta.email_de_contacto">
+	</div>
+	<div class="row">
+			Fecha de incorporación: <input type="text" ng-model="oferta.fecha_de_incorporacion">
+	</div>
+	<div class="row">
+			TSG incluido: <input type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
+	</div>
+	<div class="row">
+			Horario: <input type="text" ng-model="oferta.horario">
+	</div>
+	<div class="row">
+			Duración: <input type="text" ng-model="oferta.meses_de_duracion">
+	</div>
+	<div class="row">
+			Vacantes: <input type="text" ng-model="oferta.numero_de_puestos_vacantes">
+	</div>
+	<div class="row">
+			Persona de contacto: <input type="text" ng-model="oferta.persona_de_contacto">
+	</div>
+	<div class="row">
+			Puesto: <input type="text" ng-model="oferta.puesto">
+	</div>
+	<div class="row">
+			Salario mensual: <input type="text" ng-model="oferta.salario_mensual">
+	</div>
+	<div class="row">
+			Tipo de jornada: <input type="text" ng-model="oferta.tipo_de_jornada">
+	</div>
+	<div class="row">
+			Ultimo curso academico: <input type="checkbox" ng-model="oferta.ultimo_curso_academico_superado">
+	</div>
+	<div class="row text-center">
+		<button class="btn btn-default" ng-click="crearOferta(oferta)">Crear Oferta</button>
+	</div>
+</form>

@@ -5,7 +5,7 @@
 	<div class="col-md-2">Descripcion:</div><div class="col-md-10">{{ oferta.descripcion }}</div>
 	<div class="col-md-2">Ubicacion:</div><div class="col-md-6">{{ oferta.direccion }}</div>
 	<div class="col-md-2">Plazas: </div><div class="col-md-2">{{ oferta.numero_de_puestos_vacantes }}</div>
-	<div class="col-md-6"><a href="">Empresa ofertora</a></div>
+	<div class="col-md-6"><a href="#/empresa/{{ autorOferta(oferta.usuario) }}">Empresa ofertora</a></div>
 </div>
 
 <div class="row"><h3>Información de contacto</h3></div>

@@ -25,16 +25,36 @@ myApp.controller('MyCtrl1', ['$scope', 'authlogin', '$cookieStore', '$http',
 
 myApp.controller('crearOferta', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento',
     function($scope, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento) {
-    	OfertaDeEmpresa.addNew({
-    "autor": "/api/empresa/7",
+    	
+        $scope.crearOferta = function(oferta){
+            oferta.especialidades = [ "/api/especialidad/1" ];
+            oferta.denuncias = [];
+            oferta.requisitos_de_idioma = [];
+            oferta.congelaciones = [];
+            oferta.requisitos_de_conocimiento_tecnico = [];
+            oferta.requisitos_de_experiencia_laboral = [];
+            oferta.suscripciones = [];
+            oferta.fecha_de_creacion = "2014-04-14T22:53:05.189272";
+            oferta.fecha_de_ultima_modificacion = "2014-04-14T22:53:05.249665";
+            oferta.latitud = 41.4102793;
+            oferta.longitud = 2.21318429999997;
+
+            OfertaDeEmpresa.addNew(oferta, function (data) {
+                //Correcto
+                console.log("Correcto");
+            }, function (data) {
+                //Incorrecto
+                console.log("Incorrecto");
+                console.log(data);
+            })
+        }
+
+/*
+        OfertaDeEmpresa.addNew({
     "descripcion": "Lorem Ipsum Dolor Sit Amet",
     "direccion": "Avinguda Diagonal 34, Barcelona, Spain",
     "email_de_contacto": "enric.margot@gmail.com",
-    "especialidades": [
-        {
-            "resource_uri": "/api/especialidad/1"
-        }
-    ],
+    "especialidades": [ "/api/especialidad/1" ],
     "denuncias" : [],
     "requisitos_de_idioma" : [],
     "congelaciones" : [],
@@ -58,7 +78,7 @@ myApp.controller('crearOferta', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoE
     "ultimo_curso_academico_superado": 1
 }, function(data){
 	console.log(data);
-});
+});*/
     }
 ]);
 
@@ -77,6 +97,14 @@ myApp.controller('detallesOferta', ['$scope', '$routeParams', 'OfertaDeEmpresa',
                 $scope.oferta = data;
             });
     };
+
+    $scope.autorOferta = function(t) {
+        var tmp = "";
+        if (t != undefined){
+            tmp = t.split("/")[3];
+        }
+        return tmp;
+    }
 
 }]);
 
@@ -118,14 +146,6 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
             }
 
         };
-
-        $scope.autorOferta = function(t) {
-            var tmp = "";
-            if (t != undefined){
-                tmp = t.split("/")[3];
-            }
-            return tmp;
-        }
 
         $scope.selectPage = function (page) {
             $scope.currentPage = page;
