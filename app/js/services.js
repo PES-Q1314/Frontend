@@ -61,6 +61,15 @@ apiService.factory('Empresa', ['$resource',
     }
 ]);
 
+apiService.factory('Especialidad', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'especialidad/:id', {}, {
+            queryAll: { method: 'GET', params:{id:''}, isArray: false},
+            query: { method: 'GET', params:{id:'@id'}, isArray: false}
+        })
+    }
+]);
+
 apiService.factory('Conocimiento', ['$resource',
     function($resource) {
         return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/conocimientotecnico/:id', {}, {

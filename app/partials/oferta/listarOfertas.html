@@ -1,17 +1,36 @@
 <div class="row-fluid">
 	<form novalidate class="simple-form">
-		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
-				Tipo de oferta: <select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta"></select>
-			</div>
+		<div class="row text-center">
+			Tipo de oferta: <select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta"></select>
 		</div>
 		<div class="row text-center">
-			<div class="col-md-6">
-				<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG
-			</div>
-			<div class="col-md-6">
-				Tipo de Jornada: <select ng-model="query.tipo_de_jornada" ng-options="tipo for tipo in tipos_jornada"></select>
-			</div>
+			Estudios: <select ng-model="query.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades">
+				<option value="">Todas</option>
+			</select>
+		</div>
+		<div class="row text-center">
+            <p class="input-group">
+              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.fecha_de_incorporacion__gte" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </p>
+		</div>
+		<div class="row text-center">
+			Horario: <select ng-model="query.horario" ng-options="t.id as t.name for t in tipos_horario">
+				<option value="">Todas</option>
+			</select>
+		</div>
+		<div class="row text-center">
+			Tipo de Jornada: <select ng-model="query.tipos_jornada" ng-options="t.id as t.name for t in tipos_jornada">
+				<option value="">Todas</option>
+			</select>
+		</div>
+		<div ng-show="tfgShow(query)" class="row text-center">
+			<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG
+		</div>
+		<div ng-show="ultCurso(query)" class="row text-center">
+			<input type="checkbox" ng-model="query.ultimo_curso_academico_superado"> Ultimo curso superado
 		</div>
 		<div class="row text-center">
 			<button class="btn btn-default" ng-click="OfertasQuery(query)">Buscar</button>
