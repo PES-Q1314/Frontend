@@ -48,12 +48,16 @@ myApp.config(['$routeProvider',
     }
 ]);
 
-myApp.config(['$sceDelegateProvider', function($sceDelegateProvider) {
-    $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://bolsa-de-empleo-upc.herokuapp.com/api/**']);
-}]);
+myApp.config(['$sceDelegateProvider',
+    function($sceDelegateProvider) {
+        $sceDelegateProvider.resourceUrlWhitelist(['self', 'http://bolsa-de-empleo-upc.herokuapp.com/api/**']);
+    }
+]);
 
-myApp.config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-    $httpProvider.defaults.withCredentials = true;
-}]);
+myApp.config(['$httpProvider',
+    function($httpProvider) {
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.defaults.withCredentials = true;
+    }
+]);
