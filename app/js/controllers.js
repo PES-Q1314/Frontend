@@ -104,15 +104,15 @@ myApp.controller('detallesOferta', ['$scope', '$routeParams', 'OfertaDeEmpresa',
 
 myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Oferta', 'Especialidad',
     function($scope, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Oferta, Especialidad) {
-        $scope.query = {tipooferta:{name:'Todas'}, limit: 20, offset : 0};
 
+        //calendar Button function
         $scope.open = function($event) {
             $event.preventDefault();
             $event.stopPropagation();
-
             $scope.opened = true;
         };
 
+        //ng-Show checkbox TFG
         $scope.tfgShow = function(query){
             if (query.tipooferta.name != "Empresa"){
                 delete query.hay_posibilidad_de_tfg;
@@ -121,6 +121,7 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
             return true;
         };
 
+        //ng-Show checkbox ultimocursoacademico
         $scope.ultCurso = function(query){
             if (query.tipooferta.name != "Empresa" && query.tipooferta.name != "Departamento"){
                 delete query.ultimo_curso_academico_superado;
@@ -129,48 +130,55 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
             return true;
         };
 
+        //Pagination data funtion
+        function pagCalculation (data) {
+            $scope.ofertas = data.objects;
+            $scope.totalItems = data.meta.total_count;
+            $scope.limit = data.meta.limit;
+            $scope.loading = false;
+            $scope.sinResultados = $scope.ofertas.length == 0;
+        }
+
+        //Filter Query
         $scope.OfertasQuery = function(query){
+            $scope.loading = true;
+            $scope.sinResultados = false;
             query = query || {tipooferta:{name:'Todas'}, limit: 20, offset : 0};
             $scope.query = query;
             if (query.fecha_de_incorporacion__gte != undefined){
                 var dateObj = query.fecha_de_incorporacion__gte;
                 query.fecha_de_incorporacion__gte = dateObj.getFullYear() + '-' + (dateObj.getMonth()+1) + '-' + dateObj.getDate();
-                console.log(query.fecha_de_incorporacion__gte); 
             }
+
             if (query.tipooferta.name == $scope.tipos_oferta[1].name){
                 OfertaDeEmpresa.queryAll(query, function(data){
-                    $scope.ofertas = data.objects;
-                    $scope.totalItems = data.meta.total_count;
-                    $scope.limit = data.meta.limit;
+                    pagCalculation(data);
                 });
             }else if(query.tipooferta.name == $scope.tipos_oferta[2].name){
                 OfertaDeDepartamento.queryAll(query, function(data){
-                    $scope.ofertas = data.objects;
-                    $scope.totalItems = data.meta.total_count;
-                    $scope.limit = data.meta.limit;
+                    pagCalculation(data);
                 });
             }else if(query.tipooferta.name == $scope.tipos_oferta[3].name){
                 OfertaDeProyectoEmprendedor.queryAll(query, function(data){
-                    $scope.ofertas = data.objects;
-                    $scope.totalItems = data.meta.total_count;
-                    $scope.limit = data.meta.limit;
+                    pagCalculation(data);
                 });
             }else{
                 Oferta.queryAll(query, function(data){
-                    $scope.ofertas = data.objects;
-                    $scope.totalItems = data.meta.total_count;
-                    $scope.limit = data.meta.limit;
+                    pagCalculation(data);
                 });
             }
 
         };
 
+        //pagination function
         $scope.selectPage = function (page) {
             $scope.currentPage = page;
             $scope.query.offset = (page-1) * 20;
             $scope.OfertasQuery($scope.query);
         };
 
+        // Inicilizaciones filtros
+        $scope.query = {tipooferta:{name:'Todas'}, limit: 20, offset : 0};
         $scope.tipos_oferta = [{name:'Todas'},{name:'Empresa'},{name:'Departamento'},{name:'Colaboración'}];
         $scope.tipos_jornada = [{id:'parcial', name:'Parcial'},{id:'total',name:'Total'}];
         $scope.tipos_horario = [{id:'mañana',name:'Mañana'},{id:'tarde',name:'Tarde'},{id:'total',name:'Total'}];
@@ -179,8 +187,9 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
         })
         $scope.query.tipooferta = $scope.tipos_oferta[0];
         $scope.selectPage(1);
+
     }
-    ]);
+]);
 
 
 myApp.controller('perfilEmpresa', ['$scope', '$routeParams', 'Empresa',

@@ -39,7 +39,13 @@
 </div>
 
 <div class="row-fluid" >
-	<div ng-repeat="oferta in ofertas">
+	<div class="text-center" ng-show="loading">
+		<img id="spinner" ng-src="img/loading.gif">
+	</div>
+	<div class="text-center" ng-show="sinResultados">
+		Sin resultados
+	</div>
+	<div ng-repeat="oferta in ofertas" ng-hide="loading">
 		<div class="col-md-12">
 			<div class="row">
 				<div class="col-md-9"><a href="#/detallesOferta/{{ oferta.tipo }}/{{ oferta.id }}">{{oferta.titulo}}</a></div>
@@ -54,6 +60,6 @@
 		<div class="col-md-8 col-md-offset-2" style="border-bottom:solid; padding-bottom:10px; margin-top:10px"></div>
 	</div>
 </div>
- <div class="row-fluid">
+ <div class="text-center row-fluid" ng-hide="loading || sinResultados">
  <pagination direction-links="false" boundary-links="true" items-per-page="limit" total-items="totalItems" page="currentPage" on-select-page="selectPage(page)"></pagination>
  </div>
