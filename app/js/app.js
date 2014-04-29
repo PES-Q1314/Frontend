@@ -12,11 +12,15 @@ var myApp = angular.module('myApp', [
     'ngCookies'
 ]);
 
+myApp.value('redirectToUrlAfterLogin', {
+    url: '/'
+});
+
 myApp.config(['$routeProvider',
     function($routeProvider) {
-        $routeProvider.when('/home', {
+        $routeProvider.when('/login', {
             templateUrl: 'partials/home.html',
-            controller: 'MyCtrl1'
+            controller: 'login'
         });
         $routeProvider.when('/listarOfertas', {
             templateUrl: 'partials/oferta/listarOfertas.html',
@@ -43,7 +47,7 @@ myApp.config(['$routeProvider',
             controller: 'perfilProfesor'
         });
         $routeProvider.otherwise({
-            redirectTo: '/home'
+            redirectTo: '/listarOfertas'
         });
     }
 ]);
@@ -61,3 +65,30 @@ myApp.config(['$httpProvider',
         $httpProvider.defaults.withCredentials = true;
     }
 ]);
+
+myApp.config(function($httpProvider) {
+    $httpProvider.responseInterceptors.push('securityInterceptor');
+}).provider('securityInterceptor', function() {
+    this.$get = function($location, $q, $injector, $cookieStore, $rootScope) {
+        return function(promise) {
+            var appAuth = $injector.get('appAuth');
+            return promise.then(null, function(response) {
+                if (response.status === 401) {
+                    $cookieStore.remove('login');
+                    appAuth.saveAttemptUrl();
+                    $location.path('/login');
+                }
+                return $q.reject(response);
+            });
+        };
+    };
+});
+
+myApp.run(function($location, $rootScope, $cookieStore, appAuth) {
+    if (!appAuth.isLoggedIn()) {
+        appAuth.saveAttemptUrl();
+        $location.path('/login');
+    } else {
+        $rootScope.userCredentials = $cookieStore.get('login');
+    }
+});

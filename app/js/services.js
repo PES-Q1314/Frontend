@@ -6,8 +6,28 @@ var apiService = angular.module('apiService', ['ngResource']);
 //var urlServicio = 'http://nameless-fjord-3849.herokuapp.com/api/';
 var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
 
-apiService.factory('authlogin', ['$resource', '$cookies',
-    function($resource, $cookies) {
+apiService.factory('appAuth', function($rootScope, $location, $cookieStore, authlogin, redirectToUrlAfterLogin) {
+    return {
+        login: function(credentials) {
+            return authlogin.login(credentials);
+        },
+        isLoggedIn: function() {
+            return !!$cookieStore.get('login');; //convert value to bool
+        },
+        saveAttemptUrl: function() {
+            if ($location.path().toLowerCase() != '/login') {
+                redirectToUrlAfterLogin.url = $location.path();
+            } else
+                redirectToUrlAfterLogin.url = '/';
+        },
+        redirectToAttemptedUrl: function() {
+            $location.path(redirectToUrlAfterLogin.url);
+        }
+    };
+});
+
+apiService.factory('authlogin', ['$resource',
+    function($resource) {
         return $resource(urlServicio + 'systemuser/:action', {}, {
             login: {
                 method: 'POST',

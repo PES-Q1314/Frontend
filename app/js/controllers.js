@@ -3,18 +3,24 @@
 /* Controllers */
 
 var myApp = angular.module('myApp.controllers', []);
-myApp.controller('MyCtrl1', ['$scope', 'authlogin', '$cookieStore', '$http',
-    function($scope, authlogin, $cookieStore, $http) {
+
+myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth',
+    function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth) {
+
+        if (appAuth.isLoggedIn())
+            $location.path('/');
+
         $scope.login = function(user) {
             authlogin.login(user, function(data) {
-                console.log(data);
-                $scope.datosUsuario = data;
+                $cookieStore.put('login', data);
+                $rootScope.userCredentials = data;
+                appAuth.redirectToAttemptedUrl();
             });
         };
-        $scope.logout = function(user) {
-            authlogin.logout(user, function(data) {
-                console.log(data);
-            });
+        $scope.logout = function() {
+            $cookieStore.remove('login');
+            delete $rootScope.usercredentials;
+            $location.path('/login');
         };
     }
 ]);
@@ -36,15 +42,13 @@ myApp.controller('crearOferta', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoE
 
             OfertaDeEmpresa.addNew(oferta, function(data) {
                 //Correcto
-                console.log("Correcto");
+            console.log("Correcto");
             }, function(data) {
                 //Incorrecto
                 console.log("Incorrecto");
                 console.log(data);
             })
         }
-
-
         OfertaDeEmpresa.addNew({
             "descripcion": "Lorem Ipsum Dolor Sit Amet",
             "direccion": "Avinguda Diagonal 34, Barcelona, Spain",
@@ -84,7 +88,6 @@ myApp.controller('detallesOferta', ['$scope', '$routeParams', 'OfertaDeEmpresa',
         $scope.texto = '';
 
         function getData(data, tipo, texto) {
-            console.log(data);
             $scope.oferta = data;
             $scope.tipousuario = tipo;
             $scope.textousuario = texto;
