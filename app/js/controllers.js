@@ -20,63 +20,98 @@ myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 
         $scope.logout = function() {
             $cookieStore.remove('login');
             delete $rootScope.usercredentials;
+            delete $scope.userCredentials;
             $location.path('/login');
         };
     }
 ]);
 
 
-myApp.controller('crearOferta', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento',
-    function($scope, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento) {
+myApp.controller('crearOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad',
+    function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad) {
 
+        if ($scope.userCredentials == undefined) {
+            $location.path("/login");
+        } else {
+            if ($scope.userCredentials.tipo == 'Profesor') {
+                $scope.titulo = "Oferta de departamento";
+                $scope.showTfg = false;
+                $scope.showUltimoCurso = true;
+            } else if ($scope.userCredentials.tipo == 'Estudiante') {
+                $scope.titulo = "Oferta de proyecto emprendedor";
+                $scope.showTfg = false;
+                $scope.showUltimoCurso = false;
+            } else {
+                $scope.titulo = "Oferta de empresa";
+                $scope.showTfg = true;
+                $scope.showUltimoCurso = true;
+            };
+        }
+
+        /**
+         * Crear oferta y editar los conocimientos tecnicos
+         *
+         **/
+        $scope.oferta = {};
         $scope.crearOferta = function(oferta) {
-            oferta.especialidades = ["/api/especialidad/1"];
-            oferta.denuncias = [];
             oferta.requisitos_de_idioma = [];
-            oferta.congelaciones = [];
             oferta.requisitos_de_conocimiento_tecnico = [];
             oferta.requisitos_de_experiencia_laboral = [];
-            oferta.suscripciones = [];
-            oferta.latitud = 41.4102793;
-            oferta.longitud = 2.21318429999997;
+            if ($scope.userCredentials.tipo == 'Profesor') {
+                OfertaDeDepartamento.addNew(oferta, function(data) {
+                    console.log("Correcto");
+                }, function(data) {
+                    console.log("Incorrecto");
+                    console.log(data);
+                });
+            } else if ($scope.userCredentials.tipo == 'Estudiante') {
+                OfertaDeProyectoEmprendedor.addNew(oferta, function(data) {
+                    console.log("Correcto");
+                }, function(data) {
+                    console.log("Incorrecto");
+                    console.log(data);
+                });
+            } else {
+                OfertaDeEmpresa.addNew(oferta, function(data) {
+                    console.log("Correcto");
+                }, function(data) {
+                    console.log("Incorrecto");
+                    console.log(data);
+                });
+            };
+        };
 
-            OfertaDeEmpresa.addNew(oferta, function(data) {
-                //Correcto
-            console.log("Correcto");
-            }, function(data) {
-                //Incorrecto
-                console.log("Incorrecto");
-                console.log(data);
-            })
-        }
-        OfertaDeEmpresa.addNew({
-            "descripcion": "Lorem Ipsum Dolor Sit Amet",
-            "direccion": "Avinguda Diagonal 34, Barcelona, Spain",
-            "email_de_contacto": "enric.margot@gmail.com",
-            "especialidades": ["/api/especialidad/1"],
-            "denuncias": [],
-            "requisitos_de_idioma": [],
-            "congelaciones": [],
-            "requisitos_de_conocimiento_tecnico": [],
-            "requisitos_de_experiencia_laboral": [],
-            "suscripciones": [],
-            "fecha_de_creacion": "2014-04-14T22:53:05.189272",
-            "fecha_de_incorporacion": "2014-04-14",
-            "fecha_de_ultima_modificacion": "2014-04-14T22:53:05.249665",
-            "hay_posibilidad_de_tfg": false,
-            "horario": "manyana",
-            "latitud": 41.4102793,
-            "longitud": 2.21318429999997,
-            "meses_de_duracion": 4,
-            "numero_de_puestos_vacantes": 4,
-            "persona_de_contacto": "Enric Margot",
-            "puesto": "Community Manager",
-            "salario_mensual": 600,
-            "tipo_de_jornada": "total",
-            "titulo": "Oferta de Empresa 1",
-            "ultimo_curso_academico_superado": 1
+        //calendar Button function
+        $scope.open = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.opened = true;
+        };
+
+        $scope.tipos_jornada = [{
+            id: 'parcial',
+            name: 'Parcial'
+        }, {
+            id: 'total',
+            name: 'Completa'
+        }];
+
+        $scope.tipos_horario = [{
+            id: 'manyana',
+            name: 'Mañana'
+        }, {
+            id: 'tarde',
+            name: 'Tarde'
+        }, {
+            id: 'total',
+            name: 'Indiferente'
+        }];
+        $scope.oferta.horario = $scope.tipos_horario[0].id;
+        $scope.oferta.tipo_de_jornada = $scope.tipos_jornada[0].id;
+        Especialidad.queryAll({
+            'limit': 200
         }, function(data) {
-            console.log(data);
+            $scope.especialidades = data.objects;
         });
     }
 ]);
@@ -231,7 +266,7 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
             name: 'Total'
         }];
         $scope.tipos_horario = [{
-            id: 'mañana',
+            id: 'manyana',
             name: 'Mañana'
         }, {
             id: 'tarde',
@@ -244,10 +279,9 @@ myApp.controller('listarOfertas', ['$scope', 'OfertaDeEmpresa', 'OfertaDeProyect
             'limit': 200
         }, function(data) {
             $scope.especialidades = data.objects;
-        })
+        });
         $scope.query.tipooferta = $scope.tipos_oferta[0];
         $scope.selectPage(1);
-
     }
 ]);
 

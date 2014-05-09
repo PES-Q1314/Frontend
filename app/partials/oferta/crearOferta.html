@@ -1,4 +1,5 @@
 <form novalidate class="simple-form">
+	<h1>{{ titulo }}</h1>
 	<div class="row">
 			Titulo: <input type="text" ng-model="oferta.titulo">
 	</div>
@@ -12,13 +13,21 @@
 			Email de contacto: <input type="text" ng-model="oferta.email_de_contacto">
 	</div>
 	<div class="row">
-			Fecha de incorporación: <input type="text" ng-model="oferta.fecha_de_incorporacion">
+		Fecha de incorporación
+		<p class="input-group">
+			<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+			<span class="input-group-btn">
+				<button class="btn btn-default" ng-click="open($event)">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+			</span>
+		</p>
 	</div>
-	<div class="row">
+	<div ng-show="showTfg" class="row">
 			TSG incluido: <input type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
 	</div>
 	<div class="row">
-			Horario: <input type="text" ng-model="oferta.horario">
+		Horario: <select ng-model="oferta.horario" ng-options="t.id as t.name for t in tipos_horario"></select>
 	</div>
 	<div class="row">
 			Duración: <input type="text" ng-model="oferta.meses_de_duracion">
@@ -36,10 +45,13 @@
 			Salario mensual: <input type="text" ng-model="oferta.salario_mensual">
 	</div>
 	<div class="row">
-			Tipo de jornada: <input type="text" ng-model="oferta.tipo_de_jornada">
+			Tipo de Jornada: <select ng-model="oferta.tipo_de_jornada" ng-options="t.id as t.name for t in tipos_jornada"></select>
+	</div>
+	<div ng-show="showUltimoCurso" class="row">
+			Ultimo curso academico: <input type="checkbox" ng-model="oferta.ultimo_curso_academico_superado">
 	</div>
 	<div class="row">
-			Ultimo curso academico: <input type="checkbox" ng-model="oferta.ultimo_curso_academico_superado">
+		<select multiple="multiple" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
 	</div>
 	<div class="row text-center">
 		<button class="btn btn-default" ng-click="crearOferta(oferta)">Crear Oferta</button>

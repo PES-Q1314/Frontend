@@ -1,0 +1,15 @@
+<div class="row-fluid">
+	<form novalidate class="simple-form">
+		<div class="row text-center">
+			username: <input type="text" ng-model="user.username"></br>
+			password: <input type="password" ng-model="user.password">
+		</div>
+		<div class="row text-center">
+			<button class="btn btn-default" ng-click="login(user)">Login</button>
+			<button class="btn btn-default" ng-click="logout()">Logout</button>
+		</div>
+	</form>
+
+{{ datosUsuario }}
+
+</div>

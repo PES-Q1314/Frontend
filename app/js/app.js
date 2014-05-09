@@ -19,7 +19,7 @@ myApp.value('redirectToUrlAfterLogin', {
 myApp.config(['$routeProvider',
     function($routeProvider) {
         $routeProvider.when('/login', {
-            templateUrl: 'partials/home.html',
+            templateUrl: 'partials/login.html',
             controller: 'login'
         });
         $routeProvider.when('/listarOfertas', {
@@ -46,8 +46,11 @@ myApp.config(['$routeProvider',
             templateUrl: 'partials/perfiles/profesor.html',
             controller: 'perfilProfesor'
         });
+        $routeProvider.when('/home', {
+            templateUrl: 'partials/home.html'
+        });
         $routeProvider.otherwise({
-            redirectTo: '/listarOfertas'
+            redirectTo: '/home'
         });
     }
 ]);
