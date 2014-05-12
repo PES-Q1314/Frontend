@@ -22,13 +22,13 @@ myApp.config(['$routeProvider',
             templateUrl: 'partials/login.html',
             controller: 'login'
         });
-        $routeProvider.when('/listarOfertas', {
-            templateUrl: 'partials/oferta/listarOfertas.html',
-            controller: 'listarOfertas'
+        $routeProvider.when('/buscarOfertas', {
+            templateUrl: 'partials/oferta/buscarOfertas.html',
+            controller: 'buscarOfertas'
         });
-        $routeProvider.when('/crearOferta', {
-            templateUrl: 'partials/oferta/crearOferta.html',
-            controller: 'crearOferta'
+        $routeProvider.when('/publicarOferta', {
+            templateUrl: 'partials/oferta/publicarOferta.html',
+            controller: 'publicarOferta'
         });
         $routeProvider.when('/detallesOferta/:tipoOferta/:idOferta', {
             templateUrl: 'partials/oferta/detallesOferta.html',
@@ -47,7 +47,8 @@ myApp.config(['$routeProvider',
             controller: 'perfilProfesor'
         });
         $routeProvider.when('/home', {
-            templateUrl: 'partials/home.html'
+            templateUrl: 'partials/home.html',
+            controller: 'home'
         });
         $routeProvider.otherwise({
             redirectTo: '/home'

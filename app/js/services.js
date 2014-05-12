@@ -12,7 +12,7 @@ apiService.factory('appAuth', function($rootScope, $location, $cookieStore, auth
             return authlogin.login(credentials);
         },
         isLoggedIn: function() {
-            return !!$cookieStore.get('login');; //convert value to bool
+            return !!$cookieStore.get('login'); //convert value to bool
         },
         saveAttemptUrl: function() {
             if ($location.path().toLowerCase() != '/login') {

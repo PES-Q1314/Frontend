@@ -35,16 +35,16 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#/home">Home</a>
-                <span ng-show="userCredentials.username" class="navbar-brand">Username: {{ userCredentials.username }}</span>
-                <button ng-show="userCredentials" ng-controller="login" type="button" class="navbar-brand" ng-click="logout()">Logout</button>
+                <span ng-if="userCredentials.username" class="navbar-brand">Username: {{ userCredentials.username }}</span>
+                <button ng-if="userCredentials" ng-controller="login" type="button" class="navbar-brand" ng-click="logout()">Logout</button>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#/about">About</a>
+                    <li><a href="#/ayuda">Ayuda</a>
                     </li>
-                    <li><a href="#/contact">Services</a>
+                    <li><a href="#/contactar">Contactar</a>
                     </li>
                 </ul>
             </div>
@@ -56,14 +56,7 @@
 
     <div class="container">
         <div  class="row">
-            <div class="col-md-3">
-                <p class="lead">Bolsa de empleo</p>
-                <ul id="sidebar" class="nav nav-stacked affix">
-                  <li><a href="#/crearOferta">Crear Oferta</a></li>
-                  <li><a href="#/listarOfertas">Listado de ofertas</a></li>
-                 </ul>
-            </div>
-
+            <div ng-include src="'partials/menu.html'" ng-if="userCredentials" class="col-md-3"></div>
             <div ng-view  class="col-md-9">
 
             </div>
