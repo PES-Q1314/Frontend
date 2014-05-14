@@ -47,13 +47,43 @@
 	<div class="row">
 			Tipo de Jornada: <select ng-model="oferta.tipo_de_jornada" ng-options="t.id as t.name for t in tipos_jornada"></select>
 	</div>
+	<div class="row">
+			Tipo de Contrato: <select ng-model="oferta.tipo_de_contrato" ng-options="t.id as t.name for t in tipos_contrato"></select>
+	</div>
 	<div ng-show="showUltimoCurso" class="row">
 			Ultimo curso academico: <input type="checkbox" ng-model="oferta.ultimo_curso_academico_superado">
 	</div>
 	<div class="row">
 		<select multiple="multiple" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
 	</div>
+	<div class="row">
+		<div class="col-md-4 text-center" ng-repeat="beneficio in beneficiosLaborales">
+			{{ beneficio.name }} <input type="checkbox" value="{{beneficio.id}}" check-list='checked_beneficios'>
+		</div>
+	</div>
+
+<div class="row">
+	<h4>Conocimientos tecnicos</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Conocimiento</td>
+			<td>Nivel</td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="conocimiento in requisitos_de_conocimiento_tecnico">
+				<td>{{ conocimiento.conocimiento }}</td>
+				<td>{{ conocimiento.nivel}}</td>
+				<td><button class="btn" ng-click="deleteConocimiento(conocimiento)">Del</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<select ng-model="ct.nombre" ng-options="t as t.conocimiento for t in conocimientotecnico"></select>
+		<select ng-model="ct.nivel" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
+		<button class="btn btn-default" ng-click="addConocimiento(ct)">Añadir conocimiento tecnico</button>
+	</div>
+</div>
 	<div class="row text-center">
-		<button class="btn btn-default" ng-click="crearOferta(oferta)">Crear Oferta</button>
+		<button class="btn btn-default" ng-click="crearOferta(oferta, checked_beneficios)">Crear Oferta</button>
 	</div>
 </form>

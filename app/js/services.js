@@ -231,9 +231,9 @@ apiService.factory('Especialidad', ['$resource',
     }
 ]);
 
-apiService.factory('Conocimiento', ['$resource',
+apiService.factory('ConocimientoTecnico', ['$resource',
     function($resource) {
-        return $resource('http://bolsa-de-empleo-upc.herokuapp.com/api/conocimientotecnico/:id', {}, {
+        return $resource(urlServicio + 'conocimientotecnico/:id', {}, {
             query: {
                 method: 'GET',
                 params: {
@@ -245,6 +245,168 @@ apiService.factory('Conocimiento', ['$resource',
                 method: 'GET',
                 params: {
                     id: ''
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('SectorMercado', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'sectordelmercado/:id', {}, {
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('Idioma', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'idioma/:id', {}, {
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('BeneficiosLaborales', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'beneficioslaborales/:id', {}, {
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('RequisitosIdioma', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'requisitodeidioma/:id', {}, {
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('RequisitosExperienciaLaboral', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'requisitodeexperiencialaboral/:id', {}, {
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            add: {
+                method: 'POST',
+                params: {
+                    id: ''
+                }
+            }
+        })
+    }
+]);
+
+apiService.factory('RequisitosConocimientoTecnico', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'requisitodeconocimientotecnico/:id', {}, {
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
                 },
                 isArray: false
             },
