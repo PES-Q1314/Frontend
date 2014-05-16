@@ -68,6 +68,7 @@
 		<thead>
 			<td>Conocimiento</td>
 			<td>Nivel</td>
+			<td></td>
 		</thead>
 		<tbody>
 			<tr ng-repeat="conocimiento in requisitos_de_conocimiento_tecnico">
@@ -83,6 +84,54 @@
 		<button class="btn btn-default" ng-click="addConocimiento(ct)">Añadir conocimiento tecnico</button>
 	</div>
 </div>
+
+<div class="row">
+	<h4>Idiomas</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Idioma</td>
+			<td>Nivel</td>
+			<td></td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="idioma in requisitos_de_idioma">
+				<td>{{ idioma.idioma }}</td>
+				<td>{{ idioma.nivel}}</td>
+				<td><button class="btn" ng-click="deleteIdioma(idioma)">Del</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<select ng-model="idiomatoadd.nombre" ng-options="t as t.idioma for t in idiomas"></select>
+		<select ng-model="idiomatoadd.nivel" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
+		<button class="btn btn-default" ng-click="addIdioma(idiomatoadd)">Añadir idioma</button>
+	</div>
+</div>
+
+<div class="row">
+	<h4>Experiencia</h4>
+	<table class="table table-striped">
+		<thead>
+			<td>Sector</td>
+			<td>Meses de experiencia</td>
+			<td></td>
+		</thead>
+		<tbody>
+			<tr ng-repeat="exp in requisitos_de_experiencia">
+				<td>{{ exp.sector }}</td>
+				<td>{{ exp.meses }}</td>
+				<td><button class="btn" ng-click="deleteExp(exp)">Del</button></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<select ng-model="experienciatoadd.sector" ng-options="t as t.sector for t in sectormercado"></select>
+		<input type="text" ng-model="experienciatoadd.meses"></select>
+		<button class="btn btn-default" ng-click="addExp(experienciatoadd)">Añadir experiencia</button>
+	</div>
+</div>
+
+
 	<div class="row text-center">
 		<button class="btn btn-default" ng-click="crearOferta(oferta, checked_beneficios)">Crear Oferta</button>
 	</div>

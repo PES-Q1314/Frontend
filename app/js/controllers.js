@@ -29,6 +29,15 @@ myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 
 myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico',
     function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico) {
 
+        $scope.oferta = {};
+        $scope.ct = {};
+        $scope.idiomatoadd = {};
+        $scope.experienciatoadd = {};
+        $scope.requisitos_de_conocimiento_tecnico = {};
+        $scope.requisitos_de_idioma = {};
+        $scope.requisitos_de_experiencia = {};
+        $scope.sectormercado = {};
+
         if (!appAuth.isLoggedIn()) {
             appAuth.saveAttemptUrl();
             $location.path("/login");
@@ -45,11 +54,21 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
                 $scope.titulo = "Oferta de empresa";
                 $scope.showTfg = true;
                 $scope.showUltimoCurso = true;
+                $scope.oferta.titulo = "Test";
             };
         }
 
         function crearOfertaGenerico(servicio, beneficios, oferta, requisitos) {
-            BeneficiosLaborales.add(beneficios, function(data) {
+
+            console.log("Oferta a insertar");
+            console.log("--------------OFERTA--------------");
+            console.log(oferta);
+            console.log("------------BENEFICIOS------------");
+            console.log(beneficios);
+            console.log("------------REQUISITOS------------");
+            console.log(requisitos);
+
+            /*            BeneficiosLaborales.add(beneficios, function(data) {
                 servicio.addNew(oferta, function(dataOferta) {
                     RequisitosConocimientoTecnico.add(requisitos.conocimiento, function(dataConocimiento) {
 
@@ -72,25 +91,45 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
 
             }, function(dataErrorBeneficios) {
                 //Error al crear los beneficios
-            });
+            });*/
         };
 
         /**
          * Crear oferta y editar los conocimientos tecnicos
          *
          **/
-        $scope.oferta = {};
-        $scope.ct = {};
-        $scope.requisitos_de_conocimiento_tecnico = {};
-        $scope.crearOferta = function(oferta, beneficios, requisitostecnicos, requisitosidioma, requisitosconocimiento) {
+        $scope.crearOferta = function(oferta, beneficios) {
             var BeneficiostoAdd = {};
+            var reqIdiomatoAdd = [];
+            var reqExptoAdd = [];
+            var reqContoAdd = [];
             var requisitos = {};
             for (var i = 0; i < beneficios.length; i++) {
                 BeneficiostoAdd[beneficios[i]] = true;
             };
-            oferta.requisitos_de_idioma = [];
-            oferta.requisitos_de_conocimiento_tecnico = [];
-            oferta.requisitos_de_experiencia_laboral = [];
+
+            for (var property in $scope.requisitos_de_idioma) {
+                if ($scope.requisitos_de_idioma.hasOwnProperty(property)) {
+                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property].resource_uri);
+                }
+            }
+
+            for (var property in $scope.requisitos_de_experiencia) {
+                if ($scope.requisitos_de_experiencia.hasOwnProperty(property)) {
+                    reqExptoAdd.push($scope.requisitos_de_experiencia[property].resource_uri);
+                }
+            }
+
+            for (var property in $scope.requisitos_de_conocimiento_tecnico) {
+                if ($scope.requisitos_de_conocimiento_tecnico.hasOwnProperty(property)) {
+                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property].resource_uri);
+                }
+            }
+
+            requisitos['idiomas'] = reqIdiomatoAdd;
+            requisitos['experiencia'] = reqExptoAdd;
+            requisitos['conocimiento'] = reqContoAdd;
+
             if ($scope.userCredentials.tipo == 'Profesor') {
                 crearOfertaGenerico(OfertaDeDepartamento, BeneficiostoAdd, oferta, requisitos);
             } else if ($scope.userCredentials.tipo == 'Estudiante') {
@@ -110,8 +149,32 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
 
         $scope.deleteConocimiento = function(delCon) {
             delete $scope.requisitos_de_conocimiento_tecnico[delCon.conocimiento];
-            console.log(delCon);
         };
+
+        $scope.addIdioma = function(newIdioma) {
+            $scope.requisitos_de_idioma[newIdioma.nombre.idioma] = {
+                'nivel': newIdioma.nivel,
+                'idioma': newIdioma.nombre.idioma,
+                'resource_uri': newIdioma.nombre.resource_uri
+            };
+        };
+
+        $scope.deleteIdioma = function(delIdioma) {
+            delete $scope.requisitos_de_idioma[delIdioma.idioma];
+        };
+
+        $scope.addExp = function(newExp) {
+            $scope.requisitos_de_experiencia[newExp.sector.sector] = {
+                'meses': newExp.meses,
+                'sector': newExp.sector.sector,
+                'resource_uri': newExp.sector.resource_uri
+            };
+        };
+
+        $scope.deleteExp = function(delExp) {
+            delete $scope.requisitos_de_experiencia[delExp.sector];
+        };
+
 
         //calendar Button function
         $scope.open = function($event) {
@@ -200,6 +263,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             'limit': 200
         }, function(data) {
             $scope.idiomas = data.objects;
+            $scope.idiomatoadd.nombre = $scope.idiomas[0];
         });
 
         ConocimientoTecnico.queryAll({
@@ -213,27 +277,46 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             'limit': 200
         }, function(data) {
             $scope.sectormercado = data.objects;
+            $scope.experienciatoadd.sector = $scope.sectormercado[0];
         });
 
         $scope.checked_beneficios = [];
         $scope.oferta.horario = $scope.tipos_horario[0].id;
         $scope.oferta.tipo_de_jornada = $scope.tipos_jornada[0].id;
         $scope.ct.nivel = $scope.niveles_conocimiento[0].id;
+        $scope.idiomatoadd.nivel = $scope.niveles_conocimiento[0].id;
         $scope.oferta.tipo_de_contrato = $scope.tipos_contrato[0].id;
 
     }
 ]);
 
-myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Conocimiento', 'appAuth',
+myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'ConocimientoTecnico', 'appAuth',
 
     function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth) {
+
+        var beneficiosLaboralesText = {
+            'horario_flexible': 'Horario flexible',
+            'vacaciones_ajustables': 'Vacaciones ajustables',
+            'seguro_de_vida': 'Seguro de vida',
+            'seguro_medico': 'Seguro médico',
+            'posibilidad_de_ascenso': 'Posibilidad de ascenso',
+            'transporte': 'Transporte',
+            'primas': 'Primas',
+            'comidas': 'Comidas',
+            'trabajo_desde_casa': 'Trabajo desde casa'
+        };
+        $scope.getBeneficioText = function(key) {
+            return beneficiosLaboralesText[key];
+        };
 
         function getData(data, tipo, texto) {
             $scope.oferta = data;
             $scope.tipousuario = tipo;
             $scope.textousuario = texto;
             $scope.loading = false;
-        }
+            delete $scope.oferta.beneficios_laborales.resource_uri;
+            delete $scope.oferta.beneficios_laborales.id;
+        };
 
         if (!appAuth.isLoggedIn()) {
             appAuth.saveAttemptUrl();

@@ -9,7 +9,14 @@
 	<div class="col-md-2">Descripcion:</div><div class="col-md-10">{{ oferta.descripcion }}</div>
 	<div class="col-md-2">Ubicacion:</div><div class="col-md-6">{{ oferta.direccion }}</div>
 	<div class="col-md-2">Puestos vacantes: </div><div class="col-md-2">{{ oferta.numero_de_puestos_vacantes }}</div>
+	<div class="col-md-2">Tipo de contrato: </div><div class="col-md-2">{{ oferta.tipo_de_contrato }}</div>
 </div>
+
+	<div class="row">
+		<div class="col-md-4 text-center" ng-repeat="(key, beneficio) in oferta.beneficios_laborales">
+			{{ getBeneficioText(key) }} <input type="checkbox" ng-checked="{{beneficio}}">
+		</div>
+	</div>
 
 <div class="row"><h3>Información de contacto</h3></div>
 <div class="row">
