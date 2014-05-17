@@ -46,6 +46,14 @@ myApp.config(['$routeProvider',
             templateUrl: 'partials/perfiles/profesor.html',
             controller: 'perfilProfesor'
         });
+        $routeProvider.when('/misOfertas', {
+            templateUrl: 'partials/oferta/misOfertas.html',
+            controller: 'misOfertas'
+        });
+        $routeProvider.when('/modificarOferta/:idOferta', {
+            templateUrl: 'partials/oferta/publicarOferta.html',
+            controller: 'modificarOferta'
+        });
         $routeProvider.when('/home', {
             templateUrl: 'partials/home.html',
             controller: 'home'

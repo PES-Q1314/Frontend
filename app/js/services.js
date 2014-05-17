@@ -68,7 +68,7 @@ apiService.factory('Oferta', ['$resource',
 
 apiService.factory('OfertaDeEmpresa', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'ofertadeempresa/:id', {}, {
+        return $resource(urlServicio + 'ofertadeempresa/:id/:action', {}, {
             queryAll: {
                 method: 'GET',
                 params: {
@@ -86,7 +86,20 @@ apiService.factory('OfertaDeEmpresa', ['$resource',
             addNew: {
                 method: 'POST',
                 params: {
-                    id: ''
+                    id: '@id'
+                }
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
+            },
+            eliminar: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'eliminar'
                 }
             }
         })
@@ -419,3 +432,108 @@ apiService.factory('RequisitosConocimientoTecnico', ['$resource',
         })
     }
 ]);
+
+
+apiService.factory('VectoresDeDatos', function() {
+    return {
+        tiposDeJornada: function() {
+            return [{
+                id: 'parcial',
+                name: 'Parcial'
+            }, {
+                id: 'completa',
+                name: 'Completa'
+            }];
+        },
+        tiposDeContrato: function() {
+            return [{
+                id: 'practicas',
+                name: 'Prácticas'
+            }, {
+                id: 'indefinido',
+                name: 'Indefinido'
+            }, {
+                id: 'temporal',
+                name: 'Temporal'
+            }];
+        },
+        tiposDeHorario: function() {
+            return [{
+                id: 'manyana',
+                name: 'Mañana'
+            }, {
+                id: 'tarde',
+                name: 'Tarde'
+            }, {
+                id: 'total',
+                name: 'Indiferente'
+            }];
+        },
+        nivelesDeConocimiento: function() {
+            return [{
+                id: 'medio',
+                name: 'Medio'
+            }, {
+                id: 'avanzado',
+                name: 'Avanzado'
+            }, {
+                id: 'experto',
+                name: 'Experto'
+            }];
+        },
+        beneficiosLaborales: function() {
+            return [{
+                id: 'horario_flexible',
+                name: 'Horario flexible'
+            }, {
+                id: 'vacaciones_ajustables',
+                name: 'Vacaciones ajustables'
+            }, {
+                id: 'seguro_de_vida',
+                name: 'Seguro de vida'
+            }, {
+                id: 'seguro_medico',
+                name: 'Seguro médico'
+            }, {
+                id: 'posibilidad_de_ascenso',
+                name: 'Posibilidad de ascenso'
+            }, {
+                id: 'transporte',
+                name: 'Transporte'
+            }, {
+                id: 'primas',
+                name: 'Primas'
+            }, {
+                id: 'comidas',
+                name: 'Comidas'
+            }, {
+                id: 'trabajo_desde_casa',
+                name: 'Trabajo desde casa'
+            }];
+        },
+        tiposDeOferta: function() {
+            return [{
+                name: 'Todas'
+            }, {
+                name: 'Empresa'
+            }, {
+                name: 'Departamento'
+            }, {
+                name: 'Colaboración'
+            }];
+        },
+        beneficiosLaboralesText: function() {
+            return {
+                'horario_flexible': 'Horario flexible',
+                'vacaciones_ajustables': 'Vacaciones ajustables',
+                'seguro_de_vida': 'Seguro de vida',
+                'seguro_medico': 'Seguro médico',
+                'posibilidad_de_ascenso': 'Posibilidad de ascenso',
+                'transporte': 'Transporte',
+                'primas': 'Primas',
+                'comidas': 'Comidas',
+                'trabajo_desde_casa': 'Trabajo desde casa'
+            };
+        }
+    }
+});
