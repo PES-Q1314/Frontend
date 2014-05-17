@@ -397,10 +397,20 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
     }
 ]);
 
+myApp.controller('ModalInstanceCtrl', ['$scope', '$modalInstance',
+    function($scope, $modalInstance, $parent) {
+        $scope.ok = function() {
+            $modalInstance.close($scope.motivo);
+        };
 
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
+        };
+    }
+]);
 
-myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'appAuth',
-    function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth) {
+myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'appAuth',
+    function($scope, $location, $routeParams, $modal, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth) {
 
         function eliminarGen(servicio, id, motivo) {
             servicio.eliminar({
@@ -410,15 +420,30 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', 'OfertaDe
             });
         }
 
-        $scope.eliminar = function(id) {
+        function eliminar(id, motivo) {
             if ($scope.userCredentials.tipo == 'Profesor') {
-                eliminarGen(OfertaDeDepartamento, id, 'MotivoTest');
+                eliminarGen(OfertaDeDepartamento, id, motivo);
             } else if ($scope.userCredentials.tipo == 'Estudiante') {
-                eliminarGen(OfertaDeProyectoEmprendedor, id, 'MotivoTest');
+                eliminarGen(OfertaDeProyectoEmprendedor, id, motivo);
             } else {
-                eliminarGen(OfertaDeEmpresa, id, 'MotivoTest');
+                eliminarGen(OfertaDeEmpresa, id, motivo);
             };
         }
+
+        $scope.open = function(id) {
+            $scope.motivo = "";
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/modals/eliminarOfertaModalConfirmation.html',
+                controller: 'ModalInstanceCtrl'
+            });
+
+            modalInstance.result.then(function(result) {
+                eliminar(id, result);
+            }, function(result) {
+                console.log(result);
+            });
+
+        };
 
         function getOfertasActivas(servicio) {
             servicio.queryAll({
