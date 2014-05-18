@@ -180,11 +180,13 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         };
 
         $scope.addExp = function(newExp) {
-            $scope.requisitos_de_experiencia[newExp.sector.sector] = {
-                'meses': newExp.meses,
-                'sector': newExp.sector.sector,
-                'resource_uri': newExp.sector.resource_uri
-            };
+            if (angular.isNumber(newExp.meses) && newExp.meses != 0) {
+                $scope.requisitos_de_experiencia[newExp.sector.sector] = {
+                    'meses': newExp.meses,
+                    'sector': newExp.sector.sector,
+                    'resource_uri': newExp.sector.resource_uri
+                };
+            }
         };
 
         $scope.deleteExp = function(delExp) {
