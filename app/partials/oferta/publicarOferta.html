@@ -95,9 +95,9 @@
 		        	<input type="number" placeholder="Meses de duración" name="meses_de_duracion" class="form-control" min="1" ng-model="oferta.meses_de_duracion">
 	        		<p ng-show="form.meses_de_duracion.$invalid && !form.meses_de_duracion.$pristine" class="help-block">Los meses de duración deben ser numericos.</p>
 	        </div>
-	        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
+	        <label ng-show="showUltimoCurso" for="ultimoCurso" class="col-xs-2 control-label">Último curso academico</label>
 	        <div ng-show="showUltimoCurso" class="col-xs-4">
-	            <select ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superadoList"></select>
+	            <select ng-model="oferta.ultimo_curso_academico_superado" name="ultimoCurso" class="form-control" ng-options="t.id as t.name for t in ultimoCurso"></select>
 	        </div>
 	    </div>
 		    <div class="form-group">

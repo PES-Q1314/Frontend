@@ -120,7 +120,6 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             console.log(oferta.especialidades);
             console.log($scope.requisitos_de_experiencia);
             console.log($scope.requisitos_de_conocimiento_tecnico);
-            console.log(asdasd);
             for (var i = 0; i < beneficios.length; i++) {
                 BeneficiostoAdd[beneficios[i]] = true;
             };
@@ -207,7 +206,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
+        $scope.ultimoCurso = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {
@@ -241,7 +240,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.ct.nivel = $scope.niveles_conocimiento[0].id;
         $scope.idiomatoadd.nivel = $scope.niveles_conocimiento[0].id;
         $scope.oferta.tipo_de_contrato = $scope.tipos_contrato[0].id;
-        $scope.oferta.ultimo_curso_academico_superado = $scope.ultimo_curso_academico_superadoList[4].id;
+        $scope.oferta.ultimo_curso_academico_superado = $scope.ultimoCurso[4].id;
 
     }
 ]);
@@ -257,7 +256,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
+        $scope.ultimoCurso = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {
@@ -762,7 +761,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
                 $scope.oferta = data;
                 $scope.checked_beneficios = [];
                 var especialidades = [];
-
                 for (var property in data.beneficios_laborales) {
                     if (data.beneficios_laborales.hasOwnProperty(property)) {
                         if (data.beneficios_laborales[property] === true) {
@@ -957,7 +955,7 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
+        $scope.ultimoCurso = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {

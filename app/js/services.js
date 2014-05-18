@@ -537,19 +537,19 @@ apiService.factory('VectoresDeDatos', function() {
         },
         ultimo_curso_academico_superado: function() {
             return [{
-                id: '1',
+                id: 1,
                 name: 'Primero'
             }, {
-                id: '2',
+                id: 2,
                 name: 'Segundo'
             }, {
-                id: '3',
+                id: 3,
                 name: 'Tercero'
             }, {
-                id: '4',
+                id: 4,
                 name: 'Cuarto'
             }, {
-                id: '5',
+                id: 5,
                 name: 'Último'
             }];
         },
