@@ -30,7 +30,7 @@
 			<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG
 		</div>
 		<div ng-show="ultCurso(query)" class="row text-center">
-			<input type="checkbox" ng-model="query.ultimo_curso_academico_superado"> Ultimo curso superado
+			 Último curso superado <select ng-model="query.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"><option value="">Todas</option></select>
 		</div>
 		<div class="row text-center">
 			<button class="btn btn-default" ng-click="OfertasQuery(query)">Buscar</button>

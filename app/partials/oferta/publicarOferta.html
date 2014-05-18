@@ -1,22 +1,22 @@
-<form novalidate class="simple-form">
+<form novalidate name="form" class="simple-form">
 	<h1>{{ titulo }}</h1>
 	<div class="row">
-			Titulo: <input type="text" ng-model="oferta.titulo">
+			Titulo*: <input required maxlength="100" type="text" ng-model="oferta.titulo">
 	</div>
 	<div class="row">
-			Descripcion: <input type="text" ng-model="oferta.descripcion">
+			Descripcion*: <input type="text" required maxlength="600" ng-model="oferta.descripcion">
 	</div>
 	<div class="row">
-			Direccion: <input type="text" ng-model="oferta.direccion">
+			Direccion: <input maxlength="200" type="text" ng-model="oferta.direccion">
 	</div>
 	<div class="row">
-			Email de contacto: <input type="text" ng-model="oferta.email_de_contacto">
+			Email de contacto: <input type="email" ng-model="oferta.email_de_contacto">
 	</div>
 	<div class="row">
-		Fecha de incorporación
+		Fecha de incorporación*
 		<p class="input-group">
-			<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
-			<span class="input-group-btn">
+			<input type="text" required class="form-control" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+			<span class ="input-group-btn">
 				<button class="btn btn-default" ng-click="open($event)">
 					<i class="glyphicon glyphicon-calendar"></i>
 				</button>
@@ -30,28 +30,28 @@
 		Horario: <select ng-model="oferta.horario" ng-options="t.id as t.name for t in tipos_horario"></select>
 	</div>
 	<div class="row">
-			Duración: <input type="text" ng-model="oferta.meses_de_duracion">
+			Duración: <input type="number" min="1" ng-model="oferta.meses_de_duracion">
 	</div>
 	<div class="row">
-			Vacantes: <input type="text" ng-model="oferta.numero_de_puestos_vacantes">
+			Vacantes: <input type="number" min="1" ng-model="oferta.numero_de_puestos_vacantes">
 	</div>
 	<div class="row">
-			Persona de contacto: <input type="text" ng-model="oferta.persona_de_contacto">
+			Persona de contacto: <input type="text" maxlength="100" ng-model="oferta.persona_de_contacto">
 	</div>
 	<div class="row">
-			Puesto: <input type="text" ng-model="oferta.puesto">
+			Puesto: <input maxlength="150" type="text" ng-model="oferta.puesto">
 	</div>
 	<div class="row">
-			Salario mensual: <input type="text" ng-model="oferta.salario_mensual">
+			Salario mensual: <input type="number" min="0" ng-model="oferta.salario_mensual">
 	</div>
 	<div class="row">
-			Tipo de Jornada: <select ng-model="oferta.tipo_de_jornada" ng-options="t.id as t.name for t in tipos_jornada"></select>
+			Tipo de Jornada: <select  ng-model="oferta.tipo_de_jornada" ng-options="t.id as t.name for t in tipos_jornada"></select>
 	</div>
 	<div class="row">
 			Tipo de Contrato: <select ng-model="oferta.tipo_de_contrato" ng-options="t.id as t.name for t in tipos_contrato"></select>
 	</div>
 	<div ng-show="showUltimoCurso" class="row">
-			Ultimo curso academico: <input type="checkbox" ng-model="oferta.ultimo_curso_academico_superado">
+			Ultimo curso academico: <select ng-model="oferta.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"></select>
 	</div>
 	<div class="row">
 		<select multiple="multiple" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
@@ -133,6 +133,6 @@
 
 
 	<div class="row text-center">
-		<button class="btn btn-default" ng-click="crearOferta(oferta, checked_beneficios)">{{ buttonText }}</button>
+		<button class="btn btn-default" ng-disabled="form.$invalid" ng-click="crearOferta(oferta, checked_beneficios)">{{ buttonText }}</button>
 	</div>
 </form>

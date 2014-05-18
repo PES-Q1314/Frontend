@@ -534,6 +534,33 @@ apiService.factory('VectoresDeDatos', function() {
                 'comidas': 'Comidas',
                 'trabajo_desde_casa': 'Trabajo desde casa'
             };
+        },
+        ultimo_curso_academico_superado: function() {
+            return [{
+                id: '1',
+                name: 'Primero'
+            }, {
+                id: '2',
+                name: 'Segundo'
+            }, {
+                id: '3',
+                name: 'Tercero'
+            }, {
+                id: '4',
+                name: 'Cuarto'
+            }, {
+                id: '5',
+                name: 'Último'
+            }];
+        },
+        ultimo_curso_academico_superado_key: function() {
+            return {
+                '1': 'Primero',
+                '2': 'Segundo',
+                '3': 'Tercero',
+                '4': 'Cuarto',
+                '5': 'Último'
+            };
         }
     }
 });

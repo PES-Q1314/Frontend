@@ -65,6 +65,10 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             };
         }
 
+        $scope.isUnchanged = function(user) {
+            return angular.equals(user, $scope.master);
+        };
+
         function crearOfertaGenerico(servicio, beneficios, oferta, requisitos) {
 
             console.log("Oferta a insertar");
@@ -200,7 +204,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-
+        $scope.ultimo_curso_academico_superado = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {
@@ -234,6 +238,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.ct.nivel = $scope.niveles_conocimiento[0].id;
         $scope.idiomatoadd.nivel = $scope.niveles_conocimiento[0].id;
         $scope.oferta.tipo_de_contrato = $scope.tipos_contrato[0].id;
+        $scope.oferta.ultimo_curso_academico_superado = $scope.ultimo_curso_academico_superado[4].id;
 
     }
 ]);
@@ -243,9 +248,14 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Ofer
     function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth, VectoresDeDatos) {
 
         var beneficiosLaboralesText = VectoresDeDatos.beneficiosLaboralesText();
+        var ultimocursoText = VectoresDeDatos.ultimo_curso_academico_superado_key();
 
         $scope.getBeneficioText = function(key) {
             return beneficiosLaboralesText[key];
+        };
+
+        $scope.getUltimoCursoKey = function(key) {
+            return ultimocursoText[key];
         };
 
         function getData(data, tipo, texto) {
@@ -350,25 +360,30 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                     offset: 0
                 };
                 $scope.query = query;
+                var dateObj;
                 if (query.fecha_de_incorporacion__gte != undefined) {
-                    var dateObj = query.fecha_de_incorporacion__gte;
+                    dateObj = query.fecha_de_incorporacion__gte;
                     query.fecha_de_incorporacion__gte = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1) + '-' + dateObj.getDate();
                 }
-
+                delete query.especialidades;
                 if (query.tipooferta.name == $scope.tipos_oferta[1].name) {
                     OfertaDeEmpresa.queryAll(query, function(data) {
+                        query.fecha_de_incorporacion__gte = dateObj;
                         pagCalculation(data);
                     });
                 } else if (query.tipooferta.name == $scope.tipos_oferta[2].name) {
                     OfertaDeDepartamento.queryAll(query, function(data) {
+                        query.fecha_de_incorporacion__gte = dateObj;
                         pagCalculation(data);
                     });
                 } else if (query.tipooferta.name == $scope.tipos_oferta[3].name) {
                     OfertaDeProyectoEmprendedor.queryAll(query, function(data) {
+                        query.fecha_de_incorporacion__gte = dateObj;
                         pagCalculation(data);
                     });
                 } else {
                     Oferta.queryAll(query, function(data) {
+                        query.fecha_de_incorporacion__gte = dateObj;
                         pagCalculation(data);
                     });
                 }
@@ -393,6 +408,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
             $scope.tipos_oferta = VectoresDeDatos.tiposDeOferta();
             $scope.tipos_jornada = VectoresDeDatos.tiposDeJornada();
             $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
+            $scope.ultimo_curso_academico_superado = VectoresDeDatos.ultimo_curso_academico_superado();
             Especialidad.queryAll({
                 'limit': 200
             }, function(data) {
