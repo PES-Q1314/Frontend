@@ -1,70 +1,117 @@
-<form novalidate name="form" class="simple-form">
+<form novalidate name="form" class="form-horizontal">
 	<h1>{{ titulo }}</h1>
-	<div class="row">
-			Titulo*: <input required maxlength="100" type="text" ng-model="oferta.titulo">
+    <div class="form-group">
+        <label for="titulo" class="col-xs-2 control-label">Titulo<span class="red">*</span></label>
+        <div class="col-xs-10">
+            <input type="text" maxlength="100" required ng-model="oferta.titulo" class="form-control col-sm-10" name="titulo" placeholder="Titulo de la oferta"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="descripcion" class="col-xs-2 control-label">Descripción<span class="red">*</span></label>
+        <div class="col-xs-10">
+            <textarea class="form-control col-sm-10" name="descripcion" maxlength="600" placeholder="Descripción de la oferta" required ng-model="oferta.descripcion" rows="4"></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ubicacion" class="col-xs-2 control-label">Ubicación</label>
+        <div class="col-xs-6">
+            <input maxlength="200" type="text" name="ubicacion" placeholder="Ubicación" class="form-control" ng-model="oferta.direccion">
+        </div>
+        <label for="plazas" class="col-xs-2 control-label">Vacantes</label>
+        <div class="col-xs-2">
+            <input type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" ng-model="oferta.numero_de_puestos_vacantes">
+        </div>
+    </div>
+
+	<h2>Información de contacto</h2>
+    <div class="form-group">
+        <label for="persona_de_contacto" class="col-xs-3 control-label">Persona de contacto<span class="red">*</span></label>
+        <div class="col-xs-9">
+            <input type="text" maxlength="100" required ng-model="oferta.persona_de_contacto" class="form-control col-sm-10" name="persona_de_contacto" placeholder="Persona de contacto"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email_de_contacto" class="col-xs-3 control-label">Correo de contacto<span class="red">*</span></label>
+        <div class="col-xs-9">
+            <input type="email" maxlength="100" required ng-model="oferta.email_de_contacto" class="form-control col-sm-10" name="email_de_contacto" placeholder="Correo de contacto"/>
+        </div>
+    </div>
+	<h2>Información sobre el puesto</h2>
+    <div class="form-group">
+        <label for="puesto" class="col-xs-2 control-label">Puesto</label>
+        <div class="col-xs-4">
+            <input maxlength="150" type="text" name="puesto" placeholder="Puesto" class="form-control" ng-model="oferta.puesto">
+        </div>
+        <label for="tipo_de_contrato" class="col-xs-2 control-label">Tipo de contrato</label>
+        <div class="col-xs-4">
+            <select ng-model="oferta.tipo_de_contrato" name="tipo_de_contrato" class="form-control" ng-options="t.id as t.name for t in tipos_contrato"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="tipo_de_jornada" class="col-xs-2 control-label">Tipo de jornada</label>
+        <div class="col-xs-4">
+			<select  ng-model="oferta.tipo_de_jornada" name="tipo_de_jornada" class="form-control" ng-options="t.id as t.name for t in tipos_jornada"></select>
+        </div>
+        <label for="horario" class="col-xs-2 control-label">Horario</label>
+        <div class="col-xs-4">
+            <select ng-model="oferta.horario" name="horario" class="form-control" ng-options="t.id as t.name for t in tipos_horario"></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="fecha_de_incorporacion" class="col-xs-2 control-label">Fecha de incorporación<span class="red">*</span></label>
+        <div class="col-xs-4">
+			<p class="input-group">
+				<input type="text" required class="form-control" placeholder="Fecha de incorporación" name="fecha_de_incorporacion" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+				<span class ="input-group-btn">
+					<button class="btn btn-default" ng-click="open($event)">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+			</p>
+        </div>
+        <label for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
+        <div class="col-xs-4">
+        	<input type="number" placeholder="Salario mensual" name="salario_mensual" class="form-control" min="0" ng-model="oferta.salario_mensual">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="meses_de_duracion" class="col-xs-2 control-label">Duración</label>
+        <div class="col-xs-4">
+	        	<input type="number" placeholder="Meses de duración" name="meses_de_duracion" class="form-control" min="1" ng-model="oferta.meses_de_duracion">
+        </div>
+        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
+        <div ng-show="showUltimoCurso" class="col-xs-4">
+            <select ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"></select>
+        </div>
+    </div>
+	    <div class="form-group">
+		<div ng-show="showTfg" class="checkbox col-xs-12">
+		  <label>
+		    <input name="hay_posibilidad_de_tfg" type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
+		    <label for="hay_posibilidad_de_tfg" class="control-label">Posibilidad de TFG</label>
+		  </label>
+		</div>
 	</div>
-	<div class="row">
-			Descripcion*: <input type="text" required maxlength="600" ng-model="oferta.descripcion">
-	</div>
-	<div class="row">
-			Direccion: <input maxlength="200" type="text" ng-model="oferta.direccion">
-	</div>
-	<div class="row">
-			Email de contacto: <input type="email" ng-model="oferta.email_de_contacto">
-	</div>
-	<div class="row">
-		Fecha de incorporación*
-		<p class="input-group">
-			<input type="text" required class="form-control" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
-			<span class ="input-group-btn">
-				<button class="btn btn-default" ng-click="open($event)">
-					<i class="glyphicon glyphicon-calendar"></i>
-				</button>
-			</span>
-		</p>
-	</div>
-	<div ng-show="showTfg" class="row">
-			TSG incluido: <input type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
-	</div>
-	<div class="row">
-		Horario: <select ng-model="oferta.horario" ng-options="t.id as t.name for t in tipos_horario"></select>
-	</div>
-	<div class="row">
-			Duración: <input type="number" min="1" ng-model="oferta.meses_de_duracion">
-	</div>
-	<div class="row">
-			Vacantes: <input type="number" min="1" ng-model="oferta.numero_de_puestos_vacantes">
-	</div>
-	<div class="row">
-			Persona de contacto: <input type="text" maxlength="100" ng-model="oferta.persona_de_contacto">
-	</div>
-	<div class="row">
-			Puesto: <input maxlength="150" type="text" ng-model="oferta.puesto">
-	</div>
-	<div class="row">
-			Salario mensual: <input type="number" min="0" ng-model="oferta.salario_mensual">
-	</div>
-	<div class="row">
-			Tipo de Jornada: <select  ng-model="oferta.tipo_de_jornada" ng-options="t.id as t.name for t in tipos_jornada"></select>
-	</div>
-	<div class="row">
-			Tipo de Contrato: <select ng-model="oferta.tipo_de_contrato" ng-options="t.id as t.name for t in tipos_contrato"></select>
-	</div>
-	<div ng-show="showUltimoCurso" class="row">
-			Ultimo curso academico: <select ng-model="oferta.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"></select>
-	</div>
-	<div class="row">
-		<select multiple="multiple" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
-	</div>
-	<div class="row">
-		<div class="col-md-4 text-center" ng-repeat="beneficio in beneficiosLaborales">
+	<h3>Beneficios laborales</h3>
+	<div class="form-group">
+		<div class="col-md-4 text-right" ng-repeat="beneficio in beneficiosLaborales">
 			{{ beneficio.name }} <input type="checkbox" value="{{beneficio.id}}" check-list='checked_beneficios'>
 		</div>
 	</div>
+	<h2>Requisitos de la oferta</h2>
+	<h3>Estudios admitidos</h3>
+	<div class="form-group">
+		<select multiple="multiple" size="8" class="form-control" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
+	</div>
+
 
 <div class="row">
-	<h4>Conocimientos tecnicos</h4>
-	<table class="table table-striped">
+	<h3>Conocimientos tecnicos</h3>
+	<table class="table table-striped table-bordered table-condensed text-center">
 		<thead>
 			<td>Conocimiento</td>
 			<td>Nivel</td>
@@ -72,22 +119,28 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="conocimiento in requisitos_de_conocimiento_tecnico">
-				<td>{{ conocimiento.conocimiento }}</td>
-				<td>{{ conocimiento.nivel}}</td>
-				<td><button class="btn" ng-click="deleteConocimiento(conocimiento)">Del</button></td>
+				<td class="col-md-6">{{ conocimiento.conocimiento }}</td>
+				<td class="col-md-5">{{ conocimiento.nivel}}</td>
+				<td class="col-md-1"><button class="btn btn-sm btn-danger" ng-click="deleteConocimiento(conocimiento)">Eliminar</button></td>
 			</tr>
 		</tbody>
 	</table>
-	<div class="row">
-		<select ng-model="ct.nombre" ng-options="t as t.conocimiento for t in conocimientotecnico"></select>
-		<select ng-model="ct.nivel" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
-		<button class="btn btn-default" ng-click="addConocimiento(ct)">Añadir conocimiento tecnico</button>
+	<div class="form-group">
+		<label for="conocimientonombre" class="col-xs-2 control-label">Conocimiento</label>
+		<div class="col-xs-3">
+			<select ng-model="ct.nombre" name="conocimientonombre" class="form-control" ng-options="t as t.conocimiento for t in conocimientotecnico"></select>
+		</div>
+			<label for="conocimientonivel" class="col-xs-1 control-label">Nivel</label>
+			<div class="col-xs-2">
+			<select ng-model="ct.nivel" name="conocimientonivel" class="form-control" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
+		</div>
+		<button class="btn btn-primary col-xs-3" ng-click="addConocimiento(ct)">Añadir conocimiento tecnico</button>
 	</div>
 </div>
 
 <div class="row">
-	<h4>Idiomas</h4>
-	<table class="table table-striped">
+	<h3>Idiomas</h3>
+	<table class="table table-striped table-bordered table-condensed text-center">
 		<thead>
 			<td>Idioma</td>
 			<td>Nivel</td>
@@ -95,22 +148,28 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="idioma in requisitos_de_idioma">
-				<td>{{ idioma.idioma }}</td>
-				<td>{{ idioma.nivel}}</td>
-				<td><button class="btn" ng-click="deleteIdioma(idioma)">Del</button></td>
+				<td class="col-md-6">{{ idioma.idioma }}</td>
+				<td class="col-md-5">{{ idioma.nivel}}</td>
+				<td class="col-md-1"><button class="btn btn-sm btn-danger" ng-click="deleteIdioma(idioma)">Eliminar</button></td>
 			</tr>
 		</tbody>
 	</table>
-	<div class="row">
-		<select ng-model="idiomatoadd.nombre" ng-options="t as t.idioma for t in idiomas"></select>
-		<select ng-model="idiomatoadd.nivel" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
-		<button class="btn btn-default" ng-click="addIdioma(idiomatoadd)">Añadir idioma</button>
+	<div class="form-group">
+		<label for="idiomanombre" class="col-xs-2 control-label">Idioma</label>
+		<div class="col-xs-3">
+			<select ng-model="idiomatoadd.nombre" name="idiomanombre" class="form-control" ng-options="t as t.idioma for t in idiomas"></select>
+		</div>
+			<label for="idiomanivel" class="col-xs-1 control-label">Nivel</label>
+			<div class="col-xs-2">
+			<select ng-model="idiomatoadd.nivel" name="idiomanivel" class="form-control" ng-options="t.id as t.name for t in niveles_conocimiento"></select>
+		</div>
+		<button class="btn btn-primary col-xs-3" ng-click="addIdioma(idiomatoadd)">Añadir idioma</button>
 	</div>
 </div>
 
 <div class="row">
-	<h4>Experiencia</h4>
-	<table class="table table-striped">
+	<h3>Experiencia</h3>
+	<table class="table table-striped table-bordered table-condensed text-center">
 		<thead>
 			<td>Sector</td>
 			<td>Meses de experiencia</td>
@@ -118,21 +177,26 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="exp in requisitos_de_experiencia">
-				<td>{{ exp.sector }}</td>
-				<td>{{ exp.meses }}</td>
-				<td><button class="btn" ng-click="deleteExp(exp)">Del</button></td>
+				<td class="col-md-6 text-center">{{ exp.sector }}</td>
+				<td class="col-md-5">{{ exp.meses }}</td>
+				<td class="col-md-1"><button class="btn btn-sm btn-danger" ng-click="deleteExp(exp)">Eliminar</button></td>
 			</tr>
 		</tbody>
 	</table>
-	<div class="row">
-		<select ng-model="experienciatoadd.sector" ng-options="t as t.sector for t in sectormercado"></select>
-		<input type="text" ng-model="experienciatoadd.meses"></select>
-		<button class="btn btn-default" ng-click="addExp(experienciatoadd)">Añadir experiencia</button>
+	<div class="form-group">
+		<label for="experiencianombre" class="col-xs-2 control-label">Experiencia</label>
+		<div class="col-xs-3">
+			<select ng-model="experienciatoadd.sector" name="experiencianombre" class="form-control" ng-options="t as t.sector for t in sectormercado"></select>
+		</div>
+			<label for="experienciameses" class="col-xs-1 control-label">Meses</label>
+			<div class="col-xs-2">
+				<input type="number" class="form-control" name="experienciameses" min="1" placeholder="Meses" ng-model="experienciatoadd.meses">
+			</div>
+		<button class="btn btn-primary col-xs-3" ng-click="addExp(experienciatoadd)">Añadir experiencia</button>
 	</div>
 </div>
-
-
-	<div class="row text-center">
-		<button class="btn btn-default" ng-disabled="form.$invalid" ng-click="crearOferta(oferta, checked_beneficios)">{{ buttonText }}</button>
+	<div class="text-center">
+		<span>Los campos con <span class="red">*</span> son obligatorios</span>
+		<button class="btn btn-lg btn-success" ng-disabled="form.$invalid" ng-click="crearOferta(oferta, checked_beneficios)">{{ buttonText }}</button>
 	</div>
 </form>
