@@ -1,48 +1,64 @@
 <div class="row-fluid">
-	<form novalidate class="simple-form">
-		<div class="row text-center">
-			Tipo de oferta: <select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta"></select>
+	<form novalidate class="simple-form form-horizontal col-xs-12">
+		<div class="form-group text-center">
+			<label class="col-xs-2 col-xs-offset-4 text-right">Tipo de oferta: </label>
+			<div class="col-xs-3">
+				<select ng-model="query.tipooferta" ng-options="t.name for t in tipos_oferta" class="form-control"></select>
+			</div>
 		</div>
-		<div class="row text-center">
-			Estudios: <select ng-model="query.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades">
-				<option value="">Todas</option>
-			</select>
+		<div class="form-group">
+			<label class="control-label col-xs-1 text-right">Estudios: </label>
+			<div class="col-xs-6">
+				<select ng-model="query.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades" class="form-control">
+					<option value="">Todas</option>
+				</select>
+			</div>
+			<label class="control-label col-xs-2 text-right">Incorporación: </label>
+			<div class="col-xs-3 text-center">
+	            <p class="input-group">
+	              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.fecha_de_incorporacion__gte" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+	              <span class="input-group-btn">
+	                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+	              </span>
+	            </p>
+			</div>
 		</div>
-		<div class="row text-center">
-            <p class="input-group">
-              <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="query.fecha_de_incorporacion__gte" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
-              <span class="input-group-btn">
-                <button class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-              </span>
-            </p>
+		<div class="form-group">
+			<label class="control-label col-xs-1 text-right">Horario: </label>
+			<div class="col-xs-3 text-center">
+				<select ng-model="query.horario" ng-options="t.id as t.name for t in tipos_horario" class="form-control">
+					<option value="">Todos</option>
+				</select>
+			</div>
+			<label class="control-label col-xs-3 col-xs-offset-2 text-right">Tipo de Jornada: </label>
+			<div class="col-xs-3 text-center">
+				<select ng-model="query.tipos_jornada" ng-options="t.id as t.name for t in tipos_jornada" class="form-control">
+					<option value="">Todas</option>
+				</select>
+			</div>
 		</div>
-		<div class="row text-center">
-			Horario: <select ng-model="query.horario" ng-options="t.id as t.name for t in tipos_horario">
-				<option value="">Todas</option>
-			</select>
-		</div>
-		<div class="row text-center">
-			Tipo de Jornada: <select ng-model="query.tipos_jornada" ng-options="t.id as t.name for t in tipos_jornada">
-				<option value="">Todas</option>
-			</select>
-		</div>
-		<div ng-show="tfgShow(query)" class="row text-center">
-			<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"> Posibilidad de TFG
-		</div>
-		<div ng-show="ultCurso(query)" class="row text-center">
-			 Último curso superado <select ng-model="query.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"><option value="">Todas</option></select>
-		</div>
-		<div class="row text-center">
-			<button class="btn btn-default" ng-click="OfertasQuery(query)">Buscar</button>
+		<div class="form-group">
+			<div ng-show="tfgShow(query)" class="col-xs-4 text-center">
+				<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"  class="form-control"> Posibilidad de TFG
+			</div>
+			<label ng-show="ultCurso(query)" class="control-label col-xs-3 text-right">Último curso superado: </label>
+			<div ng-show="ultCurso(query)" class="form-control col-xs-4 text-center">
+				 <select ng-model="query.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado" class="form-control">
+				 	<option value="">Todas</option>
+				 </select>
+			</div>
+			<div class="col-xs-1 text-center">
+				<button class="btn btn-default" ng-click="OfertasQuery(query)">Buscar</button>
+			</div>
 		</div>
 	</form>
 </div>
 
-<div class="row-fluid" >
+<div class="row-fluid">
 	<div class="text-center" ng-show="loading">
 		<img id="spinner" ng-src="img/loading.gif">
 	</div>
-	<div class="text-center" ng-show="sinResultados">
+	<div class="text-center resultados_busqueda" ng-show="sinResultados">
 		Sin resultados
 	</div>
 	<div ng-repeat="oferta in ofertas" ng-hide="loading">
@@ -57,7 +73,7 @@
 				<div class="col-md-3">{{oferta.fecha_de_incorporacion}}</div>
 			</div>
 		</div>
-		<div class="col-md-8 col-md-offset-2" style="border-bottom:solid; padding-bottom:10px; margin-top:10px"></div>
+		<div class="col-md-8 col-md-offset-2 elemento_oferta"></div>
 	</div>
 </div>
  <div class="text-center row-fluid" ng-hide="loading || sinResultados">
