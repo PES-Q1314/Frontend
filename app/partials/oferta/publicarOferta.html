@@ -1,16 +1,18 @@
 <form novalidate name="form" class="form-horizontal">
+	<h1><span>{{ titulo }}</span></h1>
 	<div id="SeccionPrincipal">
-		<h1><span>{{ titulo }}</span></h1>
 	    <div class="form-group">
 	        <label for="titulo" class="col-xs-2 control-label">Titulo<span class="red">*</span></label>
-	        <div class="col-xs-10">
+	        <div class="col-xs-10" ng-class="{ 'has-error' : form.titulo.$invalid && !form.titulo.$pristine }">
 	            <input type="text" maxlength="100" required ng-model="oferta.titulo" class="form-control col-sm-10" name="titulo" placeholder="Titulo de la oferta"/>
+	            <p ng-show="form.titulo.$invalid && !form.titulo.$pristine" class="help-block">El titulo de la oferta es obligatorio.</p>
 	        </div>
 	    </div>
 	    <div class="form-group">
 	        <label for="descripcion" class="col-xs-2 control-label">Descripción<span class="red">*</span></label>
-	        <div class="col-xs-10">
+	        <div class="col-xs-10" ng-class="{ 'has-error' : form.descripcion.$invalid && !form.descripcion.$pristine }">
 	            <textarea class="form-control col-sm-10" name="descripcion" maxlength="600" placeholder="Descripción de la oferta" required ng-model="oferta.descripcion" rows="4"></textarea>
+	            <p ng-show="form.descripcion.$invalid && !form.descripcion.$pristine" class="help-block">La descripción de la oferta es obligatoria.</p>
 	        </div>
 	    </div>
 
@@ -19,9 +21,10 @@
 	        <div class="col-xs-6">
 	            <input maxlength="200" type="text" name="ubicacion" placeholder="Ubicación" class="form-control" ng-model="oferta.direccion">
 	        </div>
-	        <label for="plazas" class="col-xs-2 control-label">Vacantes</label>
-	        <div class="col-xs-2">
+	        <label for="plazas" class="col-xs-1 control-label">Vacantes</label>
+	        <div class="col-xs-3" ng-class="{ 'has-error' : form.plazas.$invalid && !form.plazas.$pristine }">
 	            <input type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" ng-model="oferta.numero_de_puestos_vacantes">
+	            <p ng-show="form.plazas.$invalid && !form.plazas.$pristine" class="help-block">Las vacantes deben ser un número.</p>
 	        </div>
 	    </div>
     </div>
@@ -29,14 +32,16 @@
 		<h2>Información de contacto</h2>
 	    <div class="form-group">
 	        <label for="persona_de_contacto" class="col-xs-3 control-label">Persona de contacto<span class="red">*</span></label>
-	        <div class="col-xs-9">
+	        <div class="col-xs-9" ng-class="{ 'has-error' : form.persona_de_contacto.$invalid && !form.persona_de_contacto.$pristine }">
 	            <input type="text" maxlength="100" required ng-model="oferta.persona_de_contacto" class="form-control col-sm-10" name="persona_de_contacto" placeholder="Persona de contacto"/>
+	            <p ng-show="form.persona_de_contacto.$invalid && !form.persona_de_contacto.$pristine" class="help-block">La persona de contacto es obligatoria.</p>
 	        </div>
 	    </div>
 	    <div class="form-group">
 	        <label for="email_de_contacto" class="col-xs-3 control-label">Correo de contacto<span class="red">*</span></label>
-	        <div class="col-xs-9">
+	        <div class="col-xs-9" ng-class="{ 'has-error' : form.email_de_contacto.$invalid && !form.email_de_contacto.$pristine }">
 	            <input type="email" maxlength="100" required ng-model="oferta.email_de_contacto" class="form-control col-sm-10" name="email_de_contacto" placeholder="Correo de contacto"/>
+	            <p ng-show="form.email_de_contacto.$invalid && !form.email_de_contacto.$pristine" class="help-block">El correo de contacto es obligatorio y debe ser válido.</p>
 	        </div>
 	    </div>
     </div>
@@ -66,7 +71,7 @@
 
 	    <div class="form-group">
 	        <label for="fecha_de_incorporacion" class="col-xs-2 control-label">Fecha de incorporación<span class="red">*</span></label>
-	        <div class="col-xs-4">
+	        <div class="col-xs-4" ng-class="{ 'has-error' : form.fecha_de_incorporacion.$invalid && !form.fecha_de_incorporacion.$pristine }">
 				<p class="input-group">
 					<input type="text" required class="form-control" placeholder="Fecha de incorporación" name="fecha_de_incorporacion" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
 					<span class ="input-group-btn">
@@ -75,17 +80,20 @@
 						</button>
 					</span>
 				</p>
+				<p ng-show="form.fecha_de_incorporacion.$invalid && !form.fecha_de_incorporacion.$pristine" class="help-block">La fecha de incorporación es obligatoria.</p>
 	        </div>
 	        <label for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
-	        <div class="col-xs-4">
+	        <div class="col-xs-4" ng-class="{ 'has-error' : form.salario_mensual.$invalid && !form.salario_mensual.$pristine }">
 	        	<input type="number" placeholder="Salario mensual" name="salario_mensual" class="form-control" min="0" ng-model="oferta.salario_mensual">
+	        	<p ng-show="form.salario_mensual.$invalid && !form.salario_mensual.$pristine" class="help-block">El salario debe ser numerico.</p>
 	        </div>
 	    </div>
 
 	    <div class="form-group">
 	        <label for="meses_de_duracion" class="col-xs-2 control-label">Duración</label>
-	        <div class="col-xs-4">
+	        <div class="col-xs-4" ng-class="{ 'has-error' : form.meses_de_duracion.$invalid && !form.meses_de_duracion.$pristine }">
 		        	<input type="number" placeholder="Meses de duración" name="meses_de_duracion" class="form-control" min="1" ng-model="oferta.meses_de_duracion">
+	        		<p ng-show="form.meses_de_duracion.$invalid && !form.meses_de_duracion.$pristine" class="help-block">Los meses de duración deben ser numericos.</p>
 	        </div>
 	        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
 	        <div ng-show="showUltimoCurso" class="col-xs-4">
@@ -197,8 +205,9 @@
 					<select ng-model="experienciatoadd.sector" name="experiencianombre" class="form-control" ng-options="t as t.sector for t in sectormercado"></select>
 				</div>
 					<label for="experienciameses" class="col-xs-1 control-label">Meses</label>
-					<div class="col-xs-2">
+					<div class="col-xs-2" ng-class="{ 'has-error' : form.experienciameses.$invalid && !form.experienciameses.$pristine }">
 						<input type="number" class="form-control" name="experienciameses" min="1" placeholder="Meses" ng-model="experienciatoadd.meses">
+						<p ng-show="form.experienciameses.$invalid && !form.experienciameses.$pristine" class="help-block">Los meses deben ser numericos.</p>
 					</div>
 				<button class="btn btn-primary col-xs-3" ng-click="addExp(experienciatoadd)">Añadir experiencia</button>
 			</div>
