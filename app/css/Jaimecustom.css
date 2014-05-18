@@ -1,0 +1,14 @@
+.contentPartials{
+	border: 1px solid #0184d5;
+	border-radius: 20px;
+}
+
+#formOferta h1{ margin-top: -20px;}
+
+#formOferta h1 span{ background-color: #fff;}
+
+#SeccionPrincipal, 
+#SeccionInformacionContacto, 
+#SeccionInformacionPuesto, 
+#SeccionRequisitos{ border-bottom: 2px solid #0184d5;}
+
