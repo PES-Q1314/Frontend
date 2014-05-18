@@ -38,6 +38,10 @@ footer {
   color: #2a6496;
 }
 
+.red {
+  color: red;
+}
+
 /* HEADER */
 
 .header{
@@ -94,3 +98,4 @@ footer {
 .menu_group li:hover, .menu_group a:hover {
   background-color: #93C0DB !important; 
 }
+
