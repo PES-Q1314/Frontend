@@ -38,16 +38,20 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<div ng-show="ultCurso(query)" class="col-xs-7 text-center">
+				<label ng-show="ultCurso(query)" class="control-label col-xs-5">Último curso superado</label>
+				<div class="col-xs-4 text-right">
+					<select ng-model="query.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado" class="form-control">
+					 	<option value="">Todas</option>
+					</select>
+				 </div>
+			</div>
 			<div ng-show="tfgShow(query)" class="col-xs-4 text-center">
-				<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"  class="form-control"> Posibilidad de TFG
+				<label>
+					<input type="checkbox" ng-model="query.hay_posibilidad_de_tfg"><span>Posibilidad de TFG</span>
+				</label>
 			</div>
-			<label ng-show="ultCurso(query)" class="control-label col-xs-3 text-right">Último curso superado: </label>
-			<div ng-show="ultCurso(query)" class="form-control col-xs-4 text-center">
-				 <select ng-model="query.ultimo_curso_academico_superado" ng-options="t.id as t.name for t in ultimo_curso_academico_superado" class="form-control">
-				 	<option value="">Todas</option>
-				 </select>
-			</div>
-			<div class="col-xs-1 text-center">
+			<div class="col-xs-12 text-center">
 				<button class="btn btn-default" ng-click="OfertasQuery(query)">Buscar</button>
 			</div>
 		</div>
