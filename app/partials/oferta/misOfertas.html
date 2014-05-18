@@ -2,53 +2,13 @@
     <tab heading="Ofertas activas">
       <div class="row">
         <h4>Ofertas Activas</h4>
-        <table class="table table-striped">
-          <thead>
-            <td>Oferta</td>
-            <td>Alta Oferta</td>
-            <td>Acciones</td>
-          </thead>
-          <tbody>
-            <tr ng-repeat="oferta in ofertasActivas">
-              <td>{{ oferta.titulo }}</td>
-              <td>{{ oferta.fecha_de_creacion}}</td>
-              <td>
-                <a href="">Ver suscripciones</a>
-                <a href="#/modificarOferta/{{oferta.id}}">Modificar</a>
-                <button class="btn" ng-click="open(oferta.id)">Eliminar</button>
-                <!--<a ng-click="eliminar(oferta.id)">Eliminar</a>-->
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <div ui-if="myDataActiva.length>0" class="gridStyle" ng-style="getTableStyleActiva()" ng-grid="gridOptionsActiva"></div>
       </div>
     </tab>
     <tab heading="Ofertas anteriores">
       <div class="row">
         <h4>Ofertas Pasadas</h4>
-        <table class="table table-striped">
-          <thead>
-            <td>Oferta</td>
-            <td>Alta Oferta</td>
-            <td>Baja Oferta</td>
-            <td>Motivo</td>
-            <td>Acciones</td>
-          </thead>
-          <tbody>
-            <tr ng-repeat="oferta in ofertasPasadas">
-              <td>{{ oferta.titulo }}</td>
-              <td>{{ oferta.fecha_de_creacion}}</td>
-              <td>{{ oferta.fecha_de_eliminacion}}</td>
-              <td>YO KE SE TIO</td>
-              <td>
-                <a href="">Restablecer</a>
-                <a href="">Modificar</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <div ui-if="myDataPasada.length>0" class="gridStyle" ng-style="getTableStylePasada()" ng-grid="gridOptionsPasada"></div>
       </div>
-
-
     </tab>
   </tabset>

@@ -436,49 +436,199 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 templateUrl: 'partials/modals/eliminarOfertaModalConfirmation.html',
                 controller: 'ModalInstanceCtrl'
             });
-
             modalInstance.result.then(function(result) {
-                eliminar(id, result);
+                console.log("Intentando eliminar oferta " + id + " motivo: " + result);
+                //eliminar(id.entity.id, result);
             }, function(result) {
                 console.log(result);
             });
 
         };
 
-        function getOfertasActivas(servicio) {
+        function getOfertasActivas(limit, offset) {
+            var servicio;
+            if ($scope.userCredentials.tipo == 'Profesor') {
+                servicio = OfertaDeDepartamento;
+            } else if ($scope.userCredentials.tipo == 'Estudiante') {
+                servicio = OfertaDeProyectoEmprendedor;
+            } else {
+                servicio = OfertaDeEmpresa;
+            };
             servicio.queryAll({
-                'usuario__id': $scope.userCredentials.id
+                'usuario__id': $scope.userCredentials.id,
+                'limit': limit,
+                'offset': offset
                 /*, 'activa': true*/
             }, function(data) {
+                $scope.setPagingDataActiva(data.objects, data.meta.total_count);
                 $scope.ofertasActivas = data.objects;
             });
         };
 
-        function getOfertasPasadas(servicio) {
+        function getOfertasPasadas(limit, offset) {
+            var servicio;
+            if ($scope.userCredentials.tipo == 'Profesor') {
+                servicio = OfertaDeDepartamento;
+            } else if ($scope.userCredentials.tipo == 'Estudiante') {
+                servicio = OfertaDeProyectoEmprendedor;
+            } else {
+                servicio = OfertaDeEmpresa;
+            };
             servicio.queryAll({
-                'usuario__id': $scope.userCredentials.id
+                'usuario__id': $scope.userCredentials.id,
+                'limit': limit,
+                'offset': offset
                 /*, 'activa': false*/
             }, function(data) {
+                $scope.setPagingDataPasada(data.objects, data.meta.total_count);
                 $scope.ofertasPasadas = data.objects;
             });
+        };
+
+        $scope.totalServerItemsActiva = 0;
+        $scope.totalServerItemsPasada = 0;
+        $scope.pagingOptionsActiva = {
+            pageSizes: [20],
+            pageSize: 20,
+            currentPage: 1
+        };
+        $scope.pagingOptionsPasada = {
+            pageSizes: [20],
+            pageSize: 20,
+            currentPage: 1
+        };
+
+        $scope.getTableStyleActiva = function() {
+            var rowHeight = 30;
+            var headerHeight = 45;
+            if ($scope.myDataActiva == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataActiva.length) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.getTableStylePasada = function() {
+            var rowHeight = 30;
+            var headerHeight = 45;
+            if ($scope.myDataPasada == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataPasada.length) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.setPagingDataActiva = function(data, total) {
+            $scope.myDataActiva = data;
+            $scope.totalServerItemsActiva = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.setPagingDataPasada = function(data, total) {
+            $scope.myDataPasada = data;
+            $scope.totalServerItemsPasada = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.getPagedDataAsyncActiva = function(pageSize, page) {
+            getOfertasActivas(pageSize, ((page - 1) * pageSize));
+        };
+
+        $scope.getPagedDataAsyncPasada = function(pageSize, page) {
+            getOfertasPasadas(pageSize, ((page - 1) * pageSize));
+        };
+
+        $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+
+        $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+
+        $scope.$watch('pagingOptionsActiva', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+            }
+        }, true);
+
+        $scope.$watch('pagingOptionsPasada', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+            }
+        }, true);
+
+        $scope.accionesOfertasActiva = '<button type="button" class="btn" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn" ng-click="modificar(row)" >Mod</button><button type="button" class="btn" ng-click="open(row)">Eliminar</button>';
+
+        $scope.accionesOfertasPasada = '<button type="button" class="btn" ng-click="modificar(row)" >Mod</button><button type="button" class="btn" ng-click="restablecer(row)">Restablecer</button>';
+
+        $scope.modificar = function modificar(row) {
+            $location.path(/modificarOferta/ + row.entity.id);
+        };
+
+        $scope.restablecer = function restablecer(row) {
+            console.log(restablecer)
+            $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+        }
+
+        $scope.gridOptionsActiva = {
+            data: 'myDataActiva',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsActiva',
+            pagingOptions: $scope.pagingOptionsActiva,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'titulo',
+                displayName: 'Titulo'
+            }, {
+                field: 'fecha_de_creacion',
+                displayName: 'Fecha Alta',
+                cellFilter: 'date:\'dd/MM/yyyy\'',
+            }, {
+                displayName: 'Acciones',
+                cellTemplate: $scope.accionesOfertasActiva
+            }]
+        };
+
+        $scope.gridOptionsPasada = {
+            data: 'myDataPasada',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsPasada',
+            pagingOptions: $scope.pagingOptionsPasada,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'titulo',
+                displayName: 'Titulo'
+            }, {
+                field: 'fecha_de_creacion',
+                displayName: 'Alta oferta',
+                cellFilter: 'date:\'dd/MM/yyyy\'',
+            }, {
+                field: 'fecha_de_eliminacion',
+                displayName: 'Baja Oferta',
+                cellFilter: 'date:\'dd/MM/yyyy\'',
+            }, {
+                field: 'motivo',
+                displayName: 'Motivo'
+            }, {
+                displayName: 'Acciones',
+                cellTemplate: $scope.accionesOfertasPasada
+            }]
         };
 
         if (!appAuth.isLoggedIn()) {
             appAuth.saveAttemptUrl();
             $location.path("/login");
-        } else {
-
-            if ($scope.userCredentials.tipo == 'Profesor') {
-                getOfertasActivas(OfertaDeDepartamento);
-                getOfertasPasadas(OfertaDeDepartamento);
-            } else if ($scope.userCredentials.tipo == 'Estudiante') {
-                getOfertasActivas(OfertaDeProyectoEmprendedor);
-                getOfertasPasadas(OfertaDeProyectoEmprendedor);
-            } else {
-                getOfertasActivas(OfertaDeEmpresa);
-                getOfertasPasadas(OfertaDeEmpresa);
-            };
-
         }
     }
 ]);

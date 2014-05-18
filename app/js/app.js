@@ -9,7 +9,8 @@ var myApp = angular.module('myApp', [
     'myApp.controllers',
     'apiService',
     'ui.bootstrap',
-    'ngCookies'
+    'ngCookies',
+    'ngGrid'
 ]);
 
 myApp.value('redirectToUrlAfterLogin', {
