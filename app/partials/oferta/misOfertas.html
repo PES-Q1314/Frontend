@@ -1,14 +1,24 @@
+<div id="misOfertasPartial">
   <tabset>
     <tab heading="Ofertas activas">
-      <div class="row">
+      <div class="col-xs-12">
         <h4>Ofertas Activas</h4>
-          <div ui-if="myDataActiva.length>0" class="gridStyle" ng-style="getTableStyleActiva()" ng-grid="gridOptionsActiva"></div>
+          <div class="text-center" ng-show="loadingActivas">
+            <img id="spinner" ng-src="img/loading.gif">
+          </div>
+          <div ng-hide="myDataActiva.length>0 || loadingActivas">No tienes ofertas activas</div>
+          <div ng-show="myDataActiva.length>0 && !loadingActivas" class="gridStyle" ng-style="getTableStyleActiva()" ng-grid="gridOptionsActiva"></div>
       </div>
     </tab>
     <tab heading="Ofertas anteriores">
-      <div class="row">
+      <div class="col-xs-12">
         <h4>Ofertas Pasadas</h4>
-          <div ui-if="myDataPasada.length>0" class="gridStyle" ng-style="getTableStylePasada()" ng-grid="gridOptionsPasada"></div>
+          <div class="text-center" ng-show="loadingPasadas">
+            <img id="spinner" ng-src="img/loading.gif">
+          </div>
+          <div ng-hide="myDataPasada.length>0 || loadingPasadas">No tienes ofertas pasadas</div>
+          <div ng-show="myDataPasada.length>0 && !loadingPasadas" class="gridStyle" ng-style="getTableStylePasada()" ng-grid="gridOptionsPasada"></div>
       </div>
     </tab>
   </tabset>
+  </div>

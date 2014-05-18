@@ -97,11 +97,11 @@
 	        </div>
 	        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
 	        <div ng-show="showUltimoCurso" class="col-xs-4">
-	            <select ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superado"></select>
+	            <select ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superadoList"></select>
 	        </div>
 	    </div>
 		    <div class="form-group">
-			<div ng-show="showTfg" class="col-xs-12">
+			<div ng-show="showTfg" class="col-xs-12 text-center">
 			  <label>
 			    <input name="hay_posibilidad_de_tfg" type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
 			    Posibilidad de TFG

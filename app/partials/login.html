@@ -1,15 +1,20 @@
 <div class="row-fluid">
-	<form novalidate class="simple-form">
-		<div class="row text-center">
-			username: <input type="text" ng-model="user.username"></br>
-			password: <input type="password" ng-model="user.password">
+	<form novalidate name="form" class="form-horizontal col-xs-offset-3">
+		<div class="form-group">
+			<label for="username" class="col-xs-3 control-label">Nombre de usuario</label>
+			<div class="col-xs-4">
+	            <input type="text" required ng-model="user.username" class="form-control col-sm-12" name="username" placeholder="Usuario"/>
+	        </div>
+	    </div>
+	    <div class="form-group">
+			<label for="password" class="col-xs-3 control-label">Contraseña</label>
+			<div class="col-xs-4">
+	            <input type="text" required ng-model="user.password" class="form-control col-sm-12" name="password" placeholder="Contraseña"/>
+	        </div>
 		</div>
-		<div class="row text-center">
-			<button class="btn btn-default" ng-click="login(user)">Login</button>
-			<button class="btn btn-default" ng-click="logout()">Logout</button>
+		<div class="form-group text-center col-xs-8">
+			<a href="">Recuperar contraseña</a>
+			<button class="btn btn-success" ng-disabled="form.$invalid" ng-click="login(user)">Login</button>
 		</div>
 	</form>
-
-{{ datosUsuario }}
-
 </div>

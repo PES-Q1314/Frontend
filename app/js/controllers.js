@@ -6,6 +6,7 @@ var myApp = angular.module('myApp.controllers', []);
 
 myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth',
     function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth) {
+        $scope.loginPath = true;
         if (appAuth.isLoggedIn())
             $location.path('/home');
 
@@ -206,7 +207,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-        $scope.ultimo_curso_academico_superado = VectoresDeDatos.ultimo_curso_academico_superado();
+        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {
@@ -240,7 +241,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.ct.nivel = $scope.niveles_conocimiento[0].id;
         $scope.idiomatoadd.nivel = $scope.niveles_conocimiento[0].id;
         $scope.oferta.tipo_de_contrato = $scope.tipos_contrato[0].id;
-        $scope.oferta.ultimo_curso_academico_superado = $scope.ultimo_curso_academico_superado[4].id;
+        $scope.oferta.ultimo_curso_academico_superado = $scope.ultimo_curso_academico_superadoList[4].id;
 
     }
 ]);
@@ -472,6 +473,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
 
         function getOfertasActivas(limit, offset) {
             var servicio;
+            $scope.loadingActivas = true;
             if ($scope.userCredentials.tipo == 'Profesor') {
                 servicio = OfertaDeDepartamento;
             } else if ($scope.userCredentials.tipo == 'Estudiante') {
@@ -487,11 +489,13 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }, function(data) {
                 $scope.setPagingDataActiva(data.objects, data.meta.total_count);
                 $scope.ofertasActivas = data.objects;
+                $scope.loadingActivas = false;
             });
         };
 
         function getOfertasPasadas(limit, offset) {
             var servicio;
+            $scope.loadingPasadas = true;
             if ($scope.userCredentials.tipo == 'Profesor') {
                 servicio = OfertaDeDepartamento;
             } else if ($scope.userCredentials.tipo == 'Estudiante') {
@@ -507,6 +511,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }, function(data) {
                 $scope.setPagingDataPasada(data.objects, data.meta.total_count);
                 $scope.ofertasPasadas = data.objects;
+                $scope.loadingPasadas = false;
             });
         };
 
@@ -587,9 +592,9 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }
         }, true);
 
-        $scope.accionesOfertasActiva = '<button type="button" class="btn" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn" ng-click="modificar(row)" >Mod</button><button type="button" class="btn" ng-click="open(row)">Eliminar</button>';
+        $scope.accionesOfertasActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Mod</button><button type="button" class="btn miniButtons btn-xs btn-danger" ng-click="open(row)">Eliminar</button>';
 
-        $scope.accionesOfertasPasada = '<button type="button" class="btn" ng-click="modificar(row)" >Mod</button><button type="button" class="btn" ng-click="restablecer(row)">Restablecer</button>';
+        $scope.accionesOfertasPasada = '<button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Mod</button><button type="button" class="btn miniButtons btn-xs btn-success" ng-click="restablecer(row)">Restablecer</button>';
 
         $scope.modificar = function modificar(row) {
             $location.path(/modificarOferta/ + row.entity.id);
@@ -714,6 +719,8 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
                         'resource_uri': data.requisitos_de_experiencia_laboral[i].sector.resource_uri
                     };
                 };
+
+                console.log(data);
             })
         };
 
@@ -742,7 +749,7 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
 
         function modificarOfertaGenerico(servicio, beneficios, oferta, requisitos) {
             delete oferta.latitud;
-            delete oferta.langitud;
+            delete oferta.longitud;
             delete oferta.modificado_tras_una_congelacion;
             delete oferta.requisitos_de_conocimiento_tecnico;
             delete oferta.requisitos_de_experiencia_laboral;
@@ -783,6 +790,7 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
          *
          **/
         $scope.crearOferta = function(oferta, beneficios) {
+            console.log(oferta.ultimo_curso_academico_superado);
             var BeneficiostoAdd = {};
             var reqIdiomatoAdd = [];
             var reqExptoAdd = [];
@@ -809,7 +817,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
                     reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property].resource_uri);
                 }
             }
-
             requisitos['idiomas'] = reqIdiomatoAdd;
             requisitos['experiencia'] = reqExptoAdd;
             requisitos['conocimiento'] = reqContoAdd;
@@ -872,7 +879,7 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
-
+        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
         Especialidad.queryAll({
             'limit': 200
         }, function(data) {
@@ -901,11 +908,8 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         });
 
         $scope.checked_beneficios = [];
-        $scope.oferta.horario = $scope.tipos_horario[0].id;
-        $scope.oferta.tipo_de_jornada = $scope.tipos_jornada[0].id;
         $scope.ct.nivel = $scope.niveles_conocimiento[0].id;
         $scope.idiomatoadd.nivel = $scope.niveles_conocimiento[0].id;
-        $scope.oferta.tipo_de_contrato = $scope.tipos_contrato[0].id;
 
     }
 ]);

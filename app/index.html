@@ -39,39 +39,19 @@
         <a ng-if="userCredentials" ng-controller="login" ng-click="logout()"><img src="img/logout.jpg" class="img_logout" alt="Logout" title="Logout"/></a>
     </div>
   </div>
-
     <nav class="navbar navbar-inverse" role="navigation">
         <div>
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand" href="#/home">Home</a>
-
+                <a class="navbar-brand" href="#/ayuda">Ayuda</a>
+                <a class="navbar-brand" href="#/contactar">Contactar</a>
             </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="navbar-nav nav">
-                    <li><a href="#/ayuda">Ayuda</a>
-                    </li>
-                    <li><a href="#/contactar">Contactar</a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
-
     <div>
         <div  class="row">
             <div ng-include src="'partials/menu.html'" ng-controller="menuController" ng-if="userCredentials" class="col-md-2"></div>
-            <div ng-view  class="col-md-9 contentPartials">
+            <div ng-view ng-class="{fullSize : loginPath}"  class="col-md-9 contentPartials">
             </div>
         </div>
     </div>
