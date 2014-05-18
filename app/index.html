@@ -9,8 +9,9 @@
   <title>FrontEnd-PES</title>
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" type="text/css" href="http://angular-ui.github.com/ng-grid/css/ng-grid.css" />
+  <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+  <link href="css/custom.css" rel="stylesheet" type="text/css" />
   <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
-  <link href="css/custom.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
   <script src="../bower_components/angular/angular.js"></script>
   <script src="../bower_components/angular-route/angular-route.js"></script>
@@ -27,14 +28,14 @@
   <script src="js/directives.js"></script>
 
 </head>
-<body>
-  <div class="row">
+<body class="container">
+  <div class="row header">
     <div class="col-md-6">
-      <img src="img/upc.gif"/>
+      <img src="img/visualitzar_imatge.jpg"/>
     </div>
-    <div class="col-md-6" style="float:right">
-       <span ng-if="userCredentials.username" class="navbar-brand">Username: {{ userCredentials.username }}</span>
-        <button ng-if="userCredentials" ng-controller="login" type="button" class="navbar-brand" ng-click="logout()">Logout</button>
+    <div class="col-md-2 col-md-offset-4">
+       <span ng-if="userCredentials.username">{{ userCredentials.username }}</span>
+        <a ng-if="userCredentials" ng-controller="login" ng-click="logout()"><img src="img/logout.jpg" class="img_logout" alt="Logout" title="Logout"/></a>
     </div>
   </div>
 
@@ -53,7 +54,7 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
+                <ul class="navbar-nav nav">
                     <li><a href="#/ayuda">Ayuda</a>
                     </li>
                     <li><a href="#/contactar">Contactar</a>
