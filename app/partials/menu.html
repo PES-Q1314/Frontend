@@ -1,27 +1,27 @@
                 <p class="lead">Bolsa de empleo</p>
                 <ul id="sidebar" class="nav nav-stacked">
-                  <li><a href="#/buscarOfertas">Buscar ofertas</a></li>
-                  <li><a href="#/buscarPerfiles">Buscar perfiles</a></li>
-                  <li restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/publicarOferta">Publicar Oferta</a></li>
-                  <li restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/nuevasSuscripciones">Nuevas suscripciones</a></li>
-                  <li restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misOfertas">Mis ofertas</a></li>
-                  <li restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misSuscripciones">Mis suscripciones</a></li>
+                  <li ng-class="{ open: isActive('/buscarOfertas')}"><a href="#/buscarOfertas">Buscar ofertas</a></li>
+                  <li ng-class="{ open: isActive('/buscarPerfiles')}"><a href="#/buscarPerfiles">Buscar perfiles</a></li>
+                  <li ng-class="{ open: isActive('/publicarOferta')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/publicarOferta">Publicar Oferta</a></li>
+                  <li ng-class="{ open: isActive('/nuevasSuscripciones')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/nuevasSuscripciones">Nuevas suscripciones</a></li>
+                  <li ng-class="{ open: isActive('/misOfertas')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misOfertas">Mis ofertas</a></li>
+                  <li ng-class="{ open: isActive('/misSuscripciones')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misSuscripciones">Mis suscripciones</a></li>
                 </ul>
                 <p restrict access="Administrador" class="lead">Administración</p>
                 <ul restrict access="Administrador" id="sidebar" class="nav nav-stacked">
-                  <li restrict access="Administrador"><a href="#/nuevasEmpresas">Nuevas empresas</a></li>
-                  <li restrict access="Administrador"><a href="#/denuncias">Denuncias</a></li>
-                  <li restrict access="Administrador"><a href="#/modificaciones">Modificaciones</a></li>
-                  <li restrict access="Administrador"><a href="#/listaNegra">Lista negra</a></li>
+                  <li ng-class="{ open: isActive('/nuevasEmpresas')}" restrict access="Administrador"><a href="#/nuevasEmpresas">Nuevas empresas</a></li>
+                  <li ng-class="{ open: isActive('/denuncias')}" restrict access="Administrador"><a href="#/denuncias">Denuncias</a></li>
+                  <li ng-class="{ open: isActive('/modificaciones')}" restrict access="Administrador"><a href="#/modificaciones">Modificaciones</a></li>
+                  <li ng-class="{ open: isActive('/listaNegra')}" restrict access="Administrador"><a href="#/listaNegra">Lista negra</a></li>
                 </ul>
                 <p restrict access="EmpresaPremium" class="lead">Funciones Premium</p>
                 <ul restrict access="EmpresaPremium" id="sidebar" class="nav nav-stacked">
-                  <li restrict access="EmpresaPremium"><a href="#/estadisticasOferta">Estadísticas oferta</a></li>
+                  <li ng-class="{ open: isActive('/estadisticasOferta')}" restrict access="EmpresaPremium"><a href="#/estadisticasOferta">Estadísticas oferta</a></li>
                 </ul>
                 <p restrict access="Empresa EmpresaPremium Estudiante Profesor" class="lead">Configuración</p>
                 <ul restrict access="Empresa EmpresaPremium Estudiante Profesor" id="sidebar" class="nav nav-stacked">
-                  <li restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/miPerfil">Mi perfil</a></li>
-                  <li restrict access="Empresa EmpresaPremium"><a href="#/serviciosPremium">Servicios Premium</a></li>
-                  <li restrict access="Estudiante"><a href="#/privacidad">Opciones de privacidad</a></li>
-                  <li restrict access="Estudiante"><a href="#/notificaciones">Opciones de notificacion</a></li>
+                  <li ng-class="{ open: isActive('/miPerfil')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/miPerfil">Mi perfil</a></li>
+                  <li ng-class="{ open: isActive('/serviciosPremium')}" restrict access="Empresa EmpresaPremium"><a href="#/serviciosPremium">Servicios Premium</a></li>
+                  <li ng-class="{ open: isActive('/privacidad')}" restrict access="Estudiante"><a href="#/privacidad">Opciones de privacidad</a></li>
+                  <li ng-class="{ open: isActive('/notificaciones')}" restrict access="Estudiante"><a href="#/notificaciones">Opciones de notificacion</a></li>
                 </ul>

@@ -28,7 +28,17 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="row">
+    <div class="col-md-6">
+      <img src="img/upc.gif"/>
+    </div>
+    <div class="col-md-6" style="float:right">
+       <span ng-if="userCredentials.username" class="navbar-brand">Username: {{ userCredentials.username }}</span>
+        <button ng-if="userCredentials" ng-controller="login" type="button" class="navbar-brand" ng-click="logout()">Logout</button>
+    </div>
+  </div>
+
+    <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -38,8 +48,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#/home">Home</a>
-                <span ng-if="userCredentials.username" class="navbar-brand">Username: {{ userCredentials.username }}</span>
-                <button ng-if="userCredentials" ng-controller="login" type="button" class="navbar-brand" ng-click="logout()">Logout</button>
+
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -59,7 +68,7 @@
 
     <div class="container">
         <div  class="row">
-            <div ng-include src="'partials/menu.html'" ng-if="userCredentials" class="col-md-3"></div>
+            <div ng-include src="'partials/menu.html'" ng-controller="menuController" ng-if="userCredentials" class="col-md-3"></div>
             <div ng-view  class="col-md-9">
 
             </div>
@@ -71,9 +80,8 @@
         <hr>
         <footer>
             <div class="row">
-                <div class="col-lg-12">
-                    <p>Footer</a>
-                    </p>
+                <div class="col-lg-12 text-center">
+                    <p>© . Universitat Politècnica de Catalunya · BarcelonaTech</p>
                 </div>
             </div>
         </footer>

@@ -25,6 +25,13 @@ myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 
     }
 ]);
 
+myApp.controller('menuController', ['$scope', '$rootScope', '$location',
+    function($scope, $rootScope, $location) {
+        $scope.isActive = function(viewLocation) {
+            return viewLocation === $location.path();
+        };
+    }
+]);
 
 myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos',
     function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos) {
