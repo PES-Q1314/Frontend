@@ -1,103 +1,173 @@
 <div class="text-center" ng-show="loading">
 	<img id="spinner" ng-src="img/loading.gif">Cargando oferta
 </div>
+<form novalidate name="form" id="formOferta" class="form-horizontal col-xs-12">
+	<div class="col-md-12" id="detallesOferta" ng-hide="loading">
+		<h1><span>Información de la oferta</span></h1>
+		<div id="SeccionPrincipal">
+		    <div class="form-group">
+		        <label for="titulo" class="col-xs-2 control-label">Titulo</label>
+		        <div class="col-xs-10" >
+		            <input ng-disabled="true" type="text" ng-model="oferta.titulo" class="form-control col-sm-10" ng-disabled="true" name="titulo" placeholder="Titulo de la oferta"/>
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label for="descripcion" class="col-xs-2 control-label">Descripción</label>
+		        <div class="col-xs-10" >
+		            <textarea ng-disabled="true" class="form-control col-sm-10" name="descripcion" maxlength="600" placeholder="Descripción de la oferta" ng-model="oferta.descripcion" rows="4"></textarea>
+		        </div>
+		    </div>
 
-<div class="row-fluid" ng-hide="loading">
-<div class="row"><h2>Información de la oferta</h2></div>
-<div class="row">
-	<div class="col-md-2">Titulo:</div><div class="col-md-10">{{ oferta.titulo }}</div>
-	<div class="col-md-2">Descripcion:</div><div class="col-md-10">{{ oferta.descripcion }}</div>
-	<div class="col-md-2">Ubicacion:</div><div class="col-md-6">{{ oferta.direccion }}</div>
-	<div class="col-md-2">Puestos vacantes: </div><div class="col-md-2">{{ oferta.numero_de_puestos_vacantes }}</div>
-	<div class="col-md-2">Tipo de contrato: </div><div class="col-md-2">{{ oferta.tipo_de_contrato }}</div>
-</div>
+		    <div class="form-group">
+		        <label for="ubicacion" class="col-xs-2 control-label">Ubicación</label>
+		        <div class="col-xs-6">
+		            <input ng-disabled="true" maxlength="200" type="text" name="ubicacion" placeholder="Ubicación" class="form-control" ng-model="oferta.direccion">
+		        </div>
+		        <label for="plazas" class="col-xs-1 control-label">Vacantes</label>
+		        <div class="col-xs-3">
+		            <input ng-disabled="true" type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" ng-model="oferta.numero_de_puestos_vacantes">
+		        </div>
+		    </div>
+	    </div>
+		<div id="SeccionInformacionContacto">
+			<h2>Información de contacto</h2>
+		    <div class="form-group">
+		        <label for="persona_de_contacto" class="col-xs-3 control-label">Persona de contacto</label>
+		        <div class="col-xs-9">
+		            <input ng-disabled="true" type="text" maxlength="100" required ng-model="oferta.persona_de_contacto" class="form-control col-sm-10" name="persona_de_contacto" placeholder="Persona de contacto"/>
+		        </div>
+		    </div>
+		    <div class="form-group">
+		        <label for="email_de_contacto" class="col-xs-3 control-label">Correo de contacto</label>
+		        <div class="col-xs-9">
+		            <input ng-disabled="true" type="email" maxlength="100" required ng-model="oferta.email_de_contacto" class="form-control col-sm-10" name="email_de_contacto" placeholder="Correo de contacto"/>
+		        </div>
+		    </div>
+	    </div>
+	    <div id="SeccionInformacionPuesto">
+			<h2>Información sobre el puesto</h2>
+		    <div class="form-group">
+		        <label for="puesto" class="col-xs-2 control-label">Puesto</label>
+		        <div class="col-xs-4">
+		            <input ng-disabled="true" maxlength="150" type="text" name="puesto" placeholder="Puesto" class="form-control" ng-model="oferta.puesto">
+		        </div>
+		        <label for="tipo_de_contrato" class="col-xs-2 control-label">Tipo de contrato</label>
+		        <div class="col-xs-4">
+		            <select ng-disabled="true" ng-model="oferta.tipo_de_contrato" name="tipo_de_contrato" class="form-control" ng-options="t.id as t.name for t in tipos_contrato"></select>
+		        </div>
+		    </div>
 
-	<div class="row">
-		<div class="col-md-4 text-center" ng-repeat="(key, beneficio) in oferta.beneficios_laborales">
-			{{ getBeneficioText(key) }} <input type="checkbox" ng-checked="{{beneficio}}">
+		    <div class="form-group">
+		        <label for="tipo_de_jornada" class="col-xs-2 control-label">Tipo de jornada</label>
+		        <div class="col-xs-4">
+					<select ng-disabled="true"  ng-model="oferta.tipo_de_jornada" name="tipo_de_jornada" class="form-control" ng-options="t.id as t.name for t in tipos_jornada"></select>
+		        </div>
+		        <label for="horario" class="col-xs-2 control-label">Horario</label>
+		        <div class="col-xs-4">
+		            <select ng-disabled="true" ng-model="oferta.horario" name="horario" class="form-control" ng-options="t.id as t.name for t in tipos_horario"></select>
+		        </div>
+		    </div>
+
+		    <div class="form-group">
+		        <label for="fecha_de_incorporacion" class="col-xs-2 control-label">Fecha de incorporación</label>
+		        <div class="col-xs-4">
+					<p class="input-group">
+						<input ng-disabled="true" type="text" required class="form-control" placeholder="Fecha de incorporación" name="fecha_de_incorporacion" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
+						<span class ="input-group-btn">
+							<button class="btn btn-default" ng-click="open($event)">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+						</span>
+					</p>
+		        </div>
+		        <label for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
+		        <div class="col-xs-4">
+		        	<input ng-disabled="true" type="number" placeholder="Salario mensual" name="salario_mensual" class="form-control" min="0" ng-model="oferta.salario_mensual">
+		        </div>
+		    </div>
+
+		    <div class="form-group">
+		        <label for="meses_de_duracion" class="col-xs-2 control-label">Duración</label>
+		        <div class="col-xs-4" >
+			        <input ng-disabled="true" type="number" placeholder="Meses de duración" name="meses_de_duracion" class="form-control" min="1" ng-model="oferta.meses_de_duracion">
+		        </div>
+		        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
+		        <div ng-show="showUltimoCurso" class="col-xs-4">
+		            <select ng-disabled="true" ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superadoList"></select>
+		        </div>
+		    </div>
+			    <div class="form-group">
+				<div ng-show="showTfg" class="col-xs-12 text-center">
+				  <label>
+				    <input ng-disabled="true" name="hay_posibilidad_de_tfg" type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
+				    Posibilidad de TFG
+				  </label>
+				</div>
+			</div>
+			<div id="SeccionBeneficiosLaborales" style="overflow:hidden">
+				<h3>Beneficios laborales</h3>
+				<div class="form-group col-xs-10 col-xs-offset-1">
+					<div class="col-xs-4 text-right" ng-repeat="beneficio in beneficiosLaborales">
+						<label>
+							{{ beneficio.name }} <input ng-disabled="true" type="checkbox" value="{{beneficio.id}}" check-list='checked_beneficios'>
+						</label>
+					</div>
+				</div>
+			</div>
 		</div>
-	</div>
+		<div class="row"></div>
+		<div id="SeccionRequisitos col-md-12">
+			<h2>Requisitos de la oferta</h2>
+			<h3>Estudios admitidos</h3>
+			<div class="form-group">
+				<select ng-disabled="true" multiple="multiple" size="8" class="form-control" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
+			</div>
+			<div class="row">
+				<h3>Conocimientos tecnicos</h3>
+				<table class="table table-striped table-bordered table-condensed text-center">
+					<thead>
+						<td>Conocimiento</td>
+						<td>Nivel</td>
+					</thead>
+					<tbody>
+						<tr ng-repeat="conocimiento in requisitos_de_conocimiento_tecnico">
+							<td class="col-md-6">{{ conocimiento.conocimiento }}</td>
+							<td class="col-md-5">{{ conocimiento.nivel}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-<div class="row"><h3>Información de contacto</h3></div>
-<div class="row">
-	<div ng-show="oferta.persona_de_contacto" class="col-md-4">Persona de contacto:</div>
-	<div ng-show="oferta.persona_de_contacto" class="col-md-8">{{ oferta.persona_de_contacto }}</div>
-	<div ng-show="oferta.email_de_contacto" class="col-md-4">Correo electrónico:</div>
-	<div ng-show="oferta.email_de_contacto" class="col-md-8">{{ oferta.email_de_contacto }}</div>
-	<div ng-show="oferta.usuario" class="col-md-12"><a href="#/{{ tipousuario }}/{{ autorOferta(oferta.usuario) }}">{{ textousuario }}</a></div>
-</div>
+			<div class="row">
+				<h3>Idiomas</h3>
+				<table class="table table-striped table-bordered table-condensed text-center">
+					<thead>
+						<td>Idioma</td>
+						<td>Nivel</td>
+					</thead>
+					<tbody>
+						<tr ng-repeat="idioma in requisitos_de_idioma">
+							<td class="col-md-6">{{ idioma.idioma }}</td>
+							<td class="col-md-5">{{ idioma.nivel}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-<div class="row"><h3>Información sobre el puesto</h3></div>
-<div class="row">
-	<div class="col-md-2">Puesto: </div>
-	<div class="col-md-4">{{ oferta.puesto }}</div>
-	<div class="col-md-2">Horario: </div>
-	<div class="col-md-4">{{ oferta.horario }}</div>
-	<div class="col-md-3">Jornada: </div>
-	<div class="col-md-3">{{ oferta.tipo_de_jornada }}</div>
-	<div ng-show="oferta.salario_mensual" class="col-md-3">Remuneración: </div>
-	<div ng-show="oferta.salario_mensual" class="col-md-3">{{ oferta.salario_mensual }}</div>
-	<div class="col-md-3">Fecha de incorporación: </div>
-	<div class="col-md-3">{{ oferta.fecha_de_incorporacion }}</div>
-	<div class="col-md-3">Meses de duración: </div>
-	<div class="col-md-3">{{ oferta.meses_de_duracion }}</div>
-</div>
-<div class="row">
-	<h4>Especialidades</h4>
-	<ul>
-			<li ng-repeat="especialidad in oferta.especialidades">
-				{{ especialidad.facultad }} - {{ especialidad.nombre}}
-			</li>
-	</ul>
-</div>
-
-<div class="row"><h3>Requisitos</h3></div>
-<div class ="row" ng-show="oferta.ultimo_curso_academico_superado">
-	Ultimo curso academico superado: {{ getUltimoCursoKey(oferta.ultimo_curso_academico_superado) }}
-</div>
-<div class="row" ng-show="oferta.requisitos_de_conocimiento_tecnico">
-	<h4>Conocimientos tecnicos</h4>
-	<table class="table table-striped">
-		<thead>
-			<td>Conocimiento</td>
-			<td>Nivel</td>
-		</thead>
-		<tbody>
-			<tr ng-repeat="conocimiento in oferta.requisitos_de_conocimiento_tecnico">
-			<td>{{ conocimiento.conocimiento.conocimiento }}</td>
-			<td>{{ conocimiento.nivel}}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="row" ng-show="oferta.requisitos_de_experiencia_laboral">
-	<h4>Experiencia laboral</h4>
-	<table class="table table-striped">
-		<thead>
-			<td>Sector</td>
-			<td>Meses</td>
-		</thead>
-		<tbody>
-			<tr ng-repeat="conocimiento in oferta.requisitos_de_experiencia_laboral">
-			<td>{{ conocimiento.sector.sector }}</td>
-			<td>{{ conocimiento.meses}}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-<div class="row" ng-show="oferta.requisitos_de_idioma">
-	<h4>Idiomas</h4>
-	<table class="table table-striped">
-		<thead>
-			<td>Idioma</td>
-			<td>Nivel</td>
-		</thead>
-		<tbody>
-			<tr ng-repeat="conocimiento in oferta.requisitos_de_idioma">
-			<td>{{ conocimiento.idioma.idioma }}</td>
-			<td>{{ conocimiento.nivel}}</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-</div>
+			<div class="row">
+				<h3>Experiencia</h3>
+				<table class="table table-striped table-bordered table-condensed text-center">
+					<thead>
+						<td>Sector</td>
+						<td>Meses de experiencia</td>
+					</thead>
+					<tbody>
+						<tr ng-repeat="exp in requisitos_de_experiencia">
+							<td class="col-md-6 text-center">{{ exp.sector }}</td>
+							<td class="col-md-5">{{ exp.meses }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</form>

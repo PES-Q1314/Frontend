@@ -5,13 +5,9 @@
 	padding-bottom: 10px;
 }
 
-#formOferta h1{ margin-top: -20px;}
+#formOferta h1, #detallesOferta h1{ margin-top: -20px;}
 
-#formOferta h1 span{ background-color: #fff;}
-
-#misOfertasPartial{
-
-}
+#formOferta h1 span, #detallesOferta h1 span{ background-color: #fff;}
 
 #SeccionPrincipal, 
 #SeccionInformacionContacto, 

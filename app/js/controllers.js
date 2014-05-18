@@ -246,12 +246,27 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
     }
 ]);
 
-myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'ConocimientoTecnico', 'appAuth', 'VectoresDeDatos',
+myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Especialidad', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'ConocimientoTecnico', 'appAuth', 'VectoresDeDatos',
 
-    function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth, VectoresDeDatos) {
+    function($scope, $location, $routeParams, Especialidad, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth, VectoresDeDatos) {
 
         var beneficiosLaboralesText = VectoresDeDatos.beneficiosLaboralesText();
         var ultimocursoText = VectoresDeDatos.ultimo_curso_academico_superado_key();
+        $scope.tipos_contrato = VectoresDeDatos.tiposDeContrato();
+        $scope.tipos_jornada = VectoresDeDatos.tiposDeJornada();
+        $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
+        $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
+        $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
+        $scope.ultimo_curso_academico_superadoList = VectoresDeDatos.ultimo_curso_academico_superado();
+        Especialidad.queryAll({
+            'limit': 200
+        }, function(data) {
+            $scope.especialidades = data.objects;
+        });
+        $scope.checked_beneficios = [];
+        $scope.requisitos_de_conocimiento_tecnico = {};
+        $scope.requisitos_de_idioma = {};
+        $scope.requisitos_de_experiencia = {};
 
         $scope.getBeneficioText = function(key) {
             return beneficiosLaboralesText[key];
@@ -266,8 +281,43 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Ofer
             $scope.tipousuario = tipo;
             $scope.textousuario = texto;
             $scope.loading = false;
-            delete $scope.oferta.beneficios_laborales.resource_uri;
-            delete $scope.oferta.beneficios_laborales.id;
+            $scope.checked_beneficios = [];
+            var especialidades = [];
+
+            for (var property in data.beneficios_laborales) {
+                if (data.beneficios_laborales.hasOwnProperty(property)) {
+                    if (data.beneficios_laborales[property] === true) {
+                        $scope.checked_beneficios.push(property);
+                    }
+                }
+            };
+            for (var i = 0; i < data.especialidades.length; i++) {
+                especialidades.push(data.especialidades[i].resource_uri);
+            };
+            $scope.oferta.especialidades = especialidades;
+            for (var i = 0; i < data.requisitos_de_conocimiento_tecnico.length; i++) {
+                $scope.requisitos_de_conocimiento_tecnico[data.requisitos_de_conocimiento_tecnico[i].conocimiento.conocimiento] = {
+                    'conocimiento': data.requisitos_de_conocimiento_tecnico[i].conocimiento.conocimiento,
+                    'nivel': data.requisitos_de_conocimiento_tecnico[i].nivel,
+                    'resource_uri': data.requisitos_de_conocimiento_tecnico[i].conocimiento.resource_uri
+                };
+            };
+
+            for (var i = 0; i < data.requisitos_de_idioma.length; i++) {
+                $scope.requisitos_de_idioma[data.requisitos_de_idioma[i].idioma.idioma] = {
+                    'idioma': data.requisitos_de_idioma[i].idioma.idioma,
+                    'nivel': data.requisitos_de_idioma[i].nivel,
+                    'resource_uri': data.requisitos_de_idioma[i].idioma.resource_uri
+                };
+            };
+
+            for (var i = 0; i < data.requisitos_de_experiencia_laboral.length; i++) {
+                $scope.requisitos_de_experiencia[data.requisitos_de_experiencia_laboral[i].sector.sector] = {
+                    'sector': data.requisitos_de_experiencia_laboral[i].sector.sector,
+                    'meses': data.requisitos_de_experiencia_laboral[i].meses,
+                    'resource_uri': data.requisitos_de_experiencia_laboral[i].sector.resource_uri
+                };
+            };
         };
 
         if (!appAuth.isLoggedIn()) {
@@ -284,18 +334,24 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Ofer
                 }, function(data) {
                     getData(data, 'empresa', 'Empresa ofertora');
                 });
+                $scope.showTfg = true;
+                $scope.showUltimoCurso = true;
             } else if ($routeParams.tipoOferta == 'OfertaDeDepartamento') {
                 OfertaDeDepartamento.query({
                     id: $routeParams.idOferta
                 }, function(data) {
                     getData(data, 'profesor', 'Profesor ofertor');
                 });
+                $scope.showTfg = false;
+                $scope.showUltimoCurso = true;
             } else {
                 OfertaDeProyectoEmprendedor.query({
                     id: $routeParams.idOferta
                 }, function(data) {
                     getData(data, 'estudiante', 'Estudiante ofertor');
                 });
+                $scope.showTfg = false;
+                $scope.showUltimoCurso = false;
             };
 
             $scope.autorOferta = function(t) {
@@ -360,7 +416,8 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                         name: 'Todas'
                     },
                     limit: 20,
-                    offset: 0
+                    offset: 0,
+                    ordering: 'fecha_de_ultima_modificacion'
                 };
                 $scope.query = query;
                 var dateObj;
@@ -512,6 +569,24 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 $scope.setPagingDataPasada(data.objects, data.meta.total_count);
                 $scope.ofertasPasadas = data.objects;
                 $scope.loadingPasadas = false;
+
+                for (var i = 0; i < $scope.ofertasPasadas.length; i++) {
+                    var oferta = $scope.ofertasPasadas[i];
+                    if (oferta.fecha_de_eliminacion != null) {
+                        $scope.ofertasPasadas[i].baja_oferta = oferta.fecha_de_eliminacion;
+                        $scope.ofertasPasadas[i].motivo = 'Eliminada';
+                        $scope.ofertasPasadas[i].mod = false;
+                    } else if (oferta.esta_congelado) {
+                        $scope.ofertasPasadas[i].baja_oferta = oferta.fecha_de_creacion;
+                        $scope.ofertasPasadas[i].motivo = 'Congelada';
+                        $scope.ofertasPasadas[i].mod = true;
+                    } else {
+                        $scope.ofertasPasadas[i].baja_oferta = oferta.fecha_de_creacion;
+                        $scope.ofertasPasadas[i].motivo = 'API';
+                        $scope.ofertasPasadas[i].mod = (i % 2 == 0);
+                    }
+                };
+
             });
         };
 
@@ -592,9 +667,9 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }
         }, true);
 
-        $scope.accionesOfertasActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Mod</button><button type="button" class="btn miniButtons btn-xs btn-danger" ng-click="open(row)">Eliminar</button>';
+        $scope.accionesOfertasActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button type="button" class="btn miniButtons btn-xs btn-danger" ng-click="open(row)">Eliminar</button>';
 
-        $scope.accionesOfertasPasada = '<button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Mod</button><button type="button" class="btn miniButtons btn-xs btn-success" ng-click="restablecer(row)">Restablecer</button>';
+        $scope.accionesOfertasPasada = '<button type="button" ng-if="row.entity.mod" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button ng-if="!row.entity.mod" type="button" class="btn miniButtons btn-xs btn-success" ng-click="restablecer(row)">Restablecer</button>';
 
         $scope.modificar = function modificar(row) {
             $location.path(/modificarOferta/ + row.entity.id);
@@ -620,10 +695,11 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }, {
                 field: 'fecha_de_creacion',
                 displayName: 'Fecha Alta',
-                cellFilter: 'date:\'dd/MM/yyyy\'',
+                cellFilter: 'date:\'dd/MM/yyyy\''
             }, {
                 displayName: 'Acciones',
-                cellTemplate: $scope.accionesOfertasActiva
+                cellTemplate: $scope.accionesOfertasActiva,
+                width: '40%'
             }]
         };
 
@@ -638,21 +714,25 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             i18n: 'es',
             columnDefs: [{
                 field: 'titulo',
-                displayName: 'Titulo'
+                displayName: 'Titulo',
+                width: '30%'
             }, {
                 field: 'fecha_de_creacion',
                 displayName: 'Alta oferta',
                 cellFilter: 'date:\'dd/MM/yyyy\'',
+                width: '15%'
             }, {
-                field: 'fecha_de_eliminacion',
+                field: 'baja_oferta',
                 displayName: 'Baja Oferta',
                 cellFilter: 'date:\'dd/MM/yyyy\'',
+                width: '15%'
             }, {
                 field: 'motivo',
                 displayName: 'Motivo'
             }, {
                 displayName: 'Acciones',
-                cellTemplate: $scope.accionesOfertasPasada
+                cellTemplate: $scope.accionesOfertasPasada,
+                width: '15%'
             }]
         };
 
@@ -719,8 +799,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
                         'resource_uri': data.requisitos_de_experiencia_laboral[i].sector.resource_uri
                     };
                 };
-
-                console.log(data);
             })
         };
 
