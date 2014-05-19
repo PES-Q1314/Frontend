@@ -71,7 +71,7 @@ apiService.factory('Oferta', ['$resource',
 
 apiService.factory('OfertaDeEmpresa', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'ofertadeempresa/:id/:action', {}, {
+        return $resource(urlServicio + 'ofertadeempresa/:id', {}, {
             queryAll: {
                 method: 'GET',
                 params: {
@@ -99,10 +99,9 @@ apiService.factory('OfertaDeEmpresa', ['$resource',
                 }
             },
             eliminar: {
-                method: 'POST',
+                method: 'PUT',
                 params: {
-                    id: '@id',
-                    action: 'eliminar'
+                    id: '@id'
                 }
             }
         })
@@ -131,6 +130,18 @@ apiService.factory('OfertaDeDepartamento', ['$resource',
                 params: {
                     id: ''
                 }
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
+            },
+            eliminar: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
             }
         })
     }
@@ -157,6 +168,18 @@ apiService.factory('OfertaDeProyectoEmprendedor', ['$resource',
                 method: 'POST',
                 params: {
                     id: ''
+                }
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
+            },
+            eliminar: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
                 }
             }
         })

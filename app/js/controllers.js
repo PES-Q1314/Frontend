@@ -492,10 +492,14 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         $scope.errorMessages = errorMessages.getProperty();
 
         function eliminarGen(servicio, id, motivo) {
-            servicio.eliminar({
+            servicio.update({
                 'id': id
             }, {
-                'motivo': motivo
+                'motivo': motivo,
+                'fecha_de_eliminacion': new Date()
+            }, function() {
+                $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+                $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
             });
         }
 
@@ -596,25 +600,25 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         };
 
         $scope.getTableStyleActiva = function() {
-            var rowHeight = 30;
+            var rowHeight = 35;
             var headerHeight = 45;
             if ($scope.myDataActiva == undefined) {
                 return "";
             } else {
                 return {
-                    height: (($scope.myDataActiva.length) * rowHeight + headerHeight) + "px"
+                    height: (($scope.myDataActiva.length + 2) * rowHeight + headerHeight) + "px"
                 };
             }
         };
 
         $scope.getTableStylePasada = function() {
-            var rowHeight = 30;
+            var rowHeight = 35;
             var headerHeight = 45;
             if ($scope.myDataPasada == undefined) {
                 return "";
             } else {
                 return {
-                    height: (($scope.myDataPasada.length) * rowHeight + headerHeight) + "px"
+                    height: (($scope.myDataPasada.length + 2) * rowHeight + headerHeight) + "px"
                 };
             }
         };
@@ -667,8 +671,26 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             $location.path(/modificarOferta/ + row.entity.id);
         };
 
+        function restablecerGen(servicio, id) {
+            servicio.update({
+                'id': id
+            }, {
+                'motivo': '',
+                'fecha_de_eliminacion': null
+            }, function() {
+                $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+                $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+            });
+        };
+
         $scope.restablecer = function restablecer(row) {
-            $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+            if ($scope.userCredentials.tipo == 'Profesor') {
+                restablecerGen(OfertaDeDepartamento, row.entity.id);
+            } else if ($scope.userCredentials.tipo == 'Estudiante') {
+                restablecerGen(OfertaDeProyectoEmprendedor, row.entity.id);
+            } else {
+                restablecerGen(OfertaDeEmpresa, row.entity.id);
+            }
         }
 
         $scope.gridOptionsActiva = {

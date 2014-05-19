@@ -93,7 +93,7 @@
 		        </div>
 		        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
 		        <div ng-show="showUltimoCurso" class="col-xs-4">
-		            <select ng-disabled="true" ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimo_curso_academico_superadoList"></select>
+		            <select ng-disabled="true" ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimoCurso"></select>
 		        </div>
 		    </div>
 			    <div class="form-group">
@@ -106,7 +106,7 @@
 			</div>
 			<div id="SeccionBeneficiosLaborales" style="overflow:hidden">
 				<h3>Beneficios laborales</h3>
-				<div class="form-group col-xs-10 col-xs-offset-1">
+				<div class="form-group col-xs-11 col-xs-offset-1">
 					<div class="col-xs-4 text-right" ng-repeat="beneficio in beneficiosLaborales">
 						<label>
 							{{ beneficio.name }} <input ng-disabled="true" type="checkbox" value="{{beneficio.id}}" check-list='checked_beneficios'>
