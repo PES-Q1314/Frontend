@@ -347,6 +347,12 @@ apiService.factory('BeneficiosLaborales', ['$resource',
                 params: {
                     id: ''
                 }
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
             }
         })
     }
@@ -373,6 +379,12 @@ apiService.factory('RequisitosIdioma', ['$resource',
                 method: 'POST',
                 params: {
                     id: ''
+                }
+            },
+            delete: {
+                method: 'DELETE',
+                params: {
+                    id: '@id'
                 }
             }
         })
@@ -563,4 +575,17 @@ apiService.factory('VectoresDeDatos', function() {
             };
         }
     }
+});
+
+apiService.service('errorMessages', function() {
+    var error = {};
+
+    return {
+        getProperty: function() {
+            return error;
+        },
+        setProperty: function(value) {
+            error = value;
+        }
+    };
 });

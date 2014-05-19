@@ -416,7 +416,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                     },
                     limit: 20,
                     offset: 0,
-                    ordering: 'fecha_de_ultima_modificacion'
+                    order_by: 'id'
                 };
                 $scope.query = query;
                 var dateObj;
@@ -462,7 +462,8 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                     name: 'Todas'
                 },
                 limit: 20,
-                offset: 0
+                offset: 0,
+                order_by: 'id'
             };
             $scope.tipos_oferta = VectoresDeDatos.tiposDeOferta();
             $scope.tipos_jornada = VectoresDeDatos.tiposDeJornada();
@@ -491,8 +492,11 @@ myApp.controller('ModalInstanceCtrl', ['$scope', '$modalInstance',
     }
 ]);
 
-myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'appAuth',
-    function($scope, $location, $routeParams, $modal, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth) {
+myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'appAuth', 'errorMessages',
+    function($scope, $location, $routeParams, $modal, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth, errorMessages) {
+
+        $scope.errorMessages = errorMessages.getProperty();
+        console.log($scope.errorMessages);
 
         function eliminarGen(servicio, id, motivo) {
             servicio.eliminar({
@@ -524,7 +528,6 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }, function(result) {
                 console.log(result);
             });
-
         };
 
         function getOfertasActivas(limit, offset) {
@@ -742,8 +745,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
     }
 ]);
 
-myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos',
-    function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos) {
+myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos', 'errorMessages',
+    function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos, errorMessages) {
 
         $scope.oferta = {};
         $scope.ct = {};
@@ -824,6 +827,8 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         }
 
         function modificarOfertaGenerico(servicio, beneficios, oferta, requisitos) {
+            //console.log(oferta);
+            var ofertaResourceUri = oferta.resource_uri;
             delete oferta.latitud;
             delete oferta.longitud;
             delete oferta.modificado_tras_una_congelacion;
@@ -845,20 +850,68 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
             delete oferta.fecha_de_creacion;
             delete oferta.fecha_de_eliminacion;
             delete oferta.fecha_de_ultima_modificacion;
-
-            console.log("Oferta a modificar");
-            console.log("--------------OFERTA--------------");
-            console.log(oferta);
             servicio.update({
-                'id': 1
+                'id': oferta.id
             }, oferta, function() {
                 console.log("oferta modificada correctamente")
-                $location.path("/misOfertas");
+                BeneficiosLaborales.update(beneficios, function(data) {
+                    for (var i = 0; i < requisitos.idiomas.delete.length; i++) {
+                        RequisitosIdioma.delete({
+                            'id': requisitos.idiomas.delete[i].id
+                        });
+                    };
+                    for (var i = 0; i < requisitos.idiomas.add.length; i++) {
+                        RequisitosIdioma.add({
+                            'idioma': requisitos.idiomas.add[i].resource_uri,
+                            'nivel': requisitos.idiomas.add[i].nivel,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
+
+                    for (var i = 0; i < requisitos.experiencia.delete.length; i++) {
+                        RequisitosExperienciaLaboral.delete({
+                            'id': requisitos.experiencia.delete[i].id
+                        });
+                    };
+                    for (var i = 0; i < requisitos.experiencia.add.length; i++) {
+                        RequisitosExperienciaLaboral.add({
+                            'sector': requisitos.experiencia.add[i].resource_uri,
+                            'meses': requisitos.experiencia.add[i].meses,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
+
+                    for (var i = 0; i < requisitos.conocimiento.delete.length; i++) {
+                        RequisitosConocimientoTecnico.delete({
+                            'id': requisitos.conocimiento.delete[i].id
+                        });
+                    };
+                    for (var i = 0; i < requisitos.conocimiento.add.length; i++) {
+                        RequisitosConocimientoTecnico.add({
+                            'conocimiento': requisitos.conocimiento.add[i].resource_uri,
+                            'nivel': requisitos.conocimiento.add[i].nivel,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
+
+                    errorMessages.setProperty({
+                        'type': 'alert-success',
+                        'msn': 'Oferta modificada correctamente'
+                    });
+                    $location.path("/misOfertas");
+
+                }, function() {
+                    errorMessages.setProperty({
+                        'type': 'alert-error',
+                        'msn': 'Error al modificar la oferta, intentelo de nuevo'
+                    });
+                })
+            }, function() {
+                errorMessages.setProperty({
+                    'type': 'alert-error',
+                    'msn': 'Error al modificar la oferta, intentelo de nuevo'
+                });
             });
-            console.log("------------BENEFICIOS------------");
-            console.log(beneficios);
-            console.log("------------REQUISITOS------------");
-            console.log(requisitos);
         };
 
         /**
@@ -866,37 +919,48 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
          *
          **/
         $scope.crearOferta = function(oferta, beneficios) {
-            console.log(oferta.ultimo_curso_academico_superado);
-            var BeneficiostoAdd = {};
+            var BeneficiostoAdd = {
+                'id': oferta.beneficios_laborales.id
+            };
             var reqIdiomatoAdd = [];
             var reqExptoAdd = [];
             var reqContoAdd = [];
             var requisitos = {};
+            var reqIdiomatoDelete = oferta.requisitos_de_idioma;
+            var reqContoDelete = oferta.requisitos_de_conocimiento_tecnico;
+            var reqExptoDelete = oferta.requisitos_de_experiencia_laboral;
+
             for (var i = 0; i < beneficios.length; i++) {
                 BeneficiostoAdd[beneficios[i]] = true;
             };
-            /*
+
             for (var property in $scope.requisitos_de_idioma) {
                 if ($scope.requisitos_de_idioma.hasOwnProperty(property)) {
-                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property].resource_uri);
+                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property]);
                 }
-            }
+            };
 
             for (var property in $scope.requisitos_de_experiencia) {
                 if ($scope.requisitos_de_experiencia.hasOwnProperty(property)) {
-                    reqExptoAdd.push($scope.requisitos_de_experiencia[property].resource_uri);
+                    reqExptoAdd.push($scope.requisitos_de_experiencia[property]);
                 }
-            }
+            };
 
             for (var property in $scope.requisitos_de_conocimiento_tecnico) {
                 if ($scope.requisitos_de_conocimiento_tecnico.hasOwnProperty(property)) {
-                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property].resource_uri);
+                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property]);
                 }
-            }
-            requisitos['idiomas'] = reqIdiomatoAdd;
-            requisitos['experiencia'] = reqExptoAdd;
-            requisitos['conocimiento'] = reqContoAdd;
-*/
+            };
+            requisitos['idiomas'] = {};
+            requisitos['experiencia'] = {};
+            requisitos['conocimiento'] = {}
+            requisitos['idiomas']['delete'] = reqIdiomatoDelete;
+            requisitos['idiomas']['add'] = reqIdiomatoAdd;
+            requisitos['experiencia']['delete'] = reqExptoDelete;
+            requisitos['experiencia']['add'] = reqExptoAdd;
+            requisitos['conocimiento']['delete'] = reqContoDelete;
+            requisitos['conocimiento']['add'] = reqContoAdd;
+
             if ($scope.userCredentials.tipo == 'Profesor') {
                 modificarOfertaGenerico(OfertaDeDepartamento, BeneficiostoAdd, oferta, requisitos);
             } else if ($scope.userCredentials.tipo == 'Estudiante') {
@@ -941,7 +1005,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         $scope.deleteExp = function(delExp) {
             delete $scope.requisitos_de_experiencia[delExp.sector];
         };
-
 
         //calendar Button function
         $scope.open = function($event) {
