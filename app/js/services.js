@@ -4,8 +4,7 @@
 var apiService = angular.module('apiService', ['ngResource']);
 
 //var urlServicio = 'http://nameless-fjord-3849.herokuapp.com/api/';
-//var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
-var urlServicio = 'http://127.0.0.1:8001/api/';
+var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
 
 apiService.factory('appAuth', function($rootScope, $location, $cookieStore, authlogin, redirectToUrlAfterLogin) {
     return {
@@ -16,12 +15,15 @@ apiService.factory('appAuth', function($rootScope, $location, $cookieStore, auth
             return !!$cookieStore.get('login'); //convert value to bool
         },
         saveAttemptUrl: function() {
+            console.log("saveAttempt");
             if ($location.path().toLowerCase() != '/login') {
                 redirectToUrlAfterLogin.url = $location.path();
             } else
                 redirectToUrlAfterLogin.url = '/';
         },
         redirectToAttemptedUrl: function() {
+            console.log("Redirect");
+            console.log(redirectToUrlAfterLogin.url);
             $location.path(redirectToUrlAfterLogin.url);
         }
     };
@@ -348,6 +350,12 @@ apiService.factory('BeneficiosLaborales', ['$resource',
                 params: {
                     id: '@id'
                 }
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
             }
         })
     }
@@ -374,6 +382,12 @@ apiService.factory('RequisitosIdioma', ['$resource',
                 method: 'POST',
                 params: {
                     id: ''
+                }
+            },
+            delete: {
+                method: 'DELETE',
+                params: {
+                    id: '@id'
                 }
             }
         })
@@ -564,4 +578,17 @@ apiService.factory('VectoresDeDatos', function() {
             };
         }
     }
+});
+
+apiService.service('errorMessages', function() {
+    var error = {};
+
+    return {
+        getProperty: function() {
+            return error;
+        },
+        setProperty: function(value) {
+            error = value;
+        }
+    };
 });

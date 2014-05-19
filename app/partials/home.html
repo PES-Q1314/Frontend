@@ -1,3 +1,7 @@
 <div class="row-fluid">
 <h1>Home</h1>
+  <div ng-if="errorMessages.type" class="text-center alert alert-dismissable {{ errorMessages.type }}">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  {{ errorMessages.msn }}
+</div>
 </div>

@@ -1,4 +1,8 @@
 <form novalidate name="form" id="formOferta" class="form-horizontal col-xs-12">
+<div ng-if="errorMessages.type" class="text-center alert alert-dismissable {{ errorMessages.type }}">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  {{ errorMessages.msn }}
+</div>
 	<h1><span>{{ titulo }}</span></h1>
 	<div id="SeccionPrincipal">
 	    <div class="form-group">

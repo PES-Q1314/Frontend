@@ -79,27 +79,8 @@ myApp.config(['$httpProvider',
     }
 ]);
 
-myApp.config(function($httpProvider) {
-    $httpProvider.responseInterceptors.push('securityInterceptor');
-}).provider('securityInterceptor', function() {
-    this.$get = function($location, $q, $injector, $cookieStore, $rootScope) {
-        return function(promise) {
-            var appAuth = $injector.get('appAuth');
-            return promise.then(null, function(response) {
-                if (response.status === 401) {
-                    $cookieStore.remove('login');
-                    appAuth.saveAttemptUrl();
-                    $location.path('/login');
-                }
-                return $q.reject(response);
-            });
-        };
-    };
-});
-
 myApp.run(function($location, $rootScope, $cookieStore, appAuth) {
     if (!appAuth.isLoggedIn()) {
-        appAuth.saveAttemptUrl();
         $location.path('/login');
     } else {
         $rootScope.userCredentials = $cookieStore.get('login');
