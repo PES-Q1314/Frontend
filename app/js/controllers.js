@@ -6,10 +6,10 @@ var myApp = angular.module('myApp.controllers', []);
 
 myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth',
     function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth) {
+        if (appAuth.isLoggedIn()) {
+            $scope.loginPath = false;
+        }
         $scope.loginPath = true;
-        if (appAuth.isLoggedIn())
-            $location.path('/home');
-
         $scope.login = function(user) {
             authlogin.login(user, function(data) {
                 $cookieStore.put('login', data);
@@ -47,7 +47,6 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         $scope.sectormercado = {};
 
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             $scope.buttonText = "Publicar oferta";
@@ -320,7 +319,6 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
         };
 
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             $scope.loading = true;
@@ -378,7 +376,6 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
         }
 
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             //calendar Button function
@@ -496,7 +493,6 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
     function($scope, $location, $routeParams, $modal, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth, errorMessages) {
 
         $scope.errorMessages = errorMessages.getProperty();
-        console.log($scope.errorMessages);
 
         function eliminarGen(servicio, id, motivo) {
             servicio.eliminar({
@@ -524,7 +520,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             });
             modalInstance.result.then(function(result) {
                 console.log("Intentando eliminar oferta " + id + " motivo: " + result);
-                //eliminar(id.entity.id, result);
+                eliminar(id.entity.id, result);
             }, function(result) {
                 console.log(result);
             });
@@ -739,7 +735,6 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         };
 
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         }
     }
@@ -804,7 +799,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         };
 
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             $scope.buttonText = "Modificar oferta";
@@ -1056,7 +1050,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
 myApp.controller('perfilEmpresa', ['$scope', '$location', '$routeParams', 'Empresa', 'appAuth',
     function($scope, $location, $routeParams, Empresa, appAuth) {
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             Empresa.query({
@@ -1071,7 +1064,6 @@ myApp.controller('perfilEmpresa', ['$scope', '$location', '$routeParams', 'Empre
 myApp.controller('perfilProfesor', ['$scope', '$location', '$routeParams', 'Profesor', 'appAuth',
     function($scope, $location, $routeParams, Profesor, appAuth) {
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             Profesor.query({
@@ -1086,7 +1078,6 @@ myApp.controller('perfilProfesor', ['$scope', '$location', '$routeParams', 'Prof
 myApp.controller('perfilEstudiante', ['$scope', '$location', '$routeParams', 'Estudiante', 'appAuth',
     function($scope, $location, $routeParams, Estudiante, appAuth) {
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
             Estudiante.query({
@@ -1101,7 +1092,6 @@ myApp.controller('perfilEstudiante', ['$scope', '$location', '$routeParams', 'Es
 myApp.controller('home', ['$scope', '$location', 'appAuth',
     function($scope, $location, appAuth) {
         if (!appAuth.isLoggedIn()) {
-            appAuth.saveAttemptUrl();
             $location.path("/login");
         } else {
 
