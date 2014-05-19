@@ -314,6 +314,14 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     'resource_uri': data.requisitos_de_experiencia_laboral[i].sector.resource_uri
                 };
             };
+
+            if (data.estado_de_la_suscripcion == 'no suscrito') {
+                $scope.buttonText = 'Suscribirse';
+                $scope.suscrito = false;
+            } else {
+                $scope.buttonText = "Ya estás suscrito";
+                $scope.suscrito = true;
+            }
         };
 
         if (!appAuth.isLoggedIn()) {
@@ -355,6 +363,39 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     tmp = t.split("/")[3];
                 }
                 return tmp;
+            };
+
+            $scope.esEstudiante = function() {
+                return $scope.userCredentials.tipo == 'Estudiante';
+            }
+
+            $scope.suscripcion = function(id, suscrito) {
+                console.log(id);
+                console.log(suscrito);
+                var servicio;
+                if ($routeParams.tipoOferta == 'OfertaDeEmpresa') {
+                    servicio = OfertaDeEmpresa;
+                } else if ($routeParams.tipoOferta == 'OfertaDeDepartamento') {
+                    servicio = OfertaDeDepartamento;
+                } else {
+                    servicio = OfertaDeProyectoEmprendedor;
+                };
+
+                if (suscrito) {
+                    servicio.dessuscribirse({
+                        'id': id
+                    }, function() {
+                        $scope.buttonText = 'Suscribirse';
+                        $scope.suscrito = false;
+                    });
+                } else {
+                    servicio.suscribirse({
+                        'id': id
+                    }, function() {
+                        $scope.buttonText = "Ya estás suscrito";
+                        $scope.suscrito = true;
+                    });
+                }
             }
         }
     }

@@ -71,7 +71,7 @@ apiService.factory('Oferta', ['$resource',
 
 apiService.factory('OfertaDeEmpresa', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'ofertadeempresa/:id', {}, {
+        return $resource(urlServicio + 'ofertadeempresa/:id/:action', {}, {
             queryAll: {
                 method: 'GET',
                 params: {
@@ -102,6 +102,20 @@ apiService.factory('OfertaDeEmpresa', ['$resource',
                 method: 'PUT',
                 params: {
                     id: '@id'
+                }
+            },
+            suscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'suscribirse'
+                }
+            },
+            dessuscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'dessuscribirse'
                 }
             }
         })
@@ -110,7 +124,7 @@ apiService.factory('OfertaDeEmpresa', ['$resource',
 
 apiService.factory('OfertaDeDepartamento', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'ofertadedepartamento/:id', {}, {
+        return $resource(urlServicio + 'ofertadedepartamento/:id/:action', {}, {
             query: {
                 method: 'GET',
                 params: {
@@ -141,6 +155,20 @@ apiService.factory('OfertaDeDepartamento', ['$resource',
                 method: 'PUT',
                 params: {
                     id: '@id'
+                }
+            },
+            suscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'suscribirse'
+                }
+            },
+            dessuscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'dessuscribirse'
                 }
             }
         })
@@ -149,7 +177,7 @@ apiService.factory('OfertaDeDepartamento', ['$resource',
 
 apiService.factory('OfertaDeProyectoEmprendedor', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'ofertadeproyectoemprendedor/:id', {}, {
+        return $resource(urlServicio + 'ofertadeproyectoemprendedor/:id/:action', {}, {
             queryAll: {
                 method: 'GET',
                 params: {
@@ -180,6 +208,20 @@ apiService.factory('OfertaDeProyectoEmprendedor', ['$resource',
                 method: 'PUT',
                 params: {
                     id: '@id'
+                }
+            },
+            suscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'suscribirse'
+                }
+            },
+            dessuscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'dessuscribirse'
                 }
             }
         })
