@@ -10,7 +10,7 @@
           <div class="text-center" ng-show="loadingActivas">
             <img id="spinner" ng-src="img/loading.gif">
           </div>
-          <div ng-hide="myDataActiva.length>0 || loadingActivas">No tienes ofertas activas</div>
+          <div ng-hide="myDataActiva.length>0 || loadingActivas" class="text-center alert alert-info">No tienes ofertas activas</div>
           <div ng-show="myDataActiva.length>0 && !loadingActivas" class="gridStyle" ng-style="getTableStyleActiva()" ng-grid="gridOptionsActiva"></div>
       </div>
     </tab>
@@ -20,7 +20,7 @@
           <div class="text-center" ng-show="loadingPasadas">
             <img id="spinner" ng-src="img/loading.gif">
           </div>
-          <div ng-hide="myDataPasada.length>0 || loadingPasadas">No tienes ofertas pasadas</div>
+          <div ng-hide="myDataPasada.length>0 || loadingPasadas" class="text-center alert alert-info">No tienes ofertas pasadas</div>
           <div ng-show="myDataPasada.length>0 && !loadingPasadas" class="gridStyle" ng-style="getTableStylePasada()" ng-grid="gridOptionsPasada"></div>
       </div>
     </tab>

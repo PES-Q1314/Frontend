@@ -60,7 +60,7 @@ myApp.config(['$routeProvider',
             controller: 'home'
         });
         $routeProvider.otherwise({
-            redirectTo: '/buscarOfertas'
+            redirectTo: '/home'
         });
     }
 ]);

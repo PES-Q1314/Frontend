@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row-fluid" style="overflow:hidden">
 	<form novalidate class="simple-form form-horizontal col-xs-12">
 		<div class="form-group text-center">
 			<label class="col-xs-2 col-xs-offset-4 text-right">Tipo de oferta: </label>
@@ -62,9 +62,6 @@
 	<div class="text-center" ng-show="loading">
 		<img id="spinner" ng-src="img/loading.gif">
 	</div>
-	<div class="text-center resultados_busqueda" ng-show="sinResultados">
-		Sin resultados
-	</div>
 	<div ng-repeat="oferta in ofertas" ng-hide="loading">
 		<div class="col-md-12">
 			<div class="row">
@@ -83,3 +80,7 @@
  <div class="text-center row-fluid" ng-hide="loading || sinResultados">
  <pagination direction-links="false" boundary-links="true" items-per-page="limit" total-items="totalItems" page="currentPage" on-select-page="selectPage(page)"></pagination>
  </div>
+
+	<div class="text-center resultados_busqueda alert alert-info" ng-show="sinResultados">
+		Sin resultados
+	</div>

@@ -34,8 +34,10 @@ myApp.controller('menuController', ['$scope', '$rootScope', '$location',
     }
 ]);
 
-myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos',
-    function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos) {
+myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos', 'errorMessages',
+    function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos, errorMessages) {
+
+        $scope.errorMessages = errorMessages.getProperty();
 
         $scope.oferta = {};
         $scope.ct = {};
@@ -70,39 +72,53 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
         };
 
         function crearOfertaGenerico(servicio, beneficios, oferta, requisitos) {
+            servicio.addNew(oferta, function(dataOferta) {
+                beneficios['id'] = dataOfertas.beneficios_laborales.id;
+                BeneficiosLaborales.update(beneficios, function(data) {
 
-            console.log("Oferta a insertar");
-            console.log("--------------OFERTA--------------");
-            console.log(oferta);
-            console.log("------------BENEFICIOS------------");
-            console.log(beneficios);
-            console.log("------------REQUISITOS------------");
-            console.log(requisitos);
+                    for (var i = 0; i < requisitos.idiomas.length; i++) {
+                        RequisitosIdioma.add({
+                            'idioma': requisitos.idiomas[i].resource_uri,
+                            'nivel': requisitos.idiomas[i].nivel,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
 
-            /*            BeneficiosLaborales.add(beneficios, function(data) {
-                servicio.addNew(oferta, function(dataOferta) {
-                    RequisitosConocimientoTecnico.add(requisitos.conocimiento, function(dataConocimiento) {
+                    for (var i = 0; i < requisitos.experiencia.length; i++) {
+                        RequisitosExperienciaLaboral.add({
+                            'sector': requisitos.experiencia[i].resource_uri,
+                            'meses': requisitos.experiencia[i].meses,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
 
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos de conocimiento
+                    for (var i = 0; i < requisitos.conocimiento.add.length; i++) {
+                        RequisitosConocimientoTecnico.add({
+                            'conocimiento': requisitos.conocimiento[i].resource_uri,
+                            'nivel': requisitos.conocimiento[i].nivel,
+                            'oferta': ofertaResourceUri
+                        });
+                    };
+
+                    errorMessages.setProperty({
+                        'type': 'alert-success',
+                        'msn': 'Oferta creada correctamente'
                     });
-                    RequisitosIdioma.add(requisitos.idioma, function(dataIdioma) {
+                    $location.path("/misOfertas");
 
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos de idioma
+                }, function() {
+                    errorMessages.setProperty({
+                        'type': 'alert-danger',
+                        'msn': 'Error al crear la oferta, intentelo de nuevo'
                     });
-                    RequisitosExperienciaLaboral.add(requisitos.experiencia, function(dataExperiencia) {
-
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos laborales
-                    });
-                }, function(dataErrorOferta) {
-                    //Error al crear la oferta
+                })
+            }, function() {
+                errorMessages.setProperty({
+                    'type': 'alert-danger',
+                    'msn': 'Error al crear la oferta, intentelo de nuevo'
                 });
-
-            }, function(dataErrorBeneficios) {
-                //Error al crear los beneficios
-            });*/
+                $scope.errorMessages = errorMessages.getProperty();
+            });
         };
 
         /**
@@ -115,29 +131,25 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             var reqExptoAdd = [];
             var reqContoAdd = [];
             var requisitos = {};
-            console.log($scope.requisitos_de_idioma);
-            console.log(oferta.especialidades);
-            console.log($scope.requisitos_de_experiencia);
-            console.log($scope.requisitos_de_conocimiento_tecnico);
             for (var i = 0; i < beneficios.length; i++) {
                 BeneficiostoAdd[beneficios[i]] = true;
             };
 
             for (var property in $scope.requisitos_de_idioma) {
                 if ($scope.requisitos_de_idioma.hasOwnProperty(property)) {
-                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property].resource_uri);
+                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property]);
                 }
             }
 
             for (var property in $scope.requisitos_de_experiencia) {
                 if ($scope.requisitos_de_experiencia.hasOwnProperty(property)) {
-                    reqExptoAdd.push($scope.requisitos_de_experiencia[property].resource_uri);
+                    reqExptoAdd.push($scope.requisitos_de_experiencia[property]);
                 }
             }
 
             for (var property in $scope.requisitos_de_conocimiento_tecnico) {
                 if ($scope.requisitos_de_conocimiento_tecnico.hasOwnProperty(property)) {
-                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property].resource_uri);
+                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property]);
                 }
             }
 
@@ -519,11 +531,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 controller: 'ModalInstanceCtrl'
             });
             modalInstance.result.then(function(result) {
-                console.log("Intentando eliminar oferta " + id + " motivo: " + result);
                 eliminar(id.entity.id, result);
-            }, function(result) {
-                console.log(result);
-            });
+            }, function(result) {});
         };
 
         function getOfertasActivas(limit, offset) {
@@ -674,7 +683,6 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         };
 
         $scope.restablecer = function restablecer(row) {
-            console.log(restablecer)
             $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
         }
 
@@ -821,7 +829,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
         }
 
         function modificarOfertaGenerico(servicio, beneficios, oferta, requisitos) {
-            //console.log(oferta);
             var ofertaResourceUri = oferta.resource_uri;
             delete oferta.latitud;
             delete oferta.longitud;
@@ -847,7 +854,6 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
             servicio.update({
                 'id': oferta.id
             }, oferta, function() {
-                console.log("oferta modificada correctamente")
                 BeneficiosLaborales.update(beneficios, function(data) {
                     for (var i = 0; i < requisitos.idiomas.delete.length; i++) {
                         RequisitosIdioma.delete({
@@ -896,13 +902,13 @@ myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'Ofe
 
                 }, function() {
                     errorMessages.setProperty({
-                        'type': 'alert-error',
+                        'type': 'alert-danger',
                         'msn': 'Error al modificar la oferta, intentelo de nuevo'
                     });
                 })
             }, function() {
                 errorMessages.setProperty({
-                    'type': 'alert-error',
+                    'type': 'alert-danger',
                     'msn': 'Error al modificar la oferta, intentelo de nuevo'
                 });
             });
