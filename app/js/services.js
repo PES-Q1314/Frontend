@@ -4,7 +4,8 @@
 var apiService = angular.module('apiService', ['ngResource']);
 
 //var urlServicio = 'http://nameless-fjord-3849.herokuapp.com/api/';
-var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
+//var urlServicio = 'http://bolsa-de-empleo-upc.herokuapp.com/api/';
+var urlServicio = 'http://127.0.0.1:8001/api/';
 
 apiService.factory('appAuth', function($rootScope, $location, $cookieStore, authlogin, redirectToUrlAfterLogin) {
     return {
@@ -342,10 +343,10 @@ apiService.factory('BeneficiosLaborales', ['$resource',
                 },
                 isArray: false
             },
-            add: {
-                method: 'POST',
+            edit: {
+                method: 'PATCH',
                 params: {
-                    id: ''
+                    id: '@id'
                 }
             }
         })

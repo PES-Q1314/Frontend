@@ -63,7 +63,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
                 $scope.titulo = "Oferta de empresa";
                 $scope.showTfg = true;
                 $scope.showUltimoCurso = true;
-            };
+            }
         }
 
         $scope.isUnchanged = function(user) {
@@ -72,6 +72,9 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
 
         function crearOfertaGenerico(servicio, beneficios, oferta, requisitos) {
 
+            var c;
+
+            console.log(servicio);
             console.log("Oferta a insertar");
             console.log("--------------OFERTA--------------");
             console.log(oferta);
@@ -80,31 +83,51 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             console.log("------------REQUISITOS------------");
             console.log(requisitos);
 
-            /*            BeneficiosLaborales.add(beneficios, function(data) {
-                servicio.addNew(oferta, function(dataOferta) {
-                    RequisitosConocimientoTecnico.add(requisitos.conocimiento, function(dataConocimiento) {
 
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos de conocimiento
-                    });
-                    RequisitosIdioma.add(requisitos.idioma, function(dataIdioma) {
+            servicio.addNew(oferta, function(dataOferta) {
+                console.log(dataOferta);
 
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos de idioma
-                    });
-                    RequisitosExperienciaLaboral.add(requisitos.experiencia, function(dataExperiencia) {
+                beneficios.id = dataOferta.beneficios_laborales.id;
+                BeneficiosLaborales.edit(beneficios, function(dataBeneficios) {});
 
-                    }, function(dataErrorRequisitos) {
-                        //Error al crear los requisitos laborales
-                    });
-                }, function(dataErrorOferta) {
-                    //Error al crear la oferta
-                });
+                for (c in requisitos.conocimiento) {
+                    if (requisitos.conocimiento.hasOwnProperty(c)) {
+                        var d = {
+                            oferta: dataOferta.resource_uri,
+                            conocimiento: requisitos.conocimiento[c].resource_uri,
+                            nivel: requisitos.conocimiento[c].nivel
+                        };
+                        RequisitosConocimientoTecnico.add(d, function(d) {});
+                    }
+                }
 
-            }, function(dataErrorBeneficios) {
-                //Error al crear los beneficios
-            });*/
-        };
+                for (c in requisitos.experiencia) {
+                    if (requisitos.experiencia.hasOwnProperty(c)) {
+                        var d = {
+                            oferta: dataOferta.resource_uri,
+                            sector: requisitos.experiencia[c].resource_uri,
+                            meses: requisitos.experiencia[c].meses
+                        };
+                        RequisitosExperienciaLaboral.add(d, function(d) {});
+                    }
+                }
+
+                for (c in requisitos.idiomas) {
+                    if (requisitos.idiomas.hasOwnProperty(c)) {
+                        var d = {
+                            oferta: dataOferta.resource_uri,
+                            idioma: requisitos.idiomas[c].resource_uri,
+                            nivel: requisitos.idiomas[c].nivel
+                        };
+                        RequisitosIdioma.add(d, function(d) {});
+                    }
+                }
+
+
+
+
+            });
+        }
 
         /**
          * Crear oferta y editar los conocimientos tecnicos
@@ -112,9 +135,6 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
          **/
         $scope.crearOferta = function(oferta, beneficios) {
             var BeneficiostoAdd = {};
-            var reqIdiomatoAdd = [];
-            var reqExptoAdd = [];
-            var reqContoAdd = [];
             var requisitos = {};
             console.log($scope.requisitos_de_idioma);
             console.log(oferta.especialidades);
@@ -122,29 +142,11 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
             console.log($scope.requisitos_de_conocimiento_tecnico);
             for (var i = 0; i < beneficios.length; i++) {
                 BeneficiostoAdd[beneficios[i]] = true;
-            };
-
-            for (var property in $scope.requisitos_de_idioma) {
-                if ($scope.requisitos_de_idioma.hasOwnProperty(property)) {
-                    reqIdiomatoAdd.push($scope.requisitos_de_idioma[property].resource_uri);
-                }
             }
 
-            for (var property in $scope.requisitos_de_experiencia) {
-                if ($scope.requisitos_de_experiencia.hasOwnProperty(property)) {
-                    reqExptoAdd.push($scope.requisitos_de_experiencia[property].resource_uri);
-                }
-            }
-
-            for (var property in $scope.requisitos_de_conocimiento_tecnico) {
-                if ($scope.requisitos_de_conocimiento_tecnico.hasOwnProperty(property)) {
-                    reqContoAdd.push($scope.requisitos_de_conocimiento_tecnico[property].resource_uri);
-                }
-            }
-
-            requisitos['idiomas'] = reqIdiomatoAdd;
-            requisitos['experiencia'] = reqExptoAdd;
-            requisitos['conocimiento'] = reqContoAdd;
+            requisitos['idiomas'] = $scope.requisitos_de_idioma;
+            requisitos['experiencia'] = $scope.requisitos_de_experiencia;
+            requisitos['conocimiento'] = $scope.requisitos_de_conocimiento_tecnico;
 
             if ($scope.userCredentials.tipo == 'Profesor') {
                 crearOfertaGenerico(OfertaDeDepartamento, BeneficiostoAdd, oferta, requisitos);
@@ -152,7 +154,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
                 crearOfertaGenerico(OfertaDeProyectoEmprendedor, BeneficiostoAdd, oferta, requisitos);
             } else {
                 crearOfertaGenerico(OfertaDeEmpresa, BeneficiostoAdd, oferta, requisitos);
-            };
+            }
         };
 
         $scope.addConocimiento = function(newCon) {
@@ -461,6 +463,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                 tipooferta: {
                     name: 'Todas'
                 },
+                activa: true,
                 limit: 20,
                 offset: 0
             };
@@ -509,7 +512,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 eliminarGen(OfertaDeProyectoEmprendedor, id, motivo);
             } else {
                 eliminarGen(OfertaDeEmpresa, id, motivo);
-            };
+            }
         }
 
         $scope.open = function(id) {
@@ -536,12 +539,12 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 servicio = OfertaDeProyectoEmprendedor;
             } else {
                 servicio = OfertaDeEmpresa;
-            };
+            }
             servicio.queryAll({
                 'usuario__id': $scope.userCredentials.id,
                 'limit': limit,
-                'offset': offset
-                /*, 'activa': true*/
+                'offset': offset,
+                'activa': true
             }, function(data) {
                 $scope.setPagingDataActiva(data.objects, data.meta.total_count);
                 $scope.ofertasActivas = data.objects;
@@ -558,12 +561,12 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 servicio = OfertaDeProyectoEmprendedor;
             } else {
                 servicio = OfertaDeEmpresa;
-            };
+            }
             servicio.queryAll({
                 'usuario__id': $scope.userCredentials.id,
                 'limit': limit,
-                'offset': offset
-                /*, 'activa': false*/
+                'offset': offset,
+                'activa': false
             }, function(data) {
                 $scope.setPagingDataPasada(data.objects, data.meta.total_count);
                 $scope.ofertasPasadas = data.objects;

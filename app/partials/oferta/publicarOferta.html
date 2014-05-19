@@ -21,9 +21,9 @@
 	        <div class="col-xs-6">
 	            <input maxlength="200" type="text" name="ubicacion" placeholder="Ubicación" class="form-control" ng-model="oferta.direccion">
 	        </div>
-	        <label for="plazas" class="col-xs-1 control-label">Vacantes</label>
+	        <label for="plazas" class="col-xs-1 control-label">Vacantes<span class="red">*</span></label>
 	        <div class="col-xs-3" ng-class="{ 'has-error' : form.plazas.$invalid && !form.plazas.$pristine }">
-	            <input type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" ng-model="oferta.numero_de_puestos_vacantes">
+	            <input type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" required ng-model="oferta.numero_de_puestos_vacantes">
 	            <p ng-show="form.plazas.$invalid && !form.plazas.$pristine" class="help-block">Las vacantes deben ser un número.</p>
 	        </div>
 	    </div>
