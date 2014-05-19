@@ -38,6 +38,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
     function($scope, $location, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos, errorMessages) {
 
         $scope.errorMessages = errorMessages.getProperty();
+        errorMessages.setProperty({});
 
         $scope.oferta = {};
         $scope.ct = {};
@@ -124,6 +125,7 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
                 });
             });
             $scope.errorMessages = errorMessages.getProperty();
+            errorMessages.setProperty({});
         }
 
         /**
@@ -490,6 +492,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
     function($scope, $location, $routeParams, $modal, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, appAuth, errorMessages) {
 
         $scope.errorMessages = errorMessages.getProperty();
+        errorMessages.setProperty({});
 
         function eliminarGen(servicio, id, motivo) {
             servicio.update({
