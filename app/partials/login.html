@@ -12,6 +12,10 @@
 	            <input type="password" required ng-model="user.password" class="form-control col-sm-12" name="password" placeholder="Contraseña"/>
 	        </div>
 		</div>
+	<div ng-if="errorMessages.type" class="col-xs-6 col-xs-offset-1 text-center alert alert-dismissable {{ errorMessages.type }}">
+	  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+	  {{ errorMessages.msn }}
+	</div>
 		<div class="form-group text-center col-xs-8">
 			<a href="">Recuperar contraseña</a>
 			<button class="btn btn-success" ng-disabled="form.$invalid" ng-click="login(user)">Login</button>

@@ -4,8 +4,8 @@
 
 var myApp = angular.module('myApp.controllers', []);
 
-myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth',
-    function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth) {
+myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth', 'errorMessages',
+    function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth, errorMessages) {
         if (appAuth.isLoggedIn()) {
             $scope.loginPath = false;
         }
@@ -15,6 +15,11 @@ myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 
                 $cookieStore.put('login', data);
                 $rootScope.userCredentials = data;
                 appAuth.redirectToAttemptedUrl();
+            }, function() {
+                $scope.errorMessages = {
+                    'type': 'alert-danger',
+                    'msn': 'Usuario/contraseña incorrecto'
+                };
             });
         };
         $scope.logout = function() {
