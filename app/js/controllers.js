@@ -6,16 +6,21 @@ var myApp = angular.module('myApp.controllers', []);
 
 myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth', 'errorMessages',
     function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth, errorMessages) {
+        $scope.loading = false;
         if (appAuth.isLoggedIn()) {
             $scope.loginPath = false;
         }
         $scope.loginPath = true;
         $scope.login = function(user) {
+            $scope.loading = true;
             authlogin.login(user, function(data) {
+                $scope.loading = false;
                 $cookieStore.put('login', data);
                 $rootScope.userCredentials = data;
                 appAuth.redirectToAttemptedUrl();
+
             }, function() {
+                $scope.loading = false;
                 $scope.errorMessages = {
                     'type': 'alert-danger',
                     'msn': 'Usuario/contraseña incorrecto'
@@ -253,17 +258,15 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
 
         var beneficiosLaboralesText = VectoresDeDatos.beneficiosLaboralesText();
         var ultimocursoText = VectoresDeDatos.ultimo_curso_academico_superado_key();
+        var horarioText = VectoresDeDatos.horarios_key();
+        var tipoContratoText = VectoresDeDatos.tipocontrato_key();
+        var tipoDeJornadaText = VectoresDeDatos.tipojornada_key();
         $scope.tipos_contrato = VectoresDeDatos.tiposDeContrato();
         $scope.tipos_jornada = VectoresDeDatos.tiposDeJornada();
         $scope.tipos_horario = VectoresDeDatos.tiposDeHorario();
         $scope.niveles_conocimiento = VectoresDeDatos.nivelesDeConocimiento();
         $scope.beneficiosLaborales = VectoresDeDatos.beneficiosLaborales();
         $scope.ultimoCurso = VectoresDeDatos.ultimo_curso_academico_superado();
-        Especialidad.queryAll({
-            'limit': 200
-        }, function(data) {
-            $scope.especialidades = data.objects;
-        });
         $scope.checked_beneficios = [];
         $scope.requisitos_de_conocimiento_tecnico = {};
         $scope.requisitos_de_idioma = {};
@@ -277,13 +280,28 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
             return ultimocursoText[key];
         };
 
+        $scope.getHorarioText = function(key) {
+            return horarioText[key];
+        }
+
+        $scope.getTipoContratoText = function(key) {
+            return tipoContratoText[key];
+        }
+
+        $scope.getTipoJornadaText = function(key) {
+            return tipoDeJornadaText[key];
+        }
+
+        $scope.getPosibilidadTFG = function(key) {
+            return (key ? 'Si' : 'No');
+        }
+
         function getData(data, tipo, texto) {
             $scope.oferta = data;
             $scope.tipousuario = tipo;
             $scope.textousuario = texto;
             $scope.loading = false;
             $scope.checked_beneficios = [];
-            var especialidades = [];
 
             for (var property in data.beneficios_laborales) {
                 if (data.beneficios_laborales.hasOwnProperty(property)) {
@@ -292,10 +310,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     }
                 }
             };
-            for (var i = 0; i < data.especialidades.length; i++) {
-                especialidades.push(data.especialidades[i].resource_uri);
-            };
-            $scope.oferta.especialidades = especialidades;
+
             for (var i = 0; i < data.requisitos_de_conocimiento_tecnico.length; i++) {
                 $scope.requisitos_de_conocimiento_tecnico[data.requisitos_de_conocimiento_tecnico[i].conocimiento.conocimiento] = {
                     'conocimiento': data.requisitos_de_conocimiento_tecnico[i].conocimiento.conocimiento,
@@ -375,8 +390,6 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
             }
 
             $scope.suscripcion = function(id, suscrito) {
-                console.log(id);
-                console.log(suscrito);
                 var servicio;
                 if ($routeParams.tipoOferta == 'OfertaDeEmpresa') {
                     servicio = OfertaDeEmpresa;
@@ -447,6 +460,10 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                 return true;
             };
 
+            $scope.getHorarioText = function(text) {
+                return VectoresDeDatos.horarios_key()[text];
+            };
+
             //Filter Query
             $scope.OfertasQuery = function(query) {
                 $scope.loading = true;
@@ -455,7 +472,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                     tipooferta: {
                         name: 'Todas'
                     },
-                    limit: 20,
+                    limit: 10,
                     offset: 0,
                     order_by: 'id'
                 };
@@ -493,7 +510,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
             //pagination function
             $scope.selectPage = function(page) {
                 $scope.currentPage = page;
-                $scope.query.offset = (page - 1) * 20;
+                $scope.query.offset = (page - 1) * 10;
                 $scope.OfertasQuery($scope.query);
             };
 
@@ -503,7 +520,7 @@ myApp.controller('buscarOfertas', ['$scope', '$location', 'OfertaDeEmpresa', 'Of
                     name: 'Todas'
                 },
                 activa: true,
-                limit: 20,
+                limit: 10,
                 offset: 0,
                 order_by: 'id'
             };
@@ -587,7 +604,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 'usuario__id': $scope.userCredentials.id,
                 'limit': limit,
                 'offset': offset,
-                'activa': true
+                'activa': true,
+                'order_by': '-fecha_de_creacion'
             }, function(data) {
                 $scope.setPagingDataActiva(data.objects, data.meta.total_count);
                 $scope.ofertasActivas = data.objects;
@@ -609,7 +627,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 'usuario__id': $scope.userCredentials.id,
                 'limit': limit,
                 'offset': offset,
-                'activa': false
+                'activa': false,
+                'order_by': '-fecha_de_creacion'
             }, function(data) {
                 $scope.setPagingDataPasada(data.objects, data.meta.total_count);
                 $scope.ofertasPasadas = data.objects;
@@ -638,13 +657,13 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         $scope.totalServerItemsActiva = 0;
         $scope.totalServerItemsPasada = 0;
         $scope.pagingOptionsActiva = {
-            pageSizes: [20],
-            pageSize: 20,
+            pageSizes: [10],
+            pageSize: 10,
             currentPage: 1
         };
         $scope.pagingOptionsPasada = {
-            pageSizes: [20],
-            pageSize: 20,
+            pageSizes: [10],
+            pageSize: 10,
             currentPage: 1
         };
 

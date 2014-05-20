@@ -641,9 +641,31 @@ apiService.factory('VectoresDeDatos', function() {
                 '4': 'Cuarto',
                 '5': 'Último'
             };
+        },
+        horarios_key: function() {
+            return {
+                'manyana': 'Mañana',
+                'tarde': 'Tarde',
+                'total': 'Indiferente'
+            };
+        },
+        tipocontrato_key: function() {
+            return {
+                'practicas': 'Prácticas',
+                'temporal': 'Temporal',
+                'indefinido': 'Indefinido'
+            };
+        },
+        tipojornada_key: function() {
+            return {
+                'parcial': 'Parcial',
+                'completa': 'Completa'
+            };
         }
     }
 });
+
+
 
 apiService.service('errorMessages', function() {
     var error = {};

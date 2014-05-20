@@ -1,129 +1,64 @@
 <div class="text-center" ng-show="loading">
 	<img id="spinner" ng-src="img/loading.gif">Cargando oferta
 </div>
-<form novalidate name="form" id="formOferta" class="form-horizontal col-xs-12">
+<form novalidate name="form" id="detallesOferta" class="form-horizontal col-xs-12">
 	<div class="col-md-12" id="detallesOferta" ng-hide="loading">
 		<h1><span>Información de la oferta</span></h1>
-		<div id="SeccionPrincipal">
-		    <div class="form-group">
-		        <label for="titulo" class="col-xs-2 control-label">Titulo</label>
-		        <div class="col-xs-10" >
-		            <input ng-disabled="true" type="text" ng-model="oferta.titulo" class="form-control col-sm-10" ng-disabled="true" name="titulo" placeholder="Titulo de la oferta"/>
-		        </div>
-		    </div>
-		    <div class="form-group">
-		        <label for="descripcion" class="col-xs-2 control-label">Descripción</label>
-		        <div class="col-xs-10" >
-		            <textarea ng-disabled="true" class="form-control col-sm-10" name="descripcion" maxlength="600" placeholder="Descripción de la oferta" ng-model="oferta.descripcion" rows="4"></textarea>
-		        </div>
-		    </div>
-
-		    <div class="form-group">
-		        <label for="ubicacion" class="col-xs-2 control-label">Ubicación</label>
-		        <div class="col-xs-6">
-		            <input ng-disabled="true" maxlength="200" type="text" name="ubicacion" placeholder="Ubicación" class="form-control" ng-model="oferta.direccion">
-		        </div>
-		        <label for="plazas" class="col-xs-1 control-label">Vacantes</label>
-		        <div class="col-xs-3">
-		            <input ng-disabled="true" type="number" min="1" name="plazas" placeholder="Vacantes" class="form-control" ng-model="oferta.numero_de_puestos_vacantes">
-		        </div>
-		    </div>
-	    </div>
-		<div id="SeccionInformacionContacto">
+		<div id="SeccionPrincipal" class="col-md-12">
+				<div ng-if="oferta.titulo" class="col-md-2 lateralIzquierdo infoOferta">Titulo</div>
+				<div ng-if="oferta.titulo" class="col-md-10 infoOferta">{{oferta.titulo}}</div>
+				<div ng-if="oferta.descripcion" class="col-md-2 lateralIzquierdo infoOferta">Descripción</div>
+				<div ng-if="oferta.descripcion" class="col-md-10 infoOferta">{{oferta.descripcion}}</div>
+				<div ng-if="oferta.direccion" class="col-md-2 lateralIzquierdo infoOferta">Ubicación</div>
+				<div ng-if="oferta.direccion" class="col-md-10 infoOferta">{{oferta.direccion}}</div>
+				<div ng-if="oferta.numero_de_puestos_vacantes" class="col-md-2 lateralIzquierdo infoOferta">Vacantes</div>
+				<div ng-if="oferta.numero_de_puestos_vacantes" class="col-md-10 infoOferta">{{oferta.numero_de_puestos_vacantes}}</div>
+	  </div>
+		<div id="SeccionInformacionContacto" class="col-md-12">
 			<h2>Información de contacto</h2>
-		    <div class="form-group">
-		        <label for="persona_de_contacto" class="col-xs-3 control-label">Persona de contacto</label>
-		        <div class="col-xs-9">
-		            <input ng-disabled="true" type="text" maxlength="100" required ng-model="oferta.persona_de_contacto" class="form-control col-sm-10" name="persona_de_contacto" placeholder="Persona de contacto"/>
-		        </div>
-		    </div>
-		    <div class="form-group">
-		        <label for="email_de_contacto" class="col-xs-3 control-label">Correo de contacto</label>
-		        <div class="col-xs-9">
-		            <input ng-disabled="true" type="email" maxlength="100" required ng-model="oferta.email_de_contacto" class="form-control col-sm-10" name="email_de_contacto" placeholder="Correo de contacto"/>
-		        </div>
-		    </div>
-	    </div>
-	    <div id="SeccionInformacionPuesto">
-			<h2>Información sobre el puesto</h2>
-		    <div class="form-group">
-		        <label for="puesto" class="col-xs-2 control-label">Puesto</label>
-		        <div class="col-xs-4">
-		            <input ng-disabled="true" maxlength="150" type="text" name="puesto" placeholder="Puesto" class="form-control" ng-model="oferta.puesto">
-		        </div>
-		        <label for="tipo_de_contrato" class="col-xs-2 control-label">Tipo de contrato</label>
-		        <div class="col-xs-4">
-		            <select ng-disabled="true" ng-model="oferta.tipo_de_contrato" name="tipo_de_contrato" class="form-control" ng-options="t.id as t.name for t in tipos_contrato"></select>
-		        </div>
-		    </div>
-
-		    <div class="form-group">
-		        <label for="tipo_de_jornada" class="col-xs-2 control-label">Tipo de jornada</label>
-		        <div class="col-xs-4">
-					<select ng-disabled="true"  ng-model="oferta.tipo_de_jornada" name="tipo_de_jornada" class="form-control" ng-options="t.id as t.name for t in tipos_jornada"></select>
-		        </div>
-		        <label for="horario" class="col-xs-2 control-label">Horario</label>
-		        <div class="col-xs-4">
-		            <select ng-disabled="true" ng-model="oferta.horario" name="horario" class="form-control" ng-options="t.id as t.name for t in tipos_horario"></select>
-		        </div>
-		    </div>
-
-		    <div class="form-group">
-		        <label for="fecha_de_incorporacion" class="col-xs-2 control-label">Fecha de incorporación</label>
-		        <div class="col-xs-4">
-					<p class="input-group">
-						<input ng-disabled="true" type="text" required class="form-control" placeholder="Fecha de incorporación" name="fecha_de_incorporacion" datepicker-popup="{{format}}" ng-model="oferta.fecha_de_incorporacion" is-open="opened" show-button-bar="False" show-weeks="False" datepicker-popup='yyyy-mm-dd'/>
-						<span class ="input-group-btn">
-							<button class="btn btn-default" ng-click="open($event)">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-						</span>
-					</p>
-		        </div>
-		        <label for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
-		        <div class="col-xs-4">
-		        	<input ng-disabled="true" type="number" placeholder="Salario mensual" name="salario_mensual" class="form-control" min="0" ng-model="oferta.salario_mensual">
-		        </div>
-		    </div>
-
-		    <div class="form-group">
-		        <label for="meses_de_duracion" class="col-xs-2 control-label">Duración</label>
-		        <div class="col-xs-4" >
-			        <input ng-disabled="true" type="number" placeholder="Meses de duración" name="meses_de_duracion" class="form-control" min="1" ng-model="oferta.meses_de_duracion">
-		        </div>
-		        <label ng-show="showUltimoCurso" for="ultimo_curso_academico_superado" class="col-xs-2 control-label">Último curso academico</label>
-		        <div ng-show="showUltimoCurso" class="col-xs-4">
-		            <select ng-disabled="true" ng-model="oferta.ultimo_curso_academico_superado" name="ultimo_curso_academico_superado" class="form-control" ng-options="t.id as t.name for t in ultimoCurso"></select>
-		        </div>
-		    </div>
-			    <div class="form-group">
-				<div ng-show="showTfg" class="col-xs-12 text-center">
-				  <label>
-				    <input ng-disabled="true" name="hay_posibilidad_de_tfg" type="checkbox" ng-model="oferta.hay_posibilidad_de_tfg">
-				    Posibilidad de TFG
-				  </label>
-				</div>
-			</div>
-			<div id="SeccionBeneficiosLaborales" style="overflow:hidden">
-				<h3>Beneficios laborales</h3>
-				<div class="form-group col-xs-11 col-xs-offset-1">
-					<div class="col-xs-4 text-right" ng-repeat="beneficio in beneficiosLaborales">
-						<label>
-							{{ beneficio.name }} <input ng-disabled="true" type="checkbox" value="{{beneficio.id}}" check-list='checked_beneficios'>
-						</label>
-					</div>
-				</div>
-			</div>
+				<div ng-if="oferta.persona_de_contacto" class="col-md-3 lateralIzquierdo infoOferta">Persona de contacto</div>
+				<div ng-if="oferta.persona_de_contacto" class="col-md-9 infoOferta">{{oferta.persona_de_contacto}}</div>
+				<div ng-if="oferta.email_de_contacto" class="col-md-3 lateralIzquierdo infoOferta">Correo de contacto</div>
+				<div ng-if="oferta.email_de_contacto" class="col-md-9 infoOferta">{{oferta.email_de_contacto}}</div>
 		</div>
-		<div class="row"></div>
-		<div id="SeccionRequisitos col-md-12">
+	  <div id="SeccionInformacionPuesto" class="col-md-12">
+			<h2>Información sobre el puesto</h2>
+				<div ng-if="oferta.puesto" class="col-md-4 lateralIzquierdo infoOferta">Puesto</div>
+				<div ng-if="oferta.puesto" class="col-md-8 infoOferta">{{oferta.puesto}}</div>
+				<div ng-if="oferta.tipo_de_contrato" class="col-md-4 lateralIzquierdo infoOferta">Tipo de contrato</div>
+				<div ng-if="oferta.tipo_de_contrato" class="col-md-8 infoOferta">{{ getTipoContratoText(oferta.tipo_de_contrato) }}</div>
+				<div ng-if="oferta.tipo_de_jornada" class="col-md-4 lateralIzquierdo infoOferta">Tipo de jornada</div>
+				<div ng-if="oferta.tipo_de_jornada" class="col-md-8 infoOferta">{{ getTipoJornadaText(oferta.tipo_de_jornada)}}</div>
+				<div ng-if="oferta.horario" class="col-md-4 lateralIzquierdo infoOferta">Horario</div>
+				<div ng-if="oferta.horario" class="col-md-8 infoOferta">{{getHorarioText(oferta.horario)}}</div>
+				<div ng-if="oferta.fecha_de_incorporacion" class="col-md-4 lateralIzquierdo infoOferta">Fecha de incorporación</div>
+				<div ng-if="oferta.fecha_de_incorporacion" class="col-md-8 infoOferta">{{oferta.fecha_de_incorporacion}}</div>
+				<div ng-if="oferta.salario_mensual" class="col-md-4 lateralIzquierdo infoOferta">Salario mensual</div>
+				<div ng-if="oferta.salario_mensual" class="col-md-8 infoOferta">{{oferta.salario_mensual}} €</div>
+				<div ng-if="oferta.meses_de_duracion" class="col-md-4 lateralIzquierdo infoOferta">Duración</div>
+				<div ng-if="oferta.meses_de_duracion" class="col-md-8 infoOferta">{{oferta.meses_de_duracion}} meses</div>
+				<div ng-if="oferta.ultimo_curso_academico_superado" class="col-md-4 lateralIzquierdo infoOferta">Último curso academico</div>
+				<div ng-if="oferta.ultimo_curso_academico_superado" class="col-md-8 infoOferta">{{ getUltimoCursoKey(oferta.ultimo_curso_academico_superado)}}</div>
+				<div ng-if="oferta.hay_posibilidad_de_tfg" class="col-md-4 lateralIzquierdo infoOferta">Posibilidad de TFG</div>
+				<div ng-if="oferta.hay_posibilidad_de_tfg" class="col-md-8 infoOferta">{{ getPosibilidadTFG(oferta.hay_posibilidad_de_tfg)}}</div>
+				<div ng-if="beneficiosLaborales" class="col-md-4 lateralIzquierdo infoOferta">Beneficios laborales</div>
+				<div ng-if="beneficiosLaborales" class="col-md-8 infoOferta">
+					<ul>
+				    <li ng-repeat="beneficio in beneficiosLaborales">{{ beneficio.name }}</li>
+					</ul>
+				</div>
+
+		</div>
+		<div id="SeccionRequisitos" class="col-md-12">
 			<h2>Requisitos de la oferta</h2>
-			<h3>Estudios admitidos</h3>
-			<div class="form-group">
-				<select ng-disabled="true" multiple="multiple" size="8" class="form-control" ng-model="oferta.especialidades" ng-options="t.resource_uri as t.nombre group by t.facultad for t in especialidades"></select>
+			<div ng-if="oferta.especialidades" class="col-md-3 lateralIzquierdo infoOferta">Estudios necesarios</div>
+			<div ng-if="oferta.especialidades" class="col-md-9 infoOferta">
+					<ul>
+				    <li ng-repeat="especialidad in oferta.especialidades">{{ especialidad.nombre }} ( {{ especialidad.facultad }} )</li>
+					</ul>
 			</div>
 			<div class="row">
-				<h3>Conocimientos tecnicos</h3>
+				<h4>Conocimientos tecnicos</h4>
 				<table class="table table-striped table-bordered table-condensed text-center">
 					<thead>
 						<td>Conocimiento</td>
@@ -139,7 +74,7 @@
 			</div>
 
 			<div class="row">
-				<h3>Idiomas</h3>
+				<h4>Idiomas</h4>
 				<table class="table table-striped table-bordered table-condensed text-center">
 					<thead>
 						<td>Idioma</td>
@@ -155,7 +90,7 @@
 			</div>
 
 			<div class="row">
-				<h3>Experiencia</h3>
+				<h4>Experiencia</h4>
 				<table class="table table-striped table-bordered table-condensed text-center">
 					<thead>
 						<td>Sector</td>
