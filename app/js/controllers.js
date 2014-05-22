@@ -282,19 +282,19 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
 
         $scope.getHorarioText = function(key) {
             return horarioText[key];
-        }
+        };
 
         $scope.getTipoContratoText = function(key) {
             return tipoContratoText[key];
-        }
+        };
 
         $scope.getTipoJornadaText = function(key) {
             return tipoDeJornadaText[key];
-        }
+        };
 
         $scope.getPosibilidadTFG = function(key) {
             return (key ? 'Si' : 'No');
-        }
+        };
 
         function getData(data, tipo, texto) {
             $scope.oferta = data;
@@ -309,7 +309,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                         $scope.checked_beneficios.push(property);
                     }
                 }
-            };
+            }
 
             for (var i = 0; i < data.requisitos_de_conocimiento_tecnico.length; i++) {
                 $scope.requisitos_de_conocimiento_tecnico[data.requisitos_de_conocimiento_tecnico[i].conocimiento.conocimiento] = {
@@ -317,7 +317,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     'nivel': data.requisitos_de_conocimiento_tecnico[i].nivel,
                     'resource_uri': data.requisitos_de_conocimiento_tecnico[i].conocimiento.resource_uri
                 };
-            };
+            }
 
             for (var i = 0; i < data.requisitos_de_idioma.length; i++) {
                 $scope.requisitos_de_idioma[data.requisitos_de_idioma[i].idioma.idioma] = {
@@ -325,7 +325,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     'nivel': data.requisitos_de_idioma[i].nivel,
                     'resource_uri': data.requisitos_de_idioma[i].idioma.resource_uri
                 };
-            };
+            }
 
             for (var i = 0; i < data.requisitos_de_experiencia_laboral.length; i++) {
                 $scope.requisitos_de_experiencia[data.requisitos_de_experiencia_laboral[i].sector.sector] = {
@@ -333,7 +333,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     'meses': data.requisitos_de_experiencia_laboral[i].meses,
                     'resource_uri': data.requisitos_de_experiencia_laboral[i].sector.resource_uri
                 };
-            };
+            }
 
             if (data.estado_de_la_suscripcion == 'no suscrito') {
                 $scope.buttonText = 'Suscribirse';
@@ -342,7 +342,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                 $scope.buttonText = "Ya estás suscrito";
                 $scope.suscrito = true;
             }
-        };
+        }
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
@@ -397,7 +397,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                     servicio = OfertaDeDepartamento;
                 } else {
                     servicio = OfertaDeProyectoEmprendedor;
-                };
+                }
 
                 if (suscrito) {
                     servicio.dessuscribirse({
@@ -610,8 +610,9 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 $scope.setPagingDataActiva(data.objects, data.meta.total_count);
                 $scope.ofertasActivas = data.objects;
                 $scope.loadingActivas = false;
+                $(window).resize();
             });
-        };
+        }
 
         function getOfertasPasadas(limit, offset) {
             var servicio;
@@ -649,7 +650,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                         $scope.ofertasPasadas[i].motivo = 'API';
                         $scope.ofertasPasadas[i].mod = (i % 2 == 0);
                     }
-                };
+                }
+                $(window).resize();
 
             });
         };
@@ -749,7 +751,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
                 $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
                 $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
             });
-        };
+        }
 
         $scope.restablecer = function restablecer(row) {
             if ($scope.userCredentials.tipo == 'Profesor') {
@@ -759,7 +761,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             } else {
                 restablecerGen(OfertaDeEmpresa, row.entity.id);
             }
-        }
+        };
 
         $scope.gridOptionsActiva = {
             data: 'myDataActiva',
@@ -820,6 +822,8 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
         }
+
+
     }
 ]);
 
