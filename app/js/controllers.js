@@ -733,6 +733,10 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             getOfertasPasadas(pageSize, ((page - 1) * pageSize));
         };
 
+        $scope.tieneSuscripciones = function(row) {
+            return row.entity.suscripciones.length == 0;
+        }
+
         $scope.versuscripciones = function(row) {
             $location.path("/suscripcionesOferta/" + row.entity.id);
         }
@@ -753,7 +757,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             }
         }, true);
 
-        $scope.accionesOfertasActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="versuscripciones(row)" >Suscripciones</button><button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button type="button" class="btn miniButtons btn-xs btn-danger" ng-click="open(row)">Eliminar</button>';
+        $scope.accionesOfertasActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="versuscripciones(row)" ng-disabled="tieneSuscripciones(row)" >Suscripciones</button><button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button type="button" class="btn miniButtons btn-xs btn-danger" ng-click="open(row)">Eliminar</button>';
 
         $scope.accionesOfertasPasada = '<button type="button" ng-if="row.entity.mod" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button ng-if="!row.entity.mod" type="button" class="btn miniButtons btn-xs btn-success" ng-click="restablecer(row)">Restablecer</button>';
 
