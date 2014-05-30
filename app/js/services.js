@@ -51,7 +51,7 @@ apiService.factory('authlogin', ['$resource',
 
 apiService.factory('Oferta', ['$resource',
     function($resource) {
-        return $resource(urlServicio + 'oferta/:id', {}, {
+        return $resource(urlServicio + 'oferta/:id/:action', {}, {
             queryAll: {
                 method: 'GET',
                 params: {
@@ -65,6 +65,13 @@ apiService.factory('Oferta', ['$resource',
                     id: '@id'
                 },
                 isArray: false
+            },
+            dessuscribirse: {
+                method: 'POST',
+                params: {
+                    id: '@id',
+                    action: 'dessuscribirse'
+                }
             }
         })
     }
@@ -680,3 +687,36 @@ apiService.service('errorMessages', function() {
         }
     };
 });
+
+apiService.factory('Suscripcion', ['$resource',
+    function($resource) {
+        return $resource(urlServicio + 'suscripcion/:id/', {}, {
+            queryAll: {
+                method: 'GET',
+                params: {
+                    id: ''
+                },
+                isArray: false
+            },
+            query: {
+                method: 'GET',
+                params: {
+                    id: '@id'
+                },
+                isArray: false
+            },
+            update: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
+            },
+            eliminar: {
+                method: 'PUT',
+                params: {
+                    id: '@id'
+                }
+            }
+        })
+    }
+]);

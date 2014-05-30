@@ -252,9 +252,9 @@ myApp.controller('publicarOferta', ['$scope', '$location', 'OfertaDeEmpresa', 'O
     }
 ]);
 
-myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Especialidad', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'ConocimientoTecnico', 'appAuth', 'VectoresDeDatos',
+myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', '$modal', 'Especialidad', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'ConocimientoTecnico', 'appAuth', 'VectoresDeDatos', 'errorMessages',
 
-    function($scope, $location, $routeParams, Especialidad, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth, VectoresDeDatos) {
+    function($scope, $location, $routeParams, $modal, Especialidad, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Conocimiento, appAuth, VectoresDeDatos, errorMessages) {
 
         var beneficiosLaboralesText = VectoresDeDatos.beneficiosLaboralesText();
         var ultimocursoText = VectoresDeDatos.ultimo_curso_academico_superado_key();
@@ -271,6 +271,20 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
         $scope.requisitos_de_conocimiento_tecnico = {};
         $scope.requisitos_de_idioma = {};
         $scope.requisitos_de_experiencia = {};
+
+        $scope.open = function(id) {
+            $scope.motivo = "";
+            var modalInstance = $modal.open({
+                templateUrl: 'partials/modals/denunciarElementoModal.html',
+                controller: 'ModalInstanceCtrl'
+            });
+            modalInstance.result.then(function(result) {
+                $scope.errorMessages = {
+                    'type': 'alert-info',
+                    'msn': 'Denuncia registrada correctamente'
+                };
+            }, function(result) {});
+        };
 
         $scope.getBeneficioText = function(key) {
             return beneficiosLaboralesText[key];
@@ -385,8 +399,8 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', 'Espe
                 return tmp;
             };
 
-            $scope.esEstudiante = function() {
-                return $scope.userCredentials.tipo == 'Estudiante';
+            $scope.esEstudiante = function(autorOferta) {
+                return ($scope.userCredentials.tipo == 'Estudiante' && $scope.userCredentials.id != $scope.autorOferta(autorOferta));
             }
 
             $scope.suscripcion = function(id, suscrito) {
@@ -663,6 +677,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             pageSize: 10,
             currentPage: 1
         };
+
         $scope.pagingOptionsPasada = {
             pageSizes: [10],
             pageSize: 10,
@@ -716,6 +731,10 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
         $scope.getPagedDataAsyncPasada = function(pageSize, page) {
             getOfertasPasadas(pageSize, ((page - 1) * pageSize));
         };
+
+        $scope.versuscripciones = function(row) {
+            $location.path("/suscripcionesOferta/" + row.entity.id);
+        }
 
         $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
 
@@ -826,6 +845,208 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
 
     }
 ]);
+
+myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', '$modal', 'Suscripcion', 'appAuth', 'errorMessages',
+    function($scope, $location, $routeParams, $modal, Suscripcion, appAuth, errorMessages) {
+
+
+        $scope.errorMessages = errorMessages.getProperty();
+        errorMessages.setProperty({});
+
+        function getSuscripcionesTodas() {
+            $scope.loadingActivas = true;
+            Suscripcion.queryAll({
+                'limit': 500,
+                'offset': 0
+            }, function(data) {
+                $scope.myDataActiva = [];
+                $scope.myDataPasada = [];
+                var numActivas = 0;
+                var numPasadas = 0;
+                for (var i = 0; i < data.objects.length; i++) {
+                    if (data.objects[i].suscriptor_oid != $scope.userCredentials.id) {
+                        if (data.objects[i].estado == 'pendiente') {
+                            if ((numActivas >= (($scope.pagingOptionsActiva.currentPage - 1) * 10)) && (numActivas < ($scope.pagingOptionsActiva.currentPage * 10))) {
+                                data.objects[i].comp = Math.round(Math.random() * 100) + '%';
+                                $scope.myDataActiva.push(data.objects[i]);
+                            }
+                            numActivas++;
+                        } else {
+                            if ((numPasadas >= (($scope.pagingOptionsPasada.currentPage - 1) * 10)) && (numPasadas < ($scope.pagingOptionsPasada.currentPage * 10))) {
+                                data.objects[i].comp = Math.round(Math.random() * 100) + '%';
+                                $scope.myDataPasada.push(data.objects[i]);
+                            }
+                            numPasadas++;
+                        }
+                    }
+                }
+                $scope.setPagingDataActiva(numActivas);
+                $scope.setPagingDataPasada(numPasadas);
+                $scope.loadingActivas = false;
+                $(window).resize();
+            });
+        }
+
+        $scope.totalServerItemsActiva = 0;
+        $scope.totalServerItemsPasada = 0;
+        $scope.pagingOptionsActiva = {
+            pageSizes: [10],
+            pageSize: 10,
+            currentPage: 1
+        };
+        $scope.pagingOptionsPasada = {
+            pageSizes: [10],
+            pageSize: 10,
+            currentPage: 1
+        };
+
+        $scope.getTableStyleActiva = function() {
+            var rowHeight = 35;
+            var headerHeight = 45;
+            if ($scope.myDataActiva == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataActiva.length + 2) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.getTableStylePasada = function() {
+            var rowHeight = 35;
+            var headerHeight = 45;
+            if ($scope.myDataPasada == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataPasada.length + 2) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.setPagingDataActiva = function(total) {
+            $scope.totalServerItemsActiva = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.setPagingDataPasada = function(total) {
+            $scope.totalServerItemsPasada = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.getSuscripciones = function(pageSize, page) {
+            getSuscripcionesTodas();
+        };
+
+        $scope.getSuscripciones($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+
+        $scope.getSuscripciones($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+
+        $scope.$watch('pagingOptionsActiva', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getSuscripciones($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+            }
+        }, true);
+
+        $scope.$watch('pagingOptionsPasada', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getSuscripciones($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
+            }
+        }, true);
+
+        $scope.anular = function anular(row) {
+            $location.path("/detallesSuscripcion/" + row.entity.id);
+        }
+
+        $scope.accionesSuscripcionActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="anular(row)">Detalles</button>';
+
+        $scope.gridOptionsActiva = {
+            data: 'myDataActiva',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsActiva',
+            pagingOptions: $scope.pagingOptionsActiva,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'suscriptor.nombre',
+                displayName: 'Estudiante'
+            }, {
+                field: 'comp',
+                displayName: 'Comp.'
+            }, {
+                field: 'oferta.fecha',
+                displayName: 'Suscrito en',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                displayName: 'Acciones',
+                cellTemplate: $scope.accionesSuscripcionActiva
+            }]
+        };
+
+        $scope.gridOptionsPasada = {
+            data: 'myDataPasada',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsPasada',
+            pagingOptions: $scope.pagingOptionsPasada,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'suscriptor.nombre',
+                displayName: 'Estudiante'
+            }, {
+                field: 'comp',
+                displayName: 'Comp.'
+            }, {
+                field: 'oferta.fecha',
+                displayName: 'Fecha',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                field: 'estado',
+                displayName: 'Decisión'
+            }]
+        };
+
+        if (!appAuth.isLoggedIn()) {
+            $location.path("/login");
+        }
+
+
+
+    }
+]);
+
+myApp.controller('detalleSuscripcion', ['$scope', '$location', '$routeParams', 'Estudiante', 'Suscripcion', 'VectoresDeDatos', 'errorMessages', 'appAuth',
+    function($scope, $location, $routeParams, Estudiante, Suscripcion, VectoresDeDatos, errorMessages, appAuth) {
+
+        $scope.resolver = function(estado) {
+            Suscripcion.update({
+                'id': $routeParams.idSuscripcion
+            }, {
+                'estado': estado
+            }, function(data) {
+                errorMessages.setProperty({
+                    'type': 'alert-success',
+                    'msn': 'Suscripcion ' + estado + ' correctamente'
+                });
+                $location.path("/misOfertas");
+            })
+        }
+
+        if (!appAuth.isLoggedIn()) {
+            $location.path("/login");
+        }
+
+    }
+]);
+
 
 myApp.controller('modificarOferta', ['$scope', '$location', '$routeParams', 'OfertaDeEmpresa', 'OfertaDeProyectoEmprendedor', 'OfertaDeDepartamento', 'Especialidad', 'appAuth', 'BeneficiosLaborales', 'RequisitosIdioma', 'RequisitosExperienciaLaboral', 'RequisitosConocimientoTecnico', 'Idioma', 'SectorMercado', 'ConocimientoTecnico', 'VectoresDeDatos', 'errorMessages',
     function($scope, $location, $routeParams, OfertaDeEmpresa, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Especialidad, appAuth, BeneficiosLaborales, RequisitosIdioma, RequisitosExperienciaLaboral, RequisitosConocimientoTecnico, Idioma, SectorMercado, ConocimientoTecnico, VectoresDeDatos, errorMessages) {
@@ -1173,6 +1394,264 @@ myApp.controller('perfilEstudiante', ['$scope', '$location', '$routeParams', 'Es
         }
     }
 ]);
+
+myApp.controller('denuncias', ['$scope', '$location', '$routeParams', 'appAuth', 'errorMessages',
+    function($scope, $location, $routeParams, $modal, appAuth, errorMessages) {
+
+        $scope.pagingDenuncias = {
+            pageSizes: [10],
+            pageSize: 10,
+            currentPage: 1
+        };
+        $scope.accionesDenuncias = '<button type="button" class="btn miniButtons btn-xs btn-primary" ng-click="detalles(row)" >Detalles</button>';
+
+        $scope.getTableStyle = function() {
+            var rowHeight = 35;
+            var headerHeight = 45;
+            if ($scope.denunciasNoResueltas == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.denunciasNoResueltas.length + 2) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.denunciasNoResueltas = [{
+            titulo: "Software Solutions",
+            numero: "5",
+            tipo: "Perfil",
+            primeraDenuncias: "22/05/2014"
+        }, {
+            titulo: "Experto en Marketing",
+            numero: "2",
+            tipo: "Oferta",
+            primeraDenuncias: "10/24/2014"
+        }, {
+            titulo: "Diseñador gráfico",
+            numero: "5",
+            tipo: "Oferta",
+            primeraDenuncias: "19/05/2014"
+        }];
+        $scope.totalDenuncasNoResueltas = 3;
+
+        $scope.gridDenuncias = {
+            data: 'denunciasNoResueltas',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalDenuncasNoResueltas',
+            pagingOptions: $scope.pagingDenuncias,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'titulo',
+                displayName: 'Titulo'
+            }, {
+                field: 'numero',
+                displayName: 'Número denuncias'
+            }, {
+                field: 'tipo',
+                displayName: 'Tipo'
+            }, {
+                field: 'primeraDenuncias',
+                displayName: 'Fecha',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                displayName: 'Acciones',
+                cellTemplate: $scope.accionesDenuncias
+            }]
+        };
+
+    }
+]);
+
+
+myApp.controller('misSuscripciones', ['$scope', '$location', '$routeParams', '$modal', 'Oferta', 'Suscripcion', 'appAuth', 'errorMessages',
+    function($scope, $location, $routeParams, $modal, Oferta, Suscripcion, appAuth, errorMessages) {
+
+        $scope.errorMessages = errorMessages.getProperty();
+        errorMessages.setProperty({});
+
+        function getSuscripcionesTodas() {
+            $scope.loadingActivas = true;
+            Suscripcion.queryAll({
+                'limit': 500,
+                'offset': 0
+            }, function(data) {
+                $scope.myDataActiva = [];
+                $scope.myDataPasada = [];
+                var numActivas = 0;
+                var numPasadas = 0;
+                for (var i = 0; i < data.objects.length; i++) {
+                    if (data.objects[i].suscriptor_oid == $scope.userCredentials.id) {
+                        if (data.objects[i].estado == 'pendiente') {
+                            if ((numActivas >= (($scope.pagingOptionsActiva.currentPage - 1) * 10)) && (numActivas < ($scope.pagingOptionsActiva.currentPage * 10))) {
+                                $scope.myDataActiva.push(data.objects[i]);
+                            }
+                            numActivas++;
+                        } else {
+                            if ((numPasadas >= (($scope.pagingOptionsPasada.currentPage - 1) * 10)) && (numPasadas < ($scope.pagingOptionsPasada.currentPage * 10))) {
+                                $scope.myDataPasada.push(data.objects[i]);
+                            }
+                            numPasadas++;
+                        }
+                    }
+                }
+                $scope.setPagingDataActiva(numActivas);
+                $scope.setPagingDataPasada(numPasadas);
+                $scope.loadingActivas = false;
+                $(window).resize();
+            });
+        }
+
+        $scope.totalServerItemsActiva = 0;
+        $scope.totalServerItemsPasada = 0;
+        $scope.pagingOptionsActiva = {
+            pageSizes: [10],
+            pageSize: 10,
+            currentPage: 1
+        };
+        $scope.pagingOptionsPasada = {
+            pageSizes: [10],
+            pageSize: 10,
+            currentPage: 1
+        };
+
+        $scope.getTableStyleActiva = function() {
+            var rowHeight = 35;
+            var headerHeight = 45;
+            if ($scope.myDataActiva == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataActiva.length + 2) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.getTableStylePasada = function() {
+            var rowHeight = 35;
+            var headerHeight = 45;
+            if ($scope.myDataPasada == undefined) {
+                return "";
+            } else {
+                return {
+                    height: (($scope.myDataPasada.length + 2) * rowHeight + headerHeight) + "px"
+                };
+            }
+        };
+
+        $scope.setPagingDataActiva = function(total) {
+            $scope.totalServerItemsActiva = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.setPagingDataPasada = function(total) {
+            $scope.totalServerItemsPasada = total;
+            if (!$scope.$$phase) {
+                $scope.$apply();
+            }
+        };
+
+        $scope.getSuscripciones = function() {
+            getSuscripcionesTodas();
+        };
+
+        $scope.getSuscripciones();
+
+        $scope.$watch('pagingOptionsActiva', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getSuscripciones();
+            }
+        }, true);
+
+        $scope.$watch('pagingOptionsPasada', function(newVal, oldVal) {
+            if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
+                $scope.getSuscripciones();
+            }
+        }, true);
+
+        $scope.anular = function anular(row) {
+            Oferta.dessuscribirse({
+                'id': row.entity.modelo_oid
+            }, function() {
+                $scope.getSuscripciones();
+            })
+
+        }
+
+        $scope.accionesSuscripcionActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="anular(row)">Anular</button>';
+
+        $scope.gridOptionsActiva = {
+            data: 'myDataActiva',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsActiva',
+            pagingOptions: $scope.pagingOptionsActiva,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'oferta.titulo',
+                displayName: 'Oferta'
+            }, {
+                field: 'oferta.usuario',
+                displayName: 'Autor'
+            }, {
+                field: 'oferta.fecha',
+                displayName: 'Alta oferta',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                field: 'fecha',
+                displayName: 'Suscrito en',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                displayName: 'Acciones',
+                cellTemplate: $scope.accionesSuscripcionActiva
+            }]
+        };
+
+        $scope.gridOptionsPasada = {
+            data: 'myDataPasada',
+            enablePaging: true,
+            showFooter: true,
+            totalServerItems: 'totalServerItemsPasada',
+            pagingOptions: $scope.pagingOptionsPasada,
+            enableSorting: false,
+            enableRowSelection: false,
+            i18n: 'es',
+            columnDefs: [{
+                field: 'oferta.titulo',
+                displayName: 'Oferta'
+            }, {
+                field: 'oferta.usuario',
+                displayName: 'Autor'
+            }, {
+                field: 'oferta.fecha',
+                displayName: 'Alta oferta',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                field: 'fecha',
+                displayName: 'Suscrito en',
+                cellFilter: 'date:\'dd/MM/yyyy\''
+            }, {
+                field: 'estado',
+                displayName: 'Decisión'
+            }]
+        };
+
+        if (!appAuth.isLoggedIn()) {
+            $location.path("/login");
+        }
+    }
+]);
+
+
+
+
 
 myApp.controller('home', ['$scope', '$location', 'appAuth',
     function($scope, $location, appAuth) {

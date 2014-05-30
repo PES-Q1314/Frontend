@@ -55,6 +55,22 @@ myApp.config(['$routeProvider',
             templateUrl: 'partials/oferta/publicarOferta.html',
             controller: 'modificarOferta'
         });
+        $routeProvider.when('/misSuscripciones', {
+            templateUrl: 'partials/suscripciones/missuscripciones.html',
+            controller: 'misSuscripciones'
+        });
+        $routeProvider.when('/denuncias', {
+            templateUrl: 'partials/administracion/denuncias.html',
+            controller: 'denuncias'
+        });
+        $routeProvider.when('/suscripcionesOferta/:idOferta', {
+            templateUrl: 'partials/oferta/suscripcionesOferta.html',
+            controller: 'suscripcionesOferta'
+        });
+        $routeProvider.when('/detallesSuscripcion/:idSuscripcion', {
+            templateUrl: 'partials/suscripciones/detalleSuscripcion.html',
+            controller: 'detalleSuscripcion'
+        });
         $routeProvider.when('/home', {
             templateUrl: 'partials/home.html',
             controller: 'home'

@@ -1,0 +1,8 @@
+<div id="misOfertasPartial">
+  <div ng-if="errorMessages.type" class="text-center alert {{ errorMessages.type }}">
+  {{ errorMessages.msn }}
+</div>
+  <button class="btn btn-primary" ng-click="resolver('aceptada')">Aceptar</button>
+  <button class="btn btn-primary" ng-click="resolver('descartada')">Descartar</button>
+
+</div>

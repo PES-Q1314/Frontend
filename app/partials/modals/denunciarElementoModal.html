@@ -1,0 +1,11 @@
+<div class="modal-header">
+    <h3>Denunciar elemento</h3>
+</div>
+<div class="modal-body">
+  <div><h4>Exprese el motivo de la denuncia</h4><div>
+  <textarea class="form-control col-sm-10" style="margin-bottom:10px" maxlength="600" placeholder="Motivo de la denuncia" rows="4" ng-model="$parent.motivo"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Denunciar</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
