@@ -2,9 +2,18 @@
   <div ng-if="errorMessages.type" class="text-center alert {{ errorMessages.type }}">
   {{ errorMessages.msn }}
 </div>
-<div class="col-md-12">
+<div class="col-md-12" id="detallesOferta" ng-hide="loading">
+  <h1><span>Oferta seleccionada</span></h1>
+  <div id="SeccionPrincipal" class="col-md-12">
+      <div ng-if="oferta.titulo" class="col-md-2 lateralIzquierdo infoOferta">Titulo</div>
+      <div ng-if="oferta.titulo" class="col-md-10 infoOferta">{{oferta.titulo}}</div>
+      <div ng-if="oferta.fecha_de_incorporacion" class="col-md-4 lateralIzquierdo infoOferta">Fecha de incorporación</div>
+      <div ng-if="oferta.fecha_de_incorporacion" class="col-md-8 infoOferta">{{oferta.fecha_de_incorporacion}}</div>
 
+      <div ng-if="oferta.descripcion" class="col-md-2 lateralIzquierdo infoOferta">Descripción</div>
+      <div ng-if="oferta.descripcion" class="col-md-10 infoOferta">{{oferta.descripcion}}</div>
 
+  </div>
 </div>
 
   <tabset>

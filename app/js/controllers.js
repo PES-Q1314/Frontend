@@ -369,6 +369,7 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', '$mod
                 OfertaDeEmpresa.query({
                     id: $routeParams.idOferta
                 }, function(data) {
+                    console.log(data);
                     getData(data, 'empresa', 'Empresa ofertora');
                 });
                 $scope.showTfg = true;
@@ -846,18 +847,28 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
     }
 ]);
 
-myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', '$modal', 'Suscripcion', 'appAuth', 'errorMessages',
-    function($scope, $location, $routeParams, $modal, Suscripcion, appAuth, errorMessages) {
+myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', '$modal', 'Suscripcion', 'Oferta', 'appAuth', 'errorMessages',
+    function($scope, $location, $routeParams, $modal, Suscripcion, Oferta, appAuth, errorMessages) {
 
 
         $scope.errorMessages = errorMessages.getProperty();
         errorMessages.setProperty({});
 
+        function getDatosOferta() {
+            Oferta.query({
+                'id': $routeParams.idOferta
+            }, function(data) {
+                $scope.oferta = data;
+            });
+        };
+
+
         function getSuscripcionesTodas() {
             $scope.loadingActivas = true;
             Suscripcion.queryAll({
                 'limit': 500,
-                'offset': 0
+                'offset': 0,
+                'modelo_oid': $routeParams.idOferta
             }, function(data) {
                 $scope.myDataActiva = [];
                 $scope.myDataPasada = [];
@@ -885,7 +896,7 @@ myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', 
                 $scope.loadingActivas = false;
                 $(window).resize();
             });
-        }
+        };
 
         $scope.totalServerItemsActiva = 0;
         $scope.totalServerItemsPasada = 0;
@@ -1016,6 +1027,8 @@ myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', 
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
+        } else {
+            getDatosOferta();
         }
 
 
@@ -1039,6 +1052,8 @@ myApp.controller('detalleSuscripcion', ['$scope', '$location', '$routeParams', '
                 $location.path("/misOfertas");
             })
         }
+
+
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
