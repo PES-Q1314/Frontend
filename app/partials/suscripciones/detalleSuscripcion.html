@@ -1,9 +1,11 @@
+<div class="text-center" ng-show="loading">
+  <img id="spinner" ng-src="img/loading.gif">Cargando detalles del solicitante
+</div>
 <div id="misOfertasPartial">
   <div ng-if="errorMessages.type" class="text-center alert {{ errorMessages.type }}">
     {{ errorMessages.msn }}
   </div>
-
-  <div class="col-md-12">
+  <div ng-hide="loading" class="col-md-12">
     <h1>Información de perfil</h1>
     <div class="col-md-3"><img class="img-responsive" style="width:70%" ng-src="img/silueta_hombre.gif" alt=""></div>
     <div class="col-md-9">
@@ -64,7 +66,7 @@
     </div>
 
   </div>
-  <div class="col-md-12 text-center" style="margin-top:20px;">
+  <div ng-hide="loading" class="col-md-12 text-center" style="margin-top:20px;">
     <button class="btn btn-lg btn-success" style="margin-right:5px;" ng-click="resolver('aceptada')">Aceptar</button>
     <button class="btn btn-lg btn-warning" style="margin-left:5px;" ng-click="resolver('descartada')">Descartar</button>
   </div>

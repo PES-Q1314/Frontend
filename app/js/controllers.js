@@ -1443,13 +1443,49 @@ myApp.controller('perfilProfesor', ['$scope', '$location', '$routeParams', 'Prof
 
 myApp.controller('perfilEstudiante', ['$scope', '$location', '$routeParams', 'Estudiante', 'appAuth',
     function($scope, $location, $routeParams, Estudiante, appAuth) {
+        $scope.conocimientos_tecnicos = {};
+        $scope.idiomas = {};
+        $scope.experiencia_laboral = {};
+
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
         } else {
+            $scope.loading = true;
             Estudiante.query({
-                id: $routeParams.id
+                'id': $routeParams.id
             }, function(data) {
                 $scope.estudiante = data;
+                $scope.loading = false;
+
+                if (data.busca_trabajo) {
+                    $scope.estudiante.busca_empleo = "Busca empleo"
+                } else {
+                    $scope.estudiante.busca_empleo = "No busca empleo"
+                }
+
+                for (var i = 0; i < data.conocimientos_tecnicos.length; i++) {
+                    $scope.conocimientos_tecnicos[data.conocimientos_tecnicos[i].conocimiento.conocimiento] = {
+                        'conocimiento': data.conocimientos_tecnicos[i].conocimiento.conocimiento,
+                        'nivel': data.conocimientos_tecnicos[i].nivel,
+                        'resource_uri': data.conocimientos_tecnicos[i].conocimiento.resource_uri
+                    };
+                }
+
+                for (var i = 0; i < data.idiomas.length; i++) {
+                    $scope.idiomas[data.idiomas[i].idioma.idioma] = {
+                        'idioma': data.idiomas[i].idioma.idioma,
+                        'nivel': data.idiomas[i].nivel,
+                        'resource_uri': data.idiomas[i].idioma.resource_uri
+                    };
+                }
+
+                for (var i = 0; i < data.experiencia_laboral.length; i++) {
+                    $scope.experiencia_laboral[data.experiencia_laboral[i].sector.sector] = {
+                        'sector': data.experiencia_laboral[i].sector.sector,
+                        'meses': data.experiencia_laboral[i].meses,
+                        'resource_uri': data.experiencia_laboral[i].sector.resource_uri
+                    };
+                }
             });
         }
     }
@@ -1708,10 +1744,6 @@ myApp.controller('misSuscripciones', ['$scope', '$location', '$routeParams', '$m
         }
     }
 ]);
-
-
-
-
 
 myApp.controller('home', ['$scope', '$location', 'appAuth',
     function($scope, $location, appAuth) {

@@ -1,1 +1,69 @@
-{{ estudiante }}
+<div class="text-center" ng-show="loading">
+  <img id="spinner" ng-src="img/loading.gif">Cargando detalles del estudiante
+</div>
+<div id="misOfertasPartial">
+  <div ng-if="errorMessages.type" class="text-center alert {{ errorMessages.type }}">
+    {{ errorMessages.msn }}
+  </div>
+  <div ng-hide="loading" class="col-md-12">
+    <h1>Información de perfil</h1>
+    <div class="col-md-3"><img class="img-responsive" style="width:70%" ng-src="img/silueta_hombre.gif" alt=""></div>
+    <div class="col-md-9">
+      <div class="col-md-12"><h2>{{estudiante.nombre}}<h2></div>
+      <div class="col-md-12"><a>Descargar Curriculum</a></div>
+      <div class="col-md-12" style="text-align: right;">{{estudiante.busca_empleo}}</div>
+    </div>
+    <div class="col-md-12" style="margin-top:20px">{{estudiante.descripcion}}</div>
+
+    <div id="SeccionRequisitos" class="col-md-12">
+      <div class="row">
+        <h4>Conocimientos tecnicos</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Conocimiento</td>
+            <td>Nivel</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="conocimiento in conocimientos_tecnicos">
+              <td class="col-md-6">{{ conocimiento.conocimiento }}</td>
+              <td class="col-md-5">{{ conocimiento.nivel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <h4>Idiomas</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Idioma</td>
+            <td>Nivel</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="idioma in idiomas">
+              <td class="col-md-6">{{ idioma.idioma }}</td>
+              <td class="col-md-5">{{ idioma.nivel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <h4>Experiencia</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Sector</td>
+            <td>Meses de experiencia</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="exp in experiencia_laboral">
+              <td class="col-md-6 text-center">{{ exp.sector }}</td>
+              <td class="col-md-5">{{ exp.meses }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
