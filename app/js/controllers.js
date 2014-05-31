@@ -973,11 +973,11 @@ myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', 
             }
         }, true);
 
-        $scope.anular = function anular(row) {
-            $location.path("/detallesSuscripcion/" + row.entity.id);
+        $scope.detalles = function detalles(row) {
+            $location.path("/detallesSuscripcion/" + row.entity.id + "/" + row.entity.suscriptor_oid);
         }
 
-        $scope.accionesSuscripcionActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="anular(row)">Detalles</button>';
+        $scope.accionesSuscripcionActiva = '<button type="button" class="btn miniButtons btn-xs btn-info" ng-click="detalles(row)">Detalles</button>';
 
         $scope.gridOptionsActiva = {
             data: 'myDataActiva',
@@ -1058,9 +1058,50 @@ myApp.controller('detalleSuscripcion', ['$scope', '$location', '$routeParams', '
         }
 
 
+        $scope.conocimientos_tecnicos = {};
+        $scope.idiomas = {};
+        $scope.experiencia_laboral = {};
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
+        } else {
+            $scope.loading = true;
+            Estudiante.query({
+                'id': $routeParams.idEstudiante
+            }, function(data) {
+                $scope.estudiante = data;
+                $scope.loading = false;
+
+                if (data.busca_trabajo) {
+                    $scope.estudiante.busca_empleo = "Busca empleo"
+                } else {
+                    $scope.estudiante.busca_empleo = "No busca empleo"
+                }
+
+                for (var i = 0; i < data.conocimientos_tecnicos.length; i++) {
+                    $scope.conocimientos_tecnicos[data.conocimientos_tecnicos[i].conocimiento.conocimiento] = {
+                        'conocimiento': data.conocimientos_tecnicos[i].conocimiento.conocimiento,
+                        'nivel': data.conocimientos_tecnicos[i].nivel,
+                        'resource_uri': data.conocimientos_tecnicos[i].conocimiento.resource_uri
+                    };
+                }
+
+                for (var i = 0; i < data.idiomas.length; i++) {
+                    $scope.idiomas[data.idiomas[i].idioma.idioma] = {
+                        'idioma': data.idiomas[i].idioma.idioma,
+                        'nivel': data.idiomas[i].nivel,
+                        'resource_uri': data.idiomas[i].idioma.resource_uri
+                    };
+                }
+
+                for (var i = 0; i < data.experiencia_laboral.length; i++) {
+                    $scope.experiencia_laboral[data.experiencia_laboral[i].sector.sector] = {
+                        'sector': data.experiencia_laboral[i].sector.sector,
+                        'meses': data.experiencia_laboral[i].meses,
+                        'resource_uri': data.experiencia_laboral[i].sector.resource_uri
+                    };
+                }
+            });
         }
 
     }

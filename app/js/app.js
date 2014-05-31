@@ -67,7 +67,7 @@ myApp.config(['$routeProvider',
             templateUrl: 'partials/oferta/suscripcionesOferta.html',
             controller: 'suscripcionesOferta'
         });
-        $routeProvider.when('/detallesSuscripcion/:idSuscripcion', {
+        $routeProvider.when('/detallesSuscripcion/:idSuscripcion/:idEstudiante', {
             templateUrl: 'partials/suscripciones/detalleSuscripcion.html',
             controller: 'detalleSuscripcion'
         });

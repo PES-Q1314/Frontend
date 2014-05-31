@@ -1,8 +1,71 @@
 <div id="misOfertasPartial">
   <div ng-if="errorMessages.type" class="text-center alert {{ errorMessages.type }}">
-  {{ errorMessages.msn }}
-</div>
-  <button class="btn btn-primary" ng-click="resolver('aceptada')">Aceptar</button>
-  <button class="btn btn-primary" ng-click="resolver('descartada')">Descartar</button>
+    {{ errorMessages.msn }}
+  </div>
 
+  <div class="col-md-12">
+    <h1>Información de perfil</h1>
+    <div class="col-md-3"><img class="img-responsive" style="width:70%" ng-src="img/silueta_hombre.gif" alt=""></div>
+    <div class="col-md-9">
+      <div class="col-md-12"><h2>{{estudiante.nombre}}<h2></div>
+      <div class="col-md-12"><a>Descargar Curriculum</a></div>
+      <div class="col-md-12" style="text-align: right;">{{estudiante.busca_empleo}}</div>
+    </div>
+    <div class="col-md-12" style="margin-top:20px">{{estudiante.descripcion}}</div>
+
+    <div id="SeccionRequisitos" class="col-md-12">
+      <div class="row">
+        <h4>Conocimientos tecnicos</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Conocimiento</td>
+            <td>Nivel</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="conocimiento in conocimientos_tecnicos">
+              <td class="col-md-6">{{ conocimiento.conocimiento }}</td>
+              <td class="col-md-5">{{ conocimiento.nivel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <h4>Idiomas</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Idioma</td>
+            <td>Nivel</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="idioma in idiomas">
+              <td class="col-md-6">{{ idioma.idioma }}</td>
+              <td class="col-md-5">{{ idioma.nivel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="row">
+        <h4>Experiencia</h4>
+        <table class="table table-striped table-bordered table-condensed text-center">
+          <thead>
+            <td>Sector</td>
+            <td>Meses de experiencia</td>
+          </thead>
+          <tbody>
+            <tr ng-repeat="exp in experiencia_laboral">
+              <td class="col-md-6 text-center">{{ exp.sector }}</td>
+              <td class="col-md-5">{{ exp.meses }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <div class="col-md-12 text-center" style="margin-top:20px;">
+    <button class="btn btn-lg btn-success" style="margin-right:5px;" ng-click="resolver('aceptada')">Aceptar</button>
+    <button class="btn btn-lg btn-warning" style="margin-left:5px;" ng-click="resolver('descartada')">Descartar</button>
+  </div>
 </div>
