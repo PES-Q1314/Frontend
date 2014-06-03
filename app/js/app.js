@@ -13,6 +13,8 @@ var myApp = angular.module('myApp', [
     'ngGrid'
 ]);
 
+angular.module('myApp.controllers', []);
+
 myApp.value('redirectToUrlAfterLogin', {
     url: '/'
 });
@@ -94,6 +96,27 @@ myApp.config(['$httpProvider',
         $httpProvider.defaults.withCredentials = true;
     }
 ]);
+
+myApp.config(function($httpProvider) {
+    $httpProvider.responseInterceptors.push('securityInterceptor');
+}).provider('securityInterceptor', function() {
+    this.$get = function($location, $q, $injector, $cookieStore, $rootScope) {
+        return function(promise) {
+            var appAuth = $injector.get('appAuth');
+            var errorMessages = $injector.get('errorMessages');
+            return promise.then(null, function(response) {
+                if (response.status === 401) {
+                    errorMessages.setProperty({
+                        'type': 'alert-danger',
+                        'msn': 'Error desconocido inesperado'
+                    });
+                    $location.path('/home');
+                }
+                return $q.reject(response);
+            });
+        };
+    };
+});
 
 myApp.run(function($location, $rootScope, $cookieStore, appAuth) {
     if (!appAuth.isLoggedIn()) {

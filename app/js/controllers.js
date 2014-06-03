@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-var myApp = angular.module('myApp.controllers', []);
+var myApp = angular.module('myApp.controllers');
 
 myApp.controller('login', ['$scope', '$rootScope', '$location', '$cookieStore', 'authlogin', 'appAuth', 'errorMessages',
     function($scope, $rootScope, $location, $cookieStore, authlogin, appAuth, errorMessages) {
@@ -1745,12 +1745,13 @@ myApp.controller('misSuscripciones', ['$scope', '$location', '$routeParams', '$m
     }
 ]);
 
-myApp.controller('home', ['$scope', '$location', 'appAuth',
-    function($scope, $location, appAuth) {
+myApp.controller('home', ['$scope', '$location', 'appAuth', 'errorMessages',
+    function($scope, $location, appAuth, errorMessages) {
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
         } else {
-
+            $scope.errorMessages = errorMessages.getProperty();
+            errorMessages.setProperty({});
         }
     }
 ]);

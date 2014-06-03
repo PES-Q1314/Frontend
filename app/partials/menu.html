@@ -2,11 +2,11 @@
                   <p class="lead">Bolsa de empleo</p>
                   <ul id="sidebar" class="nav nav-stacked">
                     <li ng-class="{ open: isActive('/buscarOfertas')}"><a href="#/buscarOfertas">Buscar ofertas</a></li>
-                    <li ng-class="{ open: isActive('/buscarPerfiles')}"><a href="">Buscar perfiles</a></li>
+                    <li ng-class="{ open: isActive('/buscarPerfiles')}" restrict access="EmpresaPremium Estudiante Profesor"><a href="">Buscar perfiles</a></li>
                     <li ng-class="{ open: isActive('/publicarOferta')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/publicarOferta">Publicar Oferta</a></li>
                     <li ng-class="{ open: isActive('/nuevasSuscripciones')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="">Nuevas suscripciones</a></li>
                     <li ng-class="{ open: isActive('/misOfertas')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misOfertas">Mis ofertas</a></li>
-                    <li ng-class="{ open: isActive('/misSuscripciones')}" restrict access="Empresa EmpresaPremium Estudiante Profesor"><a href="#/misSuscripciones">Mis suscripciones</a></li>
+                    <li ng-class="{ open: isActive('/misSuscripciones')}" restrict access="Estudiante Profesor"><a href="#/misSuscripciones">Mis suscripciones</a></li>
                   </ul>
                 </div>
                 <div restrict access="Administrador" class="menu_group">
