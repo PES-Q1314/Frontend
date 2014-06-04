@@ -1062,7 +1062,7 @@ myApp.controller('detalleSuscripcion', ['$scope', '$location', '$routeParams', '
             }, function(data) {
                 var msn = 'Suscripcion ' + estado + ' correctamente';
                 if (estado == 'aceptada') {
-                    msn += ' - <b>' + estudiante.nombre + ' - ' + estudiante.email + '</b>';
+                    msn += ' - ' + estudiante.nombre + ' - ' + estudiante.email;
                 }
                 errorMessages.setProperty({
                     'type': 'alert-success',
