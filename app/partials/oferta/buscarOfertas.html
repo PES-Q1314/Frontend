@@ -78,7 +78,7 @@
 	</div>
 </div>
  <div class="text-center row-fluid" ng-hide="loading || sinResultados">
- <pagination direction-links="false" boundary-links="true" items-per-page="limit" total-items="totalItems" page="currentPage" on-select-page="selectPage(page)"></pagination>
+ <pagination ng-if="numPages > 1" direction-links="false" boundary-links="true" items-per-page="limit" total-items="totalItems" page="currentPage" on-select-page="selectPage(page)"></pagination>
  </div>
 
 	<div class="text-center resultados_busqueda alert alert-info" ng-show="sinResultados">

@@ -16,15 +16,12 @@ apiService.factory('appAuth', function($rootScope, $location, $cookieStore, auth
             return !!$cookieStore.get('login'); //convert value to bool
         },
         saveAttemptUrl: function() {
-            console.log("saveAttempt");
             if ($location.path().toLowerCase() != '/login') {
                 redirectToUrlAfterLogin.url = $location.path();
             } else
                 redirectToUrlAfterLogin.url = '/';
         },
         redirectToAttemptedUrl: function() {
-            console.log("Redirect");
-            console.log(redirectToUrlAfterLogin.url);
             $location.path(redirectToUrlAfterLogin.url);
         }
     };

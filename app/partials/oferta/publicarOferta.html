@@ -32,15 +32,15 @@
 	    </div>
     </div>
 	<div id="SeccionInformacionContacto">
-		<h2>Información de contacto</h2>
-	    <div class="form-group">
+		<h2 ng-if="userCredentials.tipo != 'Estudiante'">Información de contacto</h2>
+	    <div class="form-group" ng-if="userCredentials.tipo != 'Estudiante'">
 	        <label for="persona_de_contacto" class="col-xs-3 control-label">Persona de contacto<span class="red">*</span></label>
 	        <div class="col-xs-9" ng-class="{ 'has-error' : form.persona_de_contacto.$invalid && !form.persona_de_contacto.$pristine }">
 	            <input type="text" maxlength="100" required ng-model="oferta.persona_de_contacto" class="form-control col-sm-10" name="persona_de_contacto" placeholder="Persona de contacto"/>
 	            <p ng-show="form.persona_de_contacto.$invalid && !form.persona_de_contacto.$pristine" class="help-block">La persona de contacto es obligatoria.</p>
 	        </div>
 	    </div>
-	    <div class="form-group">
+	    <div class="form-group" ng-if="userCredentials.tipo != 'Estudiante'">
 	        <label for="email_de_contacto" class="col-xs-3 control-label">Correo de contacto<span class="red">*</span></label>
 	        <div class="col-xs-9" ng-class="{ 'has-error' : form.email_de_contacto.$invalid && !form.email_de_contacto.$pristine }">
 	            <input type="email" maxlength="100" required ng-model="oferta.email_de_contacto" class="form-control col-sm-10" name="email_de_contacto" placeholder="Correo de contacto"/>
@@ -85,8 +85,8 @@
 				</p>
 				<p ng-show="form.fecha_de_incorporacion.$invalid && !form.fecha_de_incorporacion.$pristine" class="help-block">La fecha de incorporación es obligatoria.</p>
 	        </div>
-	        <label for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
-	        <div class="col-xs-4" ng-class="{ 'has-error' : form.salario_mensual.$invalid && !form.salario_mensual.$pristine }">
+	        <label ng-if="userCredentials.tipo != 'Estudiante'" for="salario_mensual" class="col-xs-2 control-label">Salario mensual</label>
+	        <div ng-if="userCredentials.tipo != 'Estudiante'" class="col-xs-4" ng-class="{ 'has-error' : form.salario_mensual.$invalid && !form.salario_mensual.$pristine }">
 	        	<input type="number" placeholder="Salario mensual" name="salario_mensual" class="form-control" min="0" ng-model="oferta.salario_mensual">
 	        	<p ng-show="form.salario_mensual.$invalid && !form.salario_mensual.$pristine" class="help-block">El salario debe ser numerico.</p>
 	        </div>
