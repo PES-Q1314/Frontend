@@ -741,10 +741,6 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             $location.path("/suscripcionesOferta/" + row.entity.id);
         }
 
-        $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
-
-        $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
-
         $scope.$watch('pagingOptionsActiva', function(newVal, oldVal) {
             if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
                 $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
@@ -845,6 +841,9 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
+        } else {
+            $scope.getPagedDataAsyncActiva($scope.pagingOptionsActiva.pageSize, $scope.pagingOptionsActiva.currentPage);
+            $scope.getPagedDataAsyncPasada($scope.pagingOptionsPasada.pageSize, $scope.pagingOptionsPasada.currentPage);
         }
 
 
