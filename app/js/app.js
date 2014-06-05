@@ -105,7 +105,7 @@ myApp.config(function($httpProvider) {
             var appAuth = $injector.get('appAuth');
             var errorMessages = $injector.get('errorMessages');
             return promise.then(null, function(response) {
-                if (response.status === 401) {
+                if (response.status === 401 && ($location.path() != '/login')) {
                     errorMessages.setProperty({
                         'type': 'alert-danger',
                         'msn': 'Error desconocido inesperado'

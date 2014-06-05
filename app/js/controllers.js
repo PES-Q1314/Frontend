@@ -350,12 +350,15 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', '$mod
             }
 
             if (data.estado_de_la_suscripcion == 'no suscrito') {
-                $scope.buttonText = 'Suscribirse';
+                $scope.buttonTextA = 'Suscribirse';
+                $scope.buttonTextB = 'Suscribirse';
                 $scope.suscrito = false;
             } else {
-                $scope.buttonText = "Ya estás suscrito";
+                $scope.buttonTextA = "Ya estás suscrito";
+                $scope.buttonTextB = 'Anular';
                 $scope.suscrito = true;
             }
+            $scope.buttonText = $scope.buttonTextA;
         }
 
         if (!appAuth.isLoggedIn()) {
@@ -369,7 +372,6 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', '$mod
                 OfertaDeEmpresa.query({
                     id: $routeParams.idOferta
                 }, function(data) {
-                    console.log(data);
                     getData(data, 'empresa', 'Empresa ofertora');
                 });
                 $scope.showTfg = true;
@@ -418,15 +420,19 @@ myApp.controller('detallesOferta', ['$scope', '$location', '$routeParams', '$mod
                     servicio.dessuscribirse({
                         'id': id
                     }, function() {
-                        $scope.buttonText = 'Suscribirse';
+                        $scope.buttonTextA = 'Suscribirse';
+                        $scope.buttonTextB = 'Suscribirse';
                         $scope.suscrito = false;
+                        $scope.buttonText = $scope.buttonTextA;
                     });
                 } else {
                     servicio.suscribirse({
                         'id': id
                     }, function() {
-                        $scope.buttonText = "Ya estás suscrito";
+                        $scope.buttonTextA = "Ya estás suscrito";
+                        $scope.buttonTextB = 'Anular';
                         $scope.suscrito = true;
+                        $scope.buttonText = $scope.buttonTextA;
                     });
                 }
             }
@@ -757,6 +763,11 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
 
         $scope.accionesOfertasPasada = '<button type="button" ng-if="row.entity.mod" class="btn miniButtons btn-xs btn-primary" ng-click="modificar(row)" >Modificar</button><button ng-if="!row.entity.mod" type="button" class="btn miniButtons btn-xs btn-success" ng-click="restablecer(row)">Restablecer</button>';
 
+
+
+        $scope.linkTitulo = '<div class="ngCellText ng-scope col1 colt1" ng-class="col.colIndex()"><a href="#/detallesOferta/{{ row.entity.tipo }}/{{ row.entity.id }}">{{row.entity.titulo}}</a></div>';
+
+
         $scope.modificar = function modificar(row) {
             $location.path(/modificarOferta/ + row.entity.id);
         };
@@ -793,7 +804,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             enableRowSelection: false,
             i18n: 'es',
             columnDefs: [{
-                field: 'titulo',
+                cellTemplate: $scope.linkTitulo,
                 displayName: 'Titulo'
             }, {
                 field: 'fecha_de_creacion',
@@ -816,7 +827,7 @@ myApp.controller('misOfertas', ['$scope', '$location', '$routeParams', '$modal',
             enableRowSelection: false,
             i18n: 'es',
             columnDefs: [{
-                field: 'titulo',
+                cellTemplate: $scope.linkTitulo,
                 displayName: 'Titulo',
                 width: '30%'
             }, {
@@ -1042,15 +1053,19 @@ myApp.controller('suscripcionesOferta', ['$scope', '$location', '$routeParams', 
 myApp.controller('detalleSuscripcion', ['$scope', '$location', '$routeParams', 'Estudiante', 'Suscripcion', 'VectoresDeDatos', 'errorMessages', 'appAuth',
     function($scope, $location, $routeParams, Estudiante, Suscripcion, VectoresDeDatos, errorMessages, appAuth) {
 
-        $scope.resolver = function(estado) {
+        $scope.resolver = function(estado, estudiante) {
             Suscripcion.update({
                 'id': $routeParams.idSuscripcion
             }, {
                 'estado': estado
             }, function(data) {
+                var msn = 'Suscripcion ' + estado + ' correctamente';
+                if (estado == 'aceptada') {
+                    msn += ' - ' + estudiante.nombre + ' - ' + estudiante.email;
+                }
                 errorMessages.setProperty({
                     'type': 'alert-success',
-                    'msn': 'Suscripcion ' + estado + ' correctamente'
+                    'msn': msn
                 });
                 $location.path("/misOfertas");
             })
@@ -1655,8 +1670,6 @@ myApp.controller('misSuscripciones', ['$scope', '$location', '$routeParams', '$m
             getSuscripcionesTodas();
         };
 
-        $scope.getSuscripciones();
-
         $scope.$watch('pagingOptionsActiva', function(newVal, oldVal) {
             if (newVal !== oldVal && newVal.currentPage !== oldVal.currentPage) {
                 $scope.getSuscripciones();
@@ -1740,6 +1753,8 @@ myApp.controller('misSuscripciones', ['$scope', '$location', '$routeParams', '$m
 
         if (!appAuth.isLoggedIn()) {
             $location.path("/login");
+        } else {
+            $scope.getSuscripciones();
         }
     }
 ]);

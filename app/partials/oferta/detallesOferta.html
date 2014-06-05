@@ -8,14 +8,13 @@
 	<div class="col-md-12" id="detallesOferta" ng-hide="loading">
 		<h1><span>Información de la oferta</span></h1>
 		<div id="SeccionPrincipal" class="col-md-12">
-				<div ng-if="oferta.titulo" class="col-md-2 lateralIzquierdo infoOferta">Titulo</div>
-				<div ng-if="oferta.titulo" class="col-md-10 infoOferta">{{oferta.titulo}}
           <div style="float: right; margin-top:-30px">
-            <button type="button" class="btn btn-default btn-sm" ng-click="open(oferta.id)">
+            <button type="button" class="btn btn-default btn-sm btn-warning" ng-click="open(oferta.id)">
               <span class="glyphicon glyphicon-warning-sign"></span> Denunciar
             </button>
           </div>
-        </div>
+				<div ng-if="oferta.titulo" class="col-md-2 lateralIzquierdo infoOferta">Titulo</div>
+				<div ng-if="oferta.titulo" class="col-md-10 infoOferta">{{oferta.titulo}}</div>
 				<div ng-if="oferta.descripcion" class="col-md-2 lateralIzquierdo infoOferta">Descripción</div>
 				<div ng-if="oferta.descripcion" class="col-md-10 infoOferta">{{oferta.descripcion}}</div>
 				<div ng-if="oferta.direccion" class="col-md-2 lateralIzquierdo infoOferta">Ubicación</div>
@@ -115,6 +114,6 @@
 			</div>
 		</div>
 		<div class="text-center">
-			<button ng-show="esEstudiante(oferta.usuario)" class="btn btn-lg btn-success" ng-click="suscripcion(oferta.id,  suscrito)">{{ buttonText }}</button>
+			<button style="width:200px;margin-top:15px" ng-show="esEstudiante(oferta.usuario)" ng-class="{'btn-danger': hover&&suscrito}" ng-mouseenter="hover = true;buttonText = buttonTextB" ng-mouseleave="hover = false;buttonText = buttonTextA" class="btn btn-lg btn-success" ng-click="suscripcion(oferta.id,  suscrito)">{{ buttonText }}</button>
 	</div>
 	</form>
